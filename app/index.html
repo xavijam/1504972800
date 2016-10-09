@@ -7,14 +7,14 @@ layout: default
 <section class="Slide Slide--blue">
   <div class="Slide-content Block--centered">
     <h2 class="Text--bigTitle Color--white">Javier + Laura</h2>
-    <h3 class="Slide-contentBox Text--subTitle Color--blue">9 Septiembre 2017</h3>
+    <h3 class="Slide-contentBox Text--subTitle Color--blue">{% t date %}</h3>
   </div>
 </section>
 
 <section class="Slide">
   <div class="Slide-content Block--centered Text--centered">
-    <h3 class="Text--subTitle Color--darkGrey">Después de (12 + 1) años...</h3>
-    <p class="Text--paragraph Color--grey">...conociéndonos hemos decidido que es el mejor momento para montar un <span class="Text--paragraphStrong Color--pink">bodorrio</span> como Dios manda, y no queremos que faltéis, así que anotad la fecha y seguid leyendo para saber todo lo que estamos tramando...</p>
+    <h3 class="Text--subTitle Color--darkGrey">{% t what.title %}</h3>
+    <p class="Text--paragraph Color--grey">{% t what.description %}</p>
   </div>
 </section>
 
@@ -23,18 +23,28 @@ layout: default
     <div class="Map Block--splittedChild js-churchMap"></div>
     <div class="Block--splittedChild">
       <div class="Block--centered Block--wider">
-        <h3 class="Text--bigTitle Color--darkGrey">Ceremonia</h3>
-        <p class="Text--paragraph Color--grey">
-          La misa tendrá lugar en la Parroquia <span class="Text--paragraphStrong Color--pink">Santísimo Corpus Christi</span> de las Rozas a las <span class="Text--paragraphStrong Color--pink">18:00</span> horas<super>*</super>.
-        </p>
-        <p class="Text--paragraph Color--grey tSpace">
-          La dirección es Camino Perales 4, Las Rozas, Madrid. Si necesitáis saber como llegar, visitad este <a class="Color--darkGrey" href="https://goo.gl/UlFTUn">link</a>.
-        </p>
+        <h3 class="Text--bigTitle Color--darkGrey">{% t section.ceremony %}</h3>
+        <p class="Text--paragraph Color--grey">{% t ceremony.description %}</p>
+        <p class="Text--paragraph Color--grey tSpace">{% t ceremony.address %}</p>
         <p class="Text--annotation Color--grey tSpace--l">
-          <super>*</super>No podéis llegar tarde, si conocéis a Lau sabréis que aparca en la puerta y llega pronto siempre.
+          <super>*</super>{% t ceremony.annotation %}
         </p>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="Slide">
+  <div class="Slide-content Block--splitted">
+    <div class="Block--splittedChild">
+      <div class="Block--centered Block--wider">
+        <h3 class="Text--bigTitle Color--darkGrey">{% t section.banquet %}</h3>
+        <p class="Text--paragraph Color--grey"></p>
+        <p class="Text--paragraph Color--grey tSpace"></p>
+        <p class="Text--annotation Color--grey tSpace--l"></p>
+      </div>
+    </div>
+    <div class="Map Block--splittedChild js-banquetMap"></div>
   </div>
 </section>
 

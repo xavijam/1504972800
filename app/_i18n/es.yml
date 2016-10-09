@@ -1,5 +1,26 @@
-langs:
-  en: English
-  es: Español
-pages:
-  team: equipo
+wedding: boda
+date: 9 Septiembre 2017
+section:
+  what: cómo
+  ceremony: ceremonia
+  banquet: banquete
+  accomodation: hoteles
+  transport: autobús
+  gift: regalo
+  contact: contacto
+what:
+  title: Después de (12 + 1) años...
+  description:
+    ...conociéndonos hemos decidido que es el mejor momento para montar un
+    <span class="Text--paragraphStrong Color--pink">bodorrio</span> como Dios
+    manda, y no queremos que faltéis, así que anotad la fecha y seguid leyendo
+    para saber todo lo que estamos tramando...
+ceremony:
+  description:
+    La misa tendrá lugar en la Parroquia <span class="Text--paragraphStrong Color--pink">Santísimo Corpus Christi</span>
+    de las Rozas a las <span class="Text--paragraphStrong Color--pink">18:00</span> horas<super>*</super>.
+  address:
+    La dirección es Camino Perales 4, Las Rozas, Madrid. Si necesitáis saber como llegar, visitad este
+    <a class="Color--darkGrey" href="https://goo.gl/UlFTUn">link</a>.
+  annotation:
+    No podéis llegar tarde, si conocéis a Lau sabréis que aparca en la puerta y llega pronto siempre.

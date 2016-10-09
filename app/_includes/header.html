@@ -5,16 +5,16 @@
 		</a>
 	</h1>
 	<nav class="Nav Text--option Color--grey">
-		<button class="Nav-item js-ceremony">cómo?</button>
-		<button class="Nav-item js-ceremony">ceremonia</button>
-		<button class="Nav-item js-banquet">banquete</button>
-		<button class="Nav-item js-accommodation">hoteles</button>
-		<button class="Nav-item js-transport">autobús</button>
-		<button class="Nav-item js-gift">regalo?</button>
-		<button class="Nav-item js-contact">contacto</button>
+		<button class="Nav-item js-what">{% t section.what %}?</button>
+		<button class="Nav-item js-ceremony">{% t section.ceremony %}</button>
+		<button class="Nav-item js-banquet">{% t section.banquet %}</button>
+		<button class="Nav-item js-accommodation">{% t section.accomodation %}</button>
+		<button class="Nav-item js-transport">{% t section.transport %}</button>
+		<button class="Nav-item js-gift">{% t section.gift %}?</button>
+		<button class="Nav-item js-contact">{% t section.contact %}</button>
 	</nav>
 	<nav class="Nav Nav--language">
-		<a class="Color--lightGrey Text--link is-selected" href="/">ES</a>
-		<a class="Color--lightGrey Text--link" href="/en/">EN</a>
+		<a class="Color--lightGrey Text--link {% if site.lang == "es" %} is-selected {% endif %}" href="/">ES</a>
+		<a class="Color--lightGrey Text--link {% if site.lang == "en" %} is-selected {% endif %}" href="/en/">EN</a>
 	</nav>
 </header>

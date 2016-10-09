@@ -1,5 +1,26 @@
-langs:
-  en: English
-  es: Español
-pages:
-  team: team
+wedding: wedding
+date: 9th September 2017
+section:
+  what: what
+  ceremony: ceremony
+  banquet: banquet
+  accomodation: hotels
+  transport: transport
+  gift: gift
+  contact: contact
+what:
+  title: After (12 + 1) years...
+  description:
+    ...learning from each other we have decided that it is the best moment to
+    celebrate <span class="Text--paragraphStrong Color--pink">the wedding</span>
+    like God demands, and we'd like you to attend! So take note about the date
+    and keep reading if you want to know all the things we are preparing...
+ceremony:
+  description:
+    It will take place in <span class="Text--paragraphStrong Color--pink">Santísimo Corpus Christi</span>
+    church, Rozas city, at <span class="Text--paragraphStrong Color--pink">6pm</span><super>*</super>.
+  address:
+    The address is Camino Perales 4, Las Rozas, Madrid. If you need to know how to arrive, just click
+    this <a class="Color--darkGrey" href="https://goo.gl/UlFTUn">link</a>.
+  annotation:
+    You can't arrive late, if you have met Lau in the past you will know she parks in front of the door and arrives always soon.
