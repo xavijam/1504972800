@@ -265,7 +265,7 @@ module.exports = function (grunt) {
           dest: '<%= app.dist %>'
         }]
       },
-      // Copy CSS into .tmp directory for Autoprefixer processing
+      // Copy CSS, fonts and images into .tmp directory for Autoprefixer processing
       stageCss: {
         files: [{
           expand: true,
@@ -279,6 +279,12 @@ module.exports = function (grunt) {
           cwd: '<%= app.app %>/_assets/fonts',
           src: '**/*',
           dest: '.tmp/fonts'
+        }, {
+          expand: true,
+          dot: true,
+          cwd: '<%= app.app %>/_assets/img',
+          src: '**/*',
+          dest: '.tmp/img'
         }]
       }
     },

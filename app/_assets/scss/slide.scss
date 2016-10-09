@@ -1,10 +1,48 @@
+@import 'vars';
 
-.slide {
+.Slide {
 	position: relative;
 	display: block;
 	width: 100%;
 	height: 100%;
 }
-.slide--blue {
-	background: #D0E2E6;
+.Slide--blue {
+	background: $thecolor;
+}
+.Slide-cream {
+	background: #F4EAE1;
+}
+.Slide-content {
+	max-width: 90%;
+}
+.Slide-contentBox {
+	position: relative;
+	padding: 5px 10px 10px;
+	background: white;
+	text-align: center;
+	border-radius: 10px;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 8px;
+		left: 8px;
+		width: 10px;
+		height: 10px;
+		border-top: 1px solid $thecolor;
+		transform: rotate(-45deg);
+		border-radius: 10px;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		width: 16px;
+		height: 16px;
+		border-top: 1px solid $thecolor;
+		transform: rotate(-45deg);
+		border-radius: 16px;
+	}
 }

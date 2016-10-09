@@ -1,0 +1,16 @@
+
+.Block {}
+.Block--centered {
+	position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.Block--splitted {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+.Block--splittedChild {
+	width: 400px;
+}

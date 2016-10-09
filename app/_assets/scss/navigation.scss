@@ -1,0 +1,42 @@
+@import 'vars';
+
+.Nav {
+	margin: 0 auto;
+	text-align: center;
+}
+.Nav-item {
+	margin: 10px 3%;
+	text-transform: uppercase;
+	background: none;
+	border: none;
+	outline: none;
+
+	&:hover {
+		cursor: pointer;
+		color: #454545;
+		text-decoration: underline;
+	}
+}
+.Nav--language {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	width: auto;
+}
+.Nav-goDown {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	padding: 10px 0;
+	color: $darkGrey;
+	outline: none;
+	z-index: 3;
+	
+	&:hover {
+		cursor: pointer;
+		background: rgba(#000, 0.1);
+		color: white;
+	}
+}

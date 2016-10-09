@@ -4,14 +4,49 @@ layout: default
 
 {% include header.html %}
 
-<section class="slide slide--blue">
-  <div class="">
-    
+<section class="Slide Slide--blue">
+  <div class="Slide-content Block--centered">
+    <h2 class="Text--bigTitle Color--white">Javier + Laura</h2>
+    <h3 class="Slide-contentBox Text--subTitle Color--blue">9 Septiembre 2017</h3>
   </div>
 </section>
 
-<section class="slide slide--pink">
-  nos hemos liado
+<section class="Slide">
+  <div class="Slide-content Block--centered Text--centered">
+    <h3 class="Text--subTitle Color--darkGrey">Después de (12 + 1) años...</h3>
+    <p class="Text--paragraph Color--grey">...conociéndonos hemos decidido que es el mejor momento para montar un <span class="Text--paragraphStrong Color--pink">bodorrio</span> como Dios manda, y no queremos que faltéis, así que anotad la fecha y seguid leyendo para saber todo lo que estamos tramando...</p>
+  </div>
 </section>
 
+<section class="Slide Slide-cream">
+  <div class="Slide-content Block--centered">
+    <h3 class="Text--bigTitle Color--darkGrey Text--centered">Ceremonia</h3>
+    <div class="Block--splitted tSpace--xl">
+      <div class="Map Block--splittedChild rSpace--xl js-map"></div>
+      <div class="Block--splittedChild">
+        <p class="Text--paragraph Color--grey">
+          La misa tendrá lugar en la Parroquia <span class="Text--paragraphStrong Color--pink">Santísimo Corpus Christi</span> de las Rozas a las <span class="Text--paragraphStrong Color--pink">18:00</span> horas<super>*</super>.
+        </p>
+        <p class="Text--paragraph Color--grey tSpace">
+          La dirección es Camino Perales 4, Las Rozas, Madrid. Si necesitáis saber como llegar, visitad este <a class="Color--darkGrey" href="https://goo.gl/UlFTUn">link</a>.
+        </p>
+        <p class="Text--annotation Color--grey tSpace--l">
+          <super>*</super>No podéis llegar tarde, si conocéis a Lau sabréis que aparca en la puerta y llega pronto siempre.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<button class="Nav-goDown">
+  <i class="fa fa-arrow-down fa-2x"></i>
+</button>
+
 {% include footer.html %}
+
+<!-- build:js(app) /js/home.js -->
+<!-- Custom JS -->
+<script src="/_assets/js/vendor/jquery.js"></script>
+<script src="/_assets/js/vendor/leaflet.js"></script>
+<script src="/_assets/js/home.js"></script>
+<!-- endbuild -->

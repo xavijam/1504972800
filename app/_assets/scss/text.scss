@@ -1,32 +1,79 @@
-@font-face {
-	font-family: 'Pacifico';
-	src: url('../fonts/Pacifico.eot');
-	src: local('☺'), url('../fonts/Pacifico.woff') format('woff'), url('../fonts/Pacifico.ttf') format('truetype'), url('../fonts/Pacifico.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
+@import 'vars';
+
+.Text {}
+.Text--bigTitle {
 	font-family: 'Blanch Inline';
-	src: url('../fonts/BLANCH_CAPS_INLINE.eot');
-	src: local('☺'), url('../fonts/BLANCH_CAPS_INLINE.woff') format('woff'), url('../fonts/BLANCH_CAPS_INLINE.ttf') format('truetype');
+	font-size: 100px;
 	font-weight: normal;
+}
+.Text--title {}
+.Text--subTitle {
+	font-family: 'Pacifico';
+	font-size: 40px;
+	font-weight: normal;
+}
+.Text--paragraph {
+	font-family: 'Lato';
+	font-size: 24px;
+	font-weight: normal;
+	line-height: 32px;
+}
+.Text--paragraphStrong {
+	font-size: 26px;
+	font-family: 'Pacifico';
+	font-weight: normal;
+}
+.Text--annotation {
+	font-family: 'Lato';
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 22px;
+}
+.Text--logo {
+	font-family: 'Blanch Inline';
+	font-size: 90px;
+	font-weight: normal;
+	text-decoration: none;
+	color: #8E8F8F;
+	vertical-align: center;
+}
+.Text--logoHeart {
+	font-family: Arial;
+	font-size: 40px;
 	font-style: normal;
 }
-@font-face {
+.Text--option {
 	font-family: 'Blanch';
-	src: url('../fonts/BLANCH_CAPS.eot');
-	src: local('☺'), url('../fonts/BLANCH_CAPS.woff') format('woff'), url('../fonts/BLANCH_CAPS.ttf') format('truetype');
+	font-size: 25px;
 	font-weight: normal;
-	font-style: normal;
 }
-@font-face {
-	font-family: 'Blanch Light';
-	src: url('../fonts/BLANCH_CAPS_LIGHT.eot');
-	src: local('☺'), url('../fonts/BLANCH_CAPS_LIGHT.woff') format('woff'), url('../fonts/BLANCH_CAPS_LIGHT.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
+.Text--link {
+	font-family: 'Blanch';
+	text-decoration: none;
+	font-size: 30px;
+}
+.Text--link.is-selected {
+	color: $pinkColor;
+}
+.Text--centered {
+	text-align: center;
 }
 
-* {
-	font-family: 'Blanch Light';
+.Color--darkGrey {
+	color: $darkGrey;
+}
+.Color--grey {
+	color: $grey;
+}
+.Color--lightGrey {
+	color: $lightGrey;
+}
+.Color--blue {
+	color: $thecolor;
+}
+.Color--pink {
+	color: $pinkColor;
+}
+.Color--white {
+	color: white;
 }
