@@ -1,0 +1,8 @@
+title: wedding
+email: xavijam@gmail.com
+baseurl: ""
+url: "http://xavij.am/1504972800"
+languages: ["es", "en"]
+exclude_from_localizations: ["img", "_assets"]
+markdown: kramdown
+gems: [jekyll-admin, jekyll-multiple-languages-plugin]
