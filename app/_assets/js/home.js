@@ -1,5 +1,4 @@
-$(function () {
-	
+$(function () {	
 	createMap({
 		el: $('.js-churchMap')[0],
 		center: [40.527476, -3.919085],
@@ -7,6 +6,7 @@ $(function () {
     iconSize: [50, 57],
     iconAnchor: [25, 28]
 	});
+	
 	createMap({
 		el: $('.js-banquetMap')[0],
 		center: [40.6257519, -4.1069981],
@@ -14,7 +14,14 @@ $(function () {
     iconSize: [70, 50],
     iconAnchor: [35, 25]
 	});
+
+	$(window).bind('scroll', onScroll);
 });
+
+function onScroll () {
+	var isAtTheBottom = $(window).scrollTop() + $(window).height() == $(document).height();
+	$('.js-goNext').toggle(!isAtTheBottom);
+}
 
 function createMap (opts) {
 	var map = L.map(opts.el, {
