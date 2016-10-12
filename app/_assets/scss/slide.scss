@@ -9,8 +9,14 @@
 .Slide--blue {
 	background: $thecolor;
 }
-.Slide-cream {
-	background: #F4EAE1;
+.Slide--cream {
+	background: rgba(#F4EAE1, 0.4);
+}
+.Slide--grey {
+	background: #EEE9ED;
+}
+.Slide--pink {
+	background: #F4EBE7;
 }
 .Slide-contentBox {
 	position: relative;

@@ -18,7 +18,7 @@ layout: default
   </div>
 </section>
 
-<section class="Slide Slide-cream">
+<section class="Slide Slide--cream">
   <div class="Slide-content Block--splitted">
     <div class="Map Block--splittedChild js-churchMap"></div>
     <div class="Block--splittedChild">
@@ -39,9 +39,9 @@ layout: default
     <div class="Block--splittedChild">
       <div class="Block--centered Block--wider">
         <h3 class="Text--bigTitle Color--darkGrey">{% t section.banquet %}</h3>
-        <p class="Text--paragraph Color--grey"></p>
-        <p class="Text--paragraph Color--grey tSpace"></p>
-        <p class="Text--annotation Color--grey tSpace--l"></p>
+        <p class="Text--paragraph Color--grey">{% t banquet.description %}</p>
+        <p class="Text--paragraph Color--grey tSpace">{% t banquet.address %}</p>
+        <p class="Text--annotation Color--grey tSpace--l"><super>*</super>{% t banquet.annotation %}</p>
       </div>
     </div>
     <div class="Map Block--splittedChild js-banquetMap"></div>
@@ -58,5 +58,6 @@ layout: default
 <!-- Custom JS -->
 <script src="/_assets/js/vendor/jquery.js"></script>
 <script src="/_assets/js/vendor/leaflet.js"></script>
+<script src="/_assets/js/church-to-banquet-route.js"></script>
 <script src="/_assets/js/home.js"></script>
 <!-- endbuild -->

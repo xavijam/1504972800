@@ -17,10 +17,18 @@ what:
     para saber todo lo que estamos tramando...
 ceremony:
   description:
-    La misa tendrá lugar en la Parroquia <span class="Text--paragraphStrong Color--pink">Santísimo Corpus Christi</span>
-    de las Rozas a las <span class="Text--paragraphStrong Color--pink">18:00</span> horas<super>*</super>.
+    Todo empezará con la misa, y esta tendrá lugar en la Parroquia <span class="Text--paragraphStrong Color--pink">Santísimo Corpus Christi</span>
+    de las Rozas a las <span class="Text--paragraphStrong Color--pink">18</span> horas<super>*</super>.
   address:
     La dirección es Camino Perales 4, Las Rozas, Madrid. Si necesitáis saber como llegar, visitad este
-    <a class="Color--darkGrey" href="https://goo.gl/UlFTUn">link</a>.
+    <a class="Color--darkGrey" href="https://goo.gl/UlFTUn" target="_blank">link</a>.
   annotation:
     No podéis llegar tarde, si conocéis a Lau sabréis que aparca en la puerta y llega pronto siempre.
+banquet:
+  description: 
+    Después disfrutaremos de buena música, comida y bebida en <span class="Text--paragraphStrong Color--pink">Los Arcos de Fuentepizarro</span>.
+  address:
+    Se encuentra en Ctra Guadarrama al Escorial, Km. 3.400, San Lorenzo del Escorial, Madrid. Si necesitáis calcular cuanto tardaríamos desde la Iglesia,
+    entra <a class="Color--darkGrey" href="https://goo.gl/5l3NWo" target="_blank">aquí</a>.
+  annotation:
+    No penséis que esto se va a acabar a las 2 de la mañana, ¡hay noche para largo!
