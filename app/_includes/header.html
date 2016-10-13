@@ -5,13 +5,13 @@
 		</a>
 	</h1>
 	<nav class="Nav Text--option Color--grey">
-		<button class="Nav-item js-what">{% t section.what %}?</button>
-		<button class="Nav-item js-ceremony">{% t section.ceremony %}</button>
-		<button class="Nav-item js-banquet">{% t section.banquet %}</button>
-		<button class="Nav-item js-accommodation">{% t section.accomodation %}</button>
-		<button class="Nav-item js-transport">{% t section.transport %}</button>
-		<button class="Nav-item js-gift">{% t section.gift %}?</button>
-		<button class="Nav-item js-contact">{% t section.contact %}</button>
+		<a class="Nav-item js-what" href="#{% t section.what %}">{% t section.what %}?</button>
+		<a class="Nav-item js-ceremony" href="#{% t section.ceremony %}">{% t section.ceremony %}</a>
+		<a class="Nav-item js-banquet" href="#{% t section.banquet %}">{% t section.banquet %}</a>
+		<a class="Nav-item js-accommodation" href="#{% t section.accomodation %}">{% t section.accomodation %}</a>
+		<a class="Nav-item js-transport" href="#{% t section.transport %}">{% t section.transport %}</a>
+		<a class="Nav-item js-gift" href="#{% t section.gift %}">{% t section.gift %}?</a>
+		<a class="Nav-item js-contact" href="#{% t section.contact %}">{% t section.contact %}</a>
 	</nav>
 	<nav class="Nav Nav--language">
 		<a class="Color--lightGrey Text--link {% if site.lang == "es" %} is-selected {% endif %}" href="/">ES</a>

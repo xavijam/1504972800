@@ -11,16 +11,20 @@ layout: default
   </div>
 </section>
 
-<section class="Slide">
+<section class="Slide" id="{% t section.what %}">
   <div class="Slide-content Block--centered Text--centered">
     <h3 class="Text--subTitle Color--darkGrey">{% t what.title %}</h3>
     <p class="Text--paragraph Color--grey">{% t what.description %}</p>
   </div>
 </section>
 
-<section class="Slide Slide--cream">
+<section class="Slide Slide--cream" id="{% t section.ceremony %}">
   <div class="Slide-content Block--splitted">
-    <div class="Map Block--splittedChild js-churchMap"></div>
+    <div class="Block--splittedChild">
+      <div class="Map-wrapper Map-wrapper--toLeft Block--centered Block--wider">
+        <div class="Map js-churchMap"></div>
+      </div>
+    </div>
     <div class="Block--splittedChild">
       <div class="Block--centered Block--wider">
         <h3 class="Text--bigTitle Color--darkGrey">{% t section.ceremony %}</h3>
@@ -34,7 +38,7 @@ layout: default
   </div>
 </section>
 
-<section class="Slide">
+<section class="Slide" id="{% t section.banquet %}">
   <div class="Slide-content Block--splitted">
     <div class="Block--splittedChild">
       <div class="Block--centered Block--wider">
@@ -44,7 +48,32 @@ layout: default
         <p class="Text--annotation Color--grey tSpace--l"><super>*</super>{% t banquet.annotation %}</p>
       </div>
     </div>
-    <div class="Map Block--splittedChild js-banquetMap"></div>
+    <div class="Block--splittedChild">
+      <div class="Map-wrapper Map-wrapper--toRight Block--centered Block--wider">
+        <div class="Map js-banquetMap"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="Slide Slide--grey" id="{% t section.accomodation %}">
+  <div class="Slide-content Block--splitted">
+    <div class="Block--splittedChild">
+      <div class="Block--centered Block--wider">
+        <h3 class="Text--subTitle Color--darkGrey">Camping del Escorial</h3>
+        <p class="Text--paragraph Color--grey"></p>
+        <p class="Text--paragraph Color--grey tSpace"></p>
+        <p class="Text--annotation Color--grey tSpace--l"><super>*</super>{% t banquet.annotation %}</p>
+      </div>
+    </div>
+    <div class="Block--splittedChild">
+      <div class="Block--centered Block--wider">
+        <h3 class="Text--subTitle Color--darkGrey">Hotel Las Rozas</h3>
+        <p class="Text--paragraph Color--grey"></p>
+        <p class="Text--paragraph Color--grey tSpace"></p>
+        <p class="Text--annotation Color--grey tSpace--l"><super>*</super>{% t banquet.annotation %}</p>
+      </div>
+    </div>
   </div>
 </section>
 
