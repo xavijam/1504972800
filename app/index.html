@@ -19,7 +19,7 @@ layout: default
 </section>
 
 <section class="Slide Slide--cream" id="{% t section.ceremony %}">
-  <div class="Slide-content Block--splitted">
+  <div class="Slide-content Block--splittedHor">
     <div class="Block--splittedChild">
       <div class="Map-wrapper Map-wrapper--toLeft Block--centered Block--wider">
         <div class="Map js-churchMap"></div>
@@ -39,7 +39,7 @@ layout: default
 </section>
 
 <section class="Slide" id="{% t section.banquet %}">
-  <div class="Slide-content Block--splitted">
+  <div class="Slide-content Block--splittedHor">
     <div class="Block--splittedChild">
       <div class="Block--centered Block--wider">
         <h3 class="Text--bigTitle Color--darkGrey">{% t section.banquet %}</h3>
@@ -57,21 +57,81 @@ layout: default
 </section>
 
 <section class="Slide Slide--grey" id="{% t section.accomodation %}">
-  <div class="Slide-content Block--splitted">
-    <div class="Block--splittedChild">
-      <div class="Block--centered Block--wider">
-        <h3 class="Text--subTitle Color--darkGrey">Camping del Escorial</h3>
-        <p class="Text--paragraph Color--grey"></p>
-        <p class="Text--paragraph Color--grey tSpace"></p>
-        <p class="Text--annotation Color--grey tSpace--l"><super>*</super>{% t banquet.annotation %}</p>
+  <div class="Slide-content">
+  
+    <div class="Block--centered Block--full">
+      <div class="Block--splittedVer">
+        <div class="Text--centered">
+          <h2 class="Text--bigTitle Color--darkGrey">{% t section.accomodation %}</h2>
+          <p class="Text--paragraph Color--grey">{% t accomodation.description %}</p>
+        </div>
+        <div class="Block--splittedHor tSpace--xxl">
+          <div class="Block--splittedChild Text--centered">
+            <h3 class="Text--subTitle Color--darkGrey">{% t accomodation.close-church.title %}</h3>
+            <ul class="Text--paragraph Color--grey tSpace--l Slide-list">
+              <li>*** <a class="Text--link" href="http://www.sidorme.com/es/hoteles/hotel-las-rozas" target="_blank">Hotel Sidorme</a> · {% t accomodation.close-church.away-1 %} {% t accomodation.and-from %} 39€.</li>
+              <li class="tSpace--m">**** <a class="Text--link" href="http://www.granhotellasrozas.com/en/" target="_blank">Gran Hotel las Rozas</a> · {% t accomodation.close-church.away-2 %} {% t accomodation.and-from %} 57€.</li>
+              <li class="tSpace--m">**** <a class="Text--link" href="http://www.hotelsefutbol.com/">Hotel Sefutbol</a> · {% t accomodation.close-church.away-3 %} {% t accomodation.and-from %} 55€.</li>
+            </ul>
+          </div>
+          <div class="Block--splittedChild Text--centered">
+            <h3 class="Text--subTitle Color--darkGrey">{% t accomodation.close-banquet.title %}</h3>
+            <ul class="Text--paragraph Color--grey tSpace--l Slide-list">
+              <li>*** <a class="Text--link" href="http://www.hflorida.com/" target="_blank">Hotel Florida</a> · {% t accomodation.close-banquet.away-1 %} {% t accomodation.and-from %} 75€.</li>
+              <li class="tSpace--m">*** <a class="Text--link" href="http://www.loslanceros.com/" target="_blank">Los Lanceros</a> · {% t accomodation.close-banquet.away-2 %} {% t accomodation.and-from %} 58€.</li>
+              <li class="tSpace--m"><a class="Text--link" href="http://www.campingelescorial.com/alojamientos/bungalows-3/" target="_blank">Camping Resort el Escorial</a> · {% t accomodation.close-banquet.away-3 %} {% t accomodation.and-from %} 99€.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="Block--splittedChild">
-      <div class="Block--centered Block--wider">
-        <h3 class="Text--subTitle Color--darkGrey">Hotel Las Rozas</h3>
-        <p class="Text--paragraph Color--grey"></p>
-        <p class="Text--paragraph Color--grey tSpace"></p>
-        <p class="Text--annotation Color--grey tSpace--l"><super>*</super>{% t banquet.annotation %}</p>
+  </div>
+</section>
+
+<section class="Slide" id="{% t section.transport %}">
+  <div class="Slide-content">
+    <div class="Block--centered Block--full">
+      <div class="Block--splittedVer">
+        <div class="Text--centered">
+          <h2 class="Text--bigTitle Color--darkGrey">{% t section.transport %}</h2>
+          <p class="Text--paragraph Color--grey">{% t transport.description %}</p>
+        </div>
+        <div class="Block--splittedHor tSpace--xl"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="Slide Slide--red" id="{% t section.gift %}">
+  <div class="Slide-content">
+    <div class="Block--centered Block--full">
+      <div class="Block--splittedVer">
+        <div class="Text--centered">
+          <h2 class="Text--bigTitle Color--darkGrey">{% t section.gift %}</h2>
+          <p class="Text--paragraph Color--grey">--</p>
+        </div>
+        <div class="Block--splittedHor tSpace--xl">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="Slide" id="{% t section.contact %}">
+  <div class="Slide-content">
+    <div class="Block--centered Block--full">
+      <div class="Block--splittedVer">
+        <div class="Text--centered">
+          <h2 class="Text--bigTitle Color--darkGrey">{% t section.contact %}</h2>
+          <p class="Text--paragraph Color--grey">{% t contact.description %}</p>
+        </div>
+        <div class="Block--splittedHor tSpace--xl">
+          <div class="Text--centered">
+            <h3 class="Text--subTitle Color--grey">Javier <em class="Color--pink">❥</em> Laura</h3>
+            <p class="Text--paragraph Color--grey">617941614 · 610431183</p>
+            <a class="Text--annotation Color--grey Text--link" href="mailto:javiylausep2017@gmail.com">javiylausep2017@gmail.com</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

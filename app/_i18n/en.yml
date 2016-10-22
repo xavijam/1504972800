@@ -21,6 +21,34 @@ ceremony:
     church, Rozas city, at <span class="Text--paragraphStrong Color--pink">6pm</span><super>*</super>.
   address:
     The address is Camino Perales 4, Las Rozas, Madrid. If you need to know how to arrive, just click
-    this <a class="Color--darkGrey" href="https://goo.gl/UlFTUn" target="_blank">link</a>.
+    this <a class="Text--link" href="https://goo.gl/UlFTUn" target="_blank">link</a>.
   annotation:
     You can't arrive late, if you have met Lau in the past you will know she parks in front of the door and arrives always soon.
+banquet:
+  description:
+    After that we will enjoy with good music, food and drinks at <span class="Text--paragraphStrong Color--pink">Los Arcos de Fuentepizarro</span>.
+  address:
+    It is located in Guadarrama to Escorial road, Km. 3.400, San Lorenzo del Escorial, Madrid. If you need to calculate cuanto tardaríamos desde la Iglesia,
+    entra <a class="Text--link" href="https://goo.gl/5l3NWo" target="_blank">aquí</a>.
+  annotation:
+    No penséis que esto se va a acabar a las 2 de la mañana, ¡hay noche para largo!
+accomodation: 
+  description: 
+    Let us give you some ideas where to sleep some hours after the party, also the bus route will cover several of these places
+  and-from: and from
+  close-church:
+    title: Close to the church
+    away-1: <a class="Text--link" href="https://goo.gl/G6Z6ay">3,7km</a> away
+    away-2: <a class="Text--link" href="https://goo.gl/sJu6Xh" target="_blank">3,8km</a> away
+    away-3: <a class="Text--link" href="https://goo.gl/yLzYbM" target="_blank">4,8km</a> away
+  close-banquet:
+    title: Close to the banquet
+    away-1: <a class="Text--link" href="https://goo.gl/CfUuGB" target="_blank">6,2km</a> away
+    away-2: <a class="Text--link" href="https://goo.gl/CQypnB">6,2km</a> away
+    away-3: <a class="Text--link" href="https://goo.gl/LZJytQ" target="_blank">0,8km</a> away
+transport:
+  description:
+    There will be 2 bus routes for the ceremony, one route then for the banquet and then again two routes during and at the end of the party
+contact:
+  description: 
+    If you need to confirm the attendance or you have any doubt, those are our email and telephone numbers.

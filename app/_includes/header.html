@@ -10,11 +10,19 @@
 		<a class="Nav-item js-banquet" href="#{% t section.banquet %}">{% t section.banquet %}</a>
 		<a class="Nav-item js-accommodation" href="#{% t section.accomodation %}">{% t section.accomodation %}</a>
 		<a class="Nav-item js-transport" href="#{% t section.transport %}">{% t section.transport %}</a>
-		<a class="Nav-item js-gift" href="#{% t section.gift %}">{% t section.gift %}?</a>
+		<a class="Nav-item js-gift" href="#{% t section.gift %}">{% t section.gift %}</a>
 		<a class="Nav-item js-contact" href="#{% t section.contact %}">{% t section.contact %}</a>
 	</nav>
-	<nav class="Nav Nav--language">
-		<a class="Color--lightGrey Text--link {% if site.lang == "es" %} is-selected {% endif %}" href="/">ES</a>
-		<a class="Color--lightGrey Text--link {% if site.lang == "en" %} is-selected {% endif %}" href="/en/">EN</a>
+	<nav class="Nav Nav--language Color--lightGrey">
+		{% if site.lang == "es" %}
+			<button class="Color--pink ">ES</button>
+		{% else %}
+			<a class="Text--link" href="/">ES</a>
+		{% endif %}
+		{% if site.lang == "en" %}
+			<button class="Color--pink">EN</a>
+		{% else %}
+			<a class="Text--link" href="/en/">EN</a>
+		{% endif %}
 	</nav>
 </header>

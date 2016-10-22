@@ -50,12 +50,9 @@
 	font-weight: normal;
 }
 .Text--link {
-	font-family: 'Blanch';
-	text-decoration: none;
-	font-size: 30px;
-}
-.Text--link.is-selected {
-	color: $pinkColor;
+	&:hover {
+		color: $darkGrey;
+	}
 }
 .Text--centered {
 	text-align: center;

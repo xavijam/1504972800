@@ -16,7 +16,10 @@
 	background: #EEE9ED;
 }
 .Slide--pink {
-	background: #F4EBE7;
+	background: rgba(pink, 0.1);
+}
+.Slide--red {
+	background: rgba(red, 0.05);
 }
 .Slide-contentBox {
 	position: relative;
@@ -48,4 +51,12 @@
 		transform: rotate(-45deg);
 		border-radius: 16px;
 	}
+}
+
+.Slide .Text--paragraph {
+	max-width: 700px;
+}
+
+.Slide-list {
+	list-style: none;
 }
