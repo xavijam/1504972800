@@ -50,5 +50,11 @@ transport:
   description:
     Habrá dos linas autobuses para la llegada a la Iglesia, una linea para el banquete y de nuevo otras 2 lineas durante y al final de la fiesta
 contact:
-  description: 
-    Para confirmar vuestra asistencia o si tenéis alguna duda, os facilitamos nuestro correo y teléfonos.
+  description: ¿Queréis confirmar vuestra asistencia?
+  email: Tu email
+  name: Tu nombre
+  message: Tu mensaje, número de invitados, autobús?,...
+  send: enviar
+  success: Mensaje enviado!
+  error: Oh! Hubo un error :(
+  doubt: ¿Alguna duda?

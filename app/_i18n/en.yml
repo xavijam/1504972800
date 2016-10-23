@@ -50,5 +50,12 @@ transport:
   description:
     There will be 2 bus routes for the ceremony, one route then for the banquet and then again two routes during and at the end of the party
 contact:
-  description: 
-    If you need to confirm the attendance or you have any doubt, those are our email and telephone numbers.
+  description: Would you like to confirm your attendance?
+  email: Your email
+  name: Your name
+  message: >
+    Your message, # attending, bus?,...
+  send: submit
+  success: Message sent!
+  error: Oops! There was an error :(
+  doubt: Any doubt?

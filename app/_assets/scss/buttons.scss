@@ -1,0 +1,54 @@
+@import 'vars';
+
+.Button {
+	padding: 10px 20px;
+	border: 2px solid transparent;
+	border-radius: 3px;
+	text-transform: uppercase;
+	outline: none;
+	&:hover {
+		cursor: pointer;
+	}
+}
+.Button--grey {
+	color: $grey;
+	border-color: $grey;
+	&:hover,
+	&:focus {
+		color: $darkGrey;
+		border-color: $darkGrey;
+	}
+}
+.Button--blue {
+	$color: rgba($thecolor, 0.6);
+	$hoverColor: rgba($thecolor, 1);
+	color: $color;
+	border-color: $color;
+	&:hover,
+	&:focus {
+		color: $hoverColor;
+		border-color: $hoverColor;
+	}
+}
+.Button--pink {
+	$color: rgba($pinkColor, 0.6);
+	$hoverColor: rgba($pinkColor, 1);
+	color: $color;
+	border-color: $color;
+	&:hover,
+	&:focus {
+		color: $hoverColor;
+		border-color: $hoverColor;
+	}
+}
+.Button--white {
+	$color: rgba(white, 0.6);
+	$hoverColor: rgba(white, 1);
+	color: $color;
+	border-color: $color;
+	&:hover,
+	&:focus {
+		color: $hoverColor;
+		border-color: $hoverColor;
+	}
+}
