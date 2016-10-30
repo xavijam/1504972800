@@ -13,7 +13,7 @@ layout: default
 
 <section class="Slide" id="{% t section.what %}">
   <div class="Slide-content Block--centered Text--centered">
-    <h3 class="Text--subTitle Color--darkGrey">{% t what.title %}</h3>
+    <h3 class="Text--subTitle Color--blue">{% t what.title %}</h3>
     <p class="Text--paragraph Color--grey">{% t what.description %}</p>
   </div>
 </section>
@@ -30,7 +30,10 @@ layout: default
         <h3 class="Text--bigTitle Color--darkGrey">{% t section.ceremony %}</h3>
         <p class="Text--paragraph Color--grey">{% t ceremony.description %}</p>
         <p class="Text--paragraph Color--grey u-tSpace">{% t ceremony.address %}</p>
-        <p class="Text--annotation Color--grey u-tSpace--l">
+        <p class="Text--annotation u-tSpace--xl">
+          <a class="Button Button--pink" href="https://goo.gl/UlFTUn" target="_blank">{% t ceremony.driving %}</a>
+        </p>
+        <p class="Text--annotation Color--lightGrey u-tSpace--xl">
           <super>*</super>{% t ceremony.annotation %}
         </p>
       </div>
@@ -45,7 +48,10 @@ layout: default
         <h3 class="Text--bigTitle Color--darkGrey">{% t section.banquet %}</h3>
         <p class="Text--paragraph Color--grey">{% t banquet.description %}</p>
         <p class="Text--paragraph Color--grey u-tSpace">{% t banquet.address %}</p>
-        <p class="Text--annotation Color--grey u-tSpace--l"><super>*</super>{% t banquet.annotation %}</p>
+        <p class="Text--annotation u-tSpace--xl">
+          <a class="Button Button--pink" href="https://goo.gl/5l3NWo" target="_blank">{% t banquet.driving %}</a>
+        </p>
+        <p class="Text--annotation Color--lightGrey u-tSpace--xl"><super>*</super>{% t banquet.annotation %}</p>
       </div>
     </div>
     <div class="Block--splittedChild">
@@ -96,7 +102,44 @@ layout: default
           <h2 class="Text--bigTitle Color--darkGrey">{% t section.transport %}</h2>
           <p class="Text--paragraph Color--grey">{% t transport.description %}</p>
         </div>
-        <div class="Block--splittedHor u-tSpace--xl"></div>
+        <div class="u-tSpace--xl" style="position:relative">
+
+        <nav class="">
+          <button class="js-departureButton is-selected">Ida</button>
+          <button class="js-returnButton">Vuelta</button>
+        </nav>
+
+          <div class="js-busRouteMap js-departureMap" data-columns="14" data-rows="8" data-cellSize="40" data-textClass="Text--annotation" data-gridNumbers="true" data-grid="false" data-lineWidth="8" style="position: relative; width: 600px; height: 400px;">
+            <ul data-color="#FF0">
+              <li data-coords="1,2" data-marker="interchange"><a href="http://marca.com">Carabanchel</a></li>
+              <li data-coords="4,2" data-marker="station"><a href="">Principe Pío</a></li>
+              <li data-coords="7,2" data-marker="station"><a href="">Gran Hotel Las Rozas</a></li>
+              <li data-coords="10,4" data-marker="interchange"><a href="">Iglesia Corpus Christi</a></li>
+              <li data-coords="13,4" data-marker="station"><a href="">Los Arcos de Fuentepizarro</a></li>
+            </ul>
+
+            <ul data-color="#00ff00" data-label="Ruta 2">      
+              <li data-coords="1,6" data-marker="interchange"><a href="">El Escorial</a></li>
+              <li data-coords="7,6" data-marker="station"><a href="">Galapagar</a></li>
+              <li data-coords="10,4" data-marker="station"></li>
+            </ul>
+          </div>
+
+          <div class="js-busRouteMap js-returnMap u-hidden" data-columns="14" data-rows="8" data-cellSize="40" data-textClass="Text--annotation" data-gridNumbers="true" data-grid="false" data-lineWidth="8" style="position: relative; width: 600px; height: 400px;">
+            <ul data-color="#FF0" data-label="Ruta 1">
+              <li data-coords="1,4" data-marker="interchange"><a href="">Los Arcos de Fuentepizarro</a></li>
+              <li data-coords="4,2" data-marker="station"><a href="">El Escorial</a></li>
+              <li data-coords="10,2" data-marker="station"><a href="">Galapagar</a></li>   
+            </ul>
+
+            <ul data-color="#00ff00" data-label="Ruta 2">      
+              <li data-coords="1,4" data-marker="interchange"></li>
+              <li data-coords="4,6" data-marker="station"><a href="">Gran Hotel las Rozas</a></li>
+              <li data-coords="7,6" data-marker="station"><a href="">Principe Pío</a></li>
+              <li data-coords="10,6" data-marker="station"><a href="">Carabanchel</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -167,6 +210,7 @@ layout: default
 <!-- Custom JS -->
 <script src="/_assets/js/vendor/jquery.js"></script>
 <script src="/_assets/js/vendor/leaflet.js"></script>
+<script src="/_assets/js/vendor/jquery.subwaymap.js"></script>
 <script src="/_assets/js/church-to-banquet-route.js"></script>
 <script src="/_assets/js/home.js"></script>
 <!-- endbuild -->

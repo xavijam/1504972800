@@ -16,6 +16,17 @@ $(function () {
 
 	// Form
 	$('.js-contactForm').submit(bindFormBehaviour);
+
+  // Transport map
+  $('.js-busRouteMap').subwayMap({ debug: false });
+  $('.js-returnButton').click(function (e) {
+    $('.js-returnMap').removeClass('u-hidden');
+    $('.js-departureMap').addClass('u-hidden');
+  });
+  $('.js-departureButton').click(function (e) {
+    $('.js-returnMap').addClass('u-hidden');
+    $('.js-departureMap').removeClass('u-hidden');
+  });
 });
 
 function bindFormBehaviour(e) {
