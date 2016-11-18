@@ -336,12 +336,12 @@ THE SOFTWARE.
         var y = data.y * scale;
 
         // Keep it simple -- black on white, or white on black
-        var fgColor = "#333";
+        var fgColor = "#444";
         var bgColor = "#FFF";
         if (reverseMarkers)
         {
             fgColor = "#FFF";
-            bgColor = "#333";
+            bgColor = "#444";
         }
 
         // Render station and interchange icons
@@ -352,7 +352,7 @@ THE SOFTWARE.
         {
             case "interchange":
             case "@interchange":
-                ctx.lineWidth = width;
+                ctx.lineWidth = 4;
                 var radius = width * 0.7;
                 if (data.markerInfo == "") {
                     ctx.arc(x, y, radius, 0, Math.PI*2, true);
@@ -500,7 +500,7 @@ THE SOFTWARE.
         {
             case "n":
                 pos = "text-align: center; margin: 0 0 " + offset + "px " + centerOffset;
-                topOffset = offset * 2;
+                topOffset = offset;
                 break;
             case "w":
                 pos = "text-align: right; margin:0 " + offset + "px 0 -" + (100 + offset) + "px";

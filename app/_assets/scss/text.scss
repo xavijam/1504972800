@@ -30,6 +30,12 @@
 	font-weight: normal;
 	line-height: 20px;
 }
+.Text--label {
+  font-family: 'Lato';
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 16px;
+}
 .Text--logo {
 	font-family: 'Blanch Inline';
 	font-size: 90px;
@@ -43,6 +49,11 @@
 	font-size: 40px;
 	font-style: normal;
 	vertical-align: middle;
+}
+.Text--iconTitle {
+  font-size: 20px;
+  font-style: normal;
+  line-height: 40px;
 }
 .Text--option {
 	font-family: 'Blanch';
@@ -70,11 +81,17 @@
 .Color--lightGrey {
 	color: $lightGrey;
 }
-.Color--blue {
+.Color--theColor {
 	color: $thecolor;
+}
+.Color--lightBlue {
+  color: $lightBlue;
 }
 .Color--pink {
 	color: $pinkColor;
+}
+.Color--cream {
+  color: #F4EAE1;
 }
 .Color--white {
 	color: white;

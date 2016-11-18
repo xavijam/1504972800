@@ -6,20 +6,20 @@
 	width: 100%;
 	height: 100%;
 }
-.Slide--blue {
+.Slide--lightBlue {
+	background: $lightBlue;
+}
+.Slide--theColor {
 	background: $thecolor;
 }
 .Slide--cream {
-	background: rgba(#F4EAE1, 0.4);
+	background: rgba($creamColor, 0.8);
 }
 .Slide--grey {
 	background: #EEE9ED;
 }
 .Slide--pink {
-	background: rgba(pink, 0.1);
-}
-.Slide--red {
-	background: rgba(red, 0.05);
+	background: rgba($pinkColor, 0.8);
 }
 .Slide-contentBox {
 	position: relative;

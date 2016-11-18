@@ -20,8 +20,8 @@
 		border-color: $darkGrey;
 	}
 }
-.Button--blue {
-	$color: rgba($thecolor, 0.6);
+.Button--theColor {
+	$color: rgba($thecolor, 0.8);
 	$hoverColor: rgba($thecolor, 1);
 	color: $color;
 	border-color: $color;

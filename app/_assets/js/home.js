@@ -1,4 +1,5 @@
 var sendingForm = false;
+var lineColor = '#8AAFB7';
 
 $(function () {	
 	window.churchMap = createMap({
@@ -139,9 +140,9 @@ function createMap (opts) {
 	});
 
 	var routeLayer = L.geoJSON(null, {
-    color: "#436971",
-    weight: 5,
-    opacity: 0.65
+    color: lineColor,
+    weight: 4,
+    opacity: 1
 	}).addTo(map);
 	routeLayer.addData(window.route);
 	
