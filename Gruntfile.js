@@ -15,6 +15,7 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     // Configurable paths
+    js: 'js',
     app: {
       app: 'app',
       dist: 'dist'
@@ -42,7 +43,7 @@ module.exports = function (grunt) {
         files: [
           '.jekyll/**/*.html',
           '.tmp/css/**/*.css',
-          '{.tmp,<%= app.app %>/_assets}/<%= js %>/**/*.js',
+          '{.tmp,<%= app.app %>/_assets}/js/**/*.js',
           '<%= app.app %>/img/**/*.{gif,jpg,jpeg,png,svg,webp}'
         ]
       }
@@ -122,7 +123,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= app.app %>/_assets/scss',
           src: '**/*.{scss,sass}',
-          dest: '<%= app.dist %>/<%= app.baseurl %>/css',
+          dest: '.tmp/<%= app.baseurl %>/css',
           ext: '.css'
         }]
       }
@@ -190,7 +191,7 @@ module.exports = function (grunt) {
       },
       html: ['<%= app.dist %>/**/*.html'],
       css: ['<%= app.dist %>/css/**/*.css'],
-      js: '<%= app.dist %>/js/*.js'
+      js: '<%= app.dist %>/js/**/*.js'
     },
     htmlmin: {
       dist: {
@@ -249,19 +250,19 @@ module.exports = function (grunt) {
           expand: true,
           dot: true,
           cwd: '<%= app.app %>',
-          src: [
-            // Jekyll processes and moves HTML and text files.
-            // Usemin moves CSS and javascript inside of Usemin blocks.
-            // Copy moves asset files and directories.
-            '_assets/img/**/*',
-            '_assets/fonts/**/*',
-            // Like Jekyll, exclude files & folders prefixed with an underscore.
-            '!**/_*{,/**}',
-            // Explicitly add any files your site needs for distribution here.
-            //'_bower_components/jquery/jquery.js',
-            'favicon.ico'
-            //'apple-touch*.png'
-          ],
+          src: 'favicon.ico',
+          dest: '<%= app.dist %>'
+        }, {
+          expand: true,
+          dot: true,
+          cwd: '<%= app.app %>/_assets',
+          src: 'fonts/**/*',
+          dest: '<%= app.dist %>'
+        }, {
+          expand: true,
+          dot: true,
+          cwd: '<%= app.app %>/_assets/img',
+          src: 'img/**/*',
           dest: '<%= app.dist %>'
         }]
       },
@@ -374,9 +375,9 @@ module.exports = function (grunt) {
 
   // No real tests yet. Add your own.
   grunt.registerTask('test', [
-  //   'clean:server',
-  //   'concurrent:test',
-  //   'connect:test'
+    'clean:server',
+    'concurrent:test',
+    'connect:test'
   ]);
 
   grunt.registerTask('check', [
@@ -405,8 +406,8 @@ module.exports = function (grunt) {
     ]);
 
   grunt.registerTask('deploy', [
-    'check',
-    'test',
+    // 'check',
+    // 'test',
     'build',
     'buildcontrol:pages'
     ]);
