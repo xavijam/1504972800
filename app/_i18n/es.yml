@@ -8,53 +8,18 @@ section:
   transport: autobús
   gift: regalo
   contact: contacto
-what:
-  title: Después de (12 + 1) años...
-  description:
-    ...conociéndonos hemos decidido que es el mejor momento para montar un
-    <span class="Text--paragraphStrong Color--pink">bodorrio</span> como Dios
-    manda, y no queremos que faltéis, así que anotad la fecha y seguid leyendo
-    para saber todo lo que estamos tramando...
-ceremony:
-  description:
-    Todo empezará con la misa, y esta tendrá lugar en la Parroquia <span class="Text--paragraphStrong Color--pink">Santísimo Corpus Christi</span>
-    de las Rozas a las <span class="Text--paragraphStrong Color--pink">18</span> horas<super>*</super>.
-  address:
-    La dirección es Camino Perales 4, Las Rozas, Madrid.
-  driving: ruta en coche
-  annotation:
-    No podéis llegar tarde, si conocéis a Lau sabréis que aparca en la puerta y llega pronto siempre.
-banquet:
-  description: 
-    Después disfrutaremos de buena música, comida y bebida en <span class="Text--paragraphStrong Color--pink">Los Arcos de Fuentepizarro</span>.
-  address:
-    Se encuentra en Ctra Guadarrama al Escorial, Km. 3.400, San Lorenzo del Escorial, Madrid.
-  driving: ruta en coche
-  annotation:
-    No penséis que esto se va a acabar a las 2 de la mañana, ¡hay noche para largo!
-accomodation: 
-  description: 
-    Os damos varias ideas de donde dormir unas pocas horas después de la fiesta, además el itinerario del autobús pasa por varios de ellos
-  and-from: y desde
-  close-church:
-    title: Cerca de la iglesia
-    away-1: a <a class="Text--link" href="https://goo.gl/G6Z6ay">3,7km</a>
-    away-2: a <a class="Text--link" href="https://goo.gl/sJu6Xh" target="_blank">3,8km</a>
-    away-3: a <a class="Text--link" href="https://goo.gl/yLzYbM" target="_blank">4,8km</a>
-  close-banquet:
-    title: Cerca del banquete
-    away-1: a <a class="Text--link" href="https://goo.gl/CfUuGB" target="_blank">6,2km</a>
-    away-2: a <a class="Text--link" href="https://goo.gl/CQypnB">6,2km</a>
-    away-3: a <a class="Text--link" href="https://goo.gl/LZJytQ" target="_blank">0,8km</a>
-transport:
-  description:
-    Habrá dos linas autobuses para la llegada a la Iglesia, una linea para el banquete y de nuevo otras 2 lineas durante y al final de la fiesta
-contact:
-  description: ¿Queréis confirmar vuestra asistencia?
-  email: Tu email
-  name: Tu nombre
-  message: Tu mensaje, número de invitados, autobús?,...
-  send: enviar
-  success: Mensaje enviado!
-  error: Oh! Hubo un error :(
-  doubt: ¿Alguna duda?
+
+honeymoon:
+  title: Viaje de novios
+  map:
+    title: Nueva Zelanda
+    desc: ¿Nos ayudas?
+  content: 
+    title: |
+      Tenemos los billetes y en <a href="http://mochiling.es">mochiling.es</a> nos han
+      creado una experiencia a medida, ¿nos ayudas a vivirla?
+    desc: |
+      paco
+
+    subtitle:
+      subtitle

@@ -1,143 +1,36 @@
-@import 'vars';
+/**
+ *  Text classes for the whole web
+ */
 
-.Text {}
-.Text--bigTitle {
-	font-family: 'Blanch Inline';
-	font-size: 100px;
-	font-weight: normal;
-	margin-top: -20px;
-}
-.Text--title {}
-.Text--subTitle {
-	font-family: 'Pacifico';
-	font-size: 40px;
-	font-weight: normal;
-}
-.Text--paragraph {
-	font-family: 'Lato';
-	font-size: 21px;
-	font-weight: normal;
-	line-height: 32px;
-}
-.Text--paragraphStrong {
-	font-size: 26px;
-	font-family: 'Pacifico';
-	font-weight: normal;
-}
-.Text--annotation {
-	font-family: 'Lato';
-	font-size: 16px;
-	font-weight: normal;
-	line-height: 20px;
-}
-.Text--label {
+.Text {
   font-family: 'Lato';
-  font-size: 14px;
   font-weight: normal;
-  line-height: 16px;
 }
-.Text--logo {
-	font-family: 'Blanch Inline';
-	font-size: 90px;
-	font-weight: normal;
-	text-decoration: none;
-	color: #8E8F8F;
-	vertical-align: center;
+.Text--giant {
+  font-size: 38px;
 }
-.Text--logoHeart {
-	font-family: Arial;
-	font-size: 40px;
-	font-style: normal;
-	vertical-align: middle;
+.Text--huge {
+  font-size: 30px;
 }
-.Text--iconTitle {
-  font-size: 20px;
-  font-style: normal;
-  line-height: 40px;
+.Text--big {
+  font-size: 22px;
 }
-.Text--option {
-	font-family: 'Blanch';
-	font-size: 25px;
-	font-weight: normal;
+.Text--large {
+  font-size: 18px;
+  line-height: 26px;
 }
-.Text--link {
-	&:hover {
-		color: $darkGrey;
-	}
+.Text--med {
+  font-size: 14px;
 }
-.Text--centered {
-	text-align: center;
+.Text--small {
+  font-size: 10px;
 }
-
-.Color--darkGrey {
-	color: $darkGrey;
+.Text--strong {
+  font-weight: bold;
 }
-.Color--red {
-	color: $redColor;
+.Text--uppercase {
+  text-transform: uppercase;
 }
-.Color--grey {
-	color: $grey;
-}
-.Color--lightGrey {
-	color: $lightGrey;
-}
-.Color--theColor {
-	color: $thecolor;
-}
-.Color--lightBlue {
-  color: $lightBlue;
-}
-.Color--pink {
-	color: $pinkColor;
-}
-.Color--cream {
-  color: #F4EAE1;
-}
-.Color--white {
-	color: white;
-}
-
-
-/* ----------- iPhone 4 and 4S ----------- */
-/* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 480px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-  	.Text--bigTitle { font-size: 40px; }
-  	.Text--subTitle { font-size: 20px; }
-  	.Text--annotation { font-size: 12px; }
-}
-
-/* ----------- iPhone 5 and 5S ----------- */
-/* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-  	.Text--bigTitle { font-size: 40px; }
-  	.Text--subTitle { font-size: 20px; }
-  	.Text--annotation { font-size: 12px; }
-}
-
-/* ----------- iPhone 6 ----------- */
-/* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) 
-  and (-webkit-min-device-pixel-ratio: 2) { 
-  	.Text--bigTitle { font-size: 40px; }
-  	.Text--subTitle { font-size: 20px; }
-  	.Text--annotation { font-size: 12px; }
-}
-
-/* ----------- iPhone 6+ ----------- */
-/* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 414px) 
-  and (max-device-width: 736px) 
-  and (-webkit-min-device-pixel-ratio: 3) { 
-  	.Text--bigTitle { font-size: 40px; }
-  	.Text--subTitle { font-size: 20px; }
-  	.Text--annotation { font-size: 12px; }
+.Text--italic {
+  font-style: italic;
 }

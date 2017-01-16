@@ -1,0 +1,11 @@
+<div class="HoneyMoonOptions-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+  <div class="l-box">
+    <img class="HoneyMoonOptions-picture" src="{{ include.data.image }}" alt="" title="" />
+    {% if include.data.wikipedia_url %}
+      <a href="{{ wikipedia_url }}">{{ include.data.name }}</a>
+    {% else %}
+      <h5>{{ include.data.name }}</h5>
+    {% endif %}
+    <p class="">{{ include.data.desc }}</p>
+  </div>
+</div>
