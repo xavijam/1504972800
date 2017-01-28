@@ -1,6 +1,6 @@
 #!/bin/sh
 echo 'Building page'
-brunch build --production
+brunch build
 echo 'Commit public folder'
 git add --all
 git commit -m "Committing public folder"
