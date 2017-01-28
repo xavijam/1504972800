@@ -1,5 +1,6 @@
 node_modules
 dist
+public
 
 # Compiled source #
 ###################
@@ -38,8 +39,3 @@ dist
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Jekyll files #
-################
-.tmp
-.jekyll
