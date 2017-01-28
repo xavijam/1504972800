@@ -28,6 +28,7 @@
     "clean-css-brunch": "^2.0.0",
     "css-brunch": "^2.0.0",
     "handlebars-brunch": "^2.10.0",
+    "html-pages-brunch": "^2.5.0",
     "javascript-brunch": "^2.0.0",
     "json-brunch": "^1.5.4",
     "node-polyglot": "^2.2.2",
