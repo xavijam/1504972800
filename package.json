@@ -1,43 +1,38 @@
 {
-	"name": "1504972800",
-	"version": "0.0.1",
-	"description": "1504972800",
-	"author": "xavijam@gmail.com",
-  "license": "ISC",
+  "name": "1504972800",
+  "description": "Wedding! :D",
+  "author": "xavijam",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xavijam/1504972800.git"
+    "url": "http://github.com/xavijam/1504972800"
   },
-  "bugs": {
-    "url": "https://github.com/xavijam/1504972800/issues"
+  "scripts": {
+    "start": "brunch watch --server",
+    "prod": "brunch build --production"
   },
-  "homepage": "https://github.com/xavijam/1504972800",
-	"devDependencies": {
-    "grunt": "~1.0.1",
-    "grunt-autoprefixer": "~3.0.4",
-    "grunt-build-control": "~0.7.1",
-    "grunt-concurrent": "~2.3.1",
-    "grunt-contrib-clean": "~1.0.0",
-    "grunt-contrib-concat": "~1.0.1",
-    "grunt-contrib-connect": "~1.0.2",
-    "grunt-contrib-copy": "~1.0.0",
-    "grunt-contrib-cssmin": "~1.0.2",
-    "grunt-contrib-htmlmin": "~2.0.0",
-    "grunt-contrib-imagemin": "~1.0.1",
-    "grunt-contrib-uglify": "~2.0.0",
-    "grunt-contrib-watch": "~1.0.0",
-    "grunt-critical": "~0.1.1",
-    "grunt-filerev": "~2.3.1",
-    "grunt-jekyll": "~0.4.4",
-    "grunt-sass": "~0.17.0",
-    "grunt-svgmin": "~2.0.0",
-    "grunt-uncss": "~0.4.0",
-    "grunt-usemin": "~3.1.1",
-    "jit-grunt": "~0.10.0",
-    "load-grunt-tasks": "~3.5.2",
-    "time-grunt": "~1.0.0"
+  "dependencies": {
+    "assetsmanager-brunch": "^1.8.1",
+    "backbone": "1.3.3",
+    "jquery": "^3.1.1",
+    "protip": "^1.4.15",
+    "reveal": "0.0.4",
+    "reveal.js": "^3.4.0",
+    "underscore": "1.8.3"
   },
-  "engines": {
-    "node": ">=0.10.0"
+  "devDependencies": {
+    "auto-reload-brunch": "^2.0.0",
+    "babel-brunch": "~6.0.0",
+    "babel-preset-es2015": "~6.3.13",
+    "brunch": "^2.4.0",
+    "clean-css-brunch": "^2.0.0",
+    "copycat-brunch": "1.1.0",
+    "css-brunch": "^2.0.0",
+    "handlebars-brunch": "^2.10.0",
+    "javascript-brunch": "^2.0.0",
+    "json-brunch": "^1.5.4",
+    "node-polyglot": "^2.2.2",
+    "sass-brunch": "^2.9.0",
+    "uglify-js-brunch": "^2.0.0"
   }
 }

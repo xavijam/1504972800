@@ -1,0 +1,12 @@
+{{#each slides}}
+  <li class="Navigation-item">
+    <button data-slide="{{@index}}" data-pt-size="small" data-pt-scheme="black" data-pt-skin="square" data-pt-offset-top="-5" data-pt-gravity="false" data-pt-position="top" data-pt-title="{{this}}" class="
+      protip
+      Navigation-button
+      {{#ifCond @index '==' ../selectedSlide}}
+        is-selected
+      {{/ifCond}}
+      js-slideButton
+    ">{{this}}</button>
+  </li>
+{{/each}}

@@ -1,0 +1,46 @@
+{
+  "date": "9 Septiembre 2017",
+  "home": {
+    "key": "boda",
+    "title": "boda",
+    "desc": "¿Nos acompañáis?"
+  },
+  "transport-going": {
+    "key": "transporte-ida",
+    "title": "Transporte",
+    "sub-title": "ida",
+    "desc": ""
+  },
+  "church": {
+    "key": "iglesia",
+    "title": "Iglesia",
+    "desc": ""
+  },
+  "banquet": {
+    "key": "banquete",
+    "title": "Banquete",
+    "desc": ""
+  },
+  "transport-return": {
+    "key": "transporte-vuelta",
+    "title": "Transporte",
+    "sub-title": "vuelta",
+    "desc": ""
+  },
+  "accomodation": {
+    "key": "hoteles",
+    "title": "Hoteles",
+    "sub-title": "vuelta",
+    "desc": ""
+  },
+  "honeymoon": {
+    "key": "viaje",
+    "title": "Viaje",
+    "desc": ""
+  },
+  "contact": {
+    "key": "contacto",
+    "title": "Contacto",
+    "desc": ""
+  }
+}

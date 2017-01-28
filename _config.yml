@@ -1,8 +1,0 @@
-title: Javi ❥ Lau
-email: javiylausep2017@gmail.com
-baseurl: ""
-url: "http://bodajaviylau.es"
-languages: ["es", "en"]
-exclude_from_localizations: ["img", "_assets"]
-markdown: kramdown
-gems: [jekyll-admin, jekyll-multiple-languages-plugin]
