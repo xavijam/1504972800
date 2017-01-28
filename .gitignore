@@ -1,6 +1,7 @@
 node_modules
 dist
 public
+brunch-deploy.sh
 
 # Compiled source #
 ###################
