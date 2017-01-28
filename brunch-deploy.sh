@@ -1,4 +1,5 @@
 #!/bin/sh
-nvm use 7.2.1
+echo 'Building page'
 brunch build
-git subtree push --prefix public origin gh-pages
+echo 'Publishing to GH-pages'
+git push origin `git subtree split --prefix public new-page`:refs/heads/gh-pages --force
