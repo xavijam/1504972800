@@ -450,7 +450,7 @@ module.exports = {
   "banquet": {
     "key": "banquete",
     "title": "Banquete",
-    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' targe='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>."
+    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>."
   },
   "transport-return": {
     "key": "transporte-vuelta",
