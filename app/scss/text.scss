@@ -6,12 +6,17 @@
   line-height: 85px;
   text-decoration: uppercase;
 }
+.Text-subTitle {
+  font-size: 30px;
+  opacity: 0.5;
+}
 .Text-paragraph {
   font-family: 'Lato';
   font-size: 16px;
-  font-weight: normal;
-  letter-spacing: 0;
-  line-height: 20px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  line-height: 25px;
+  opacity: 0.86;
 }
 .Text-highlight {
   padding: 10px 30px 18px;

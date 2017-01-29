@@ -333,7 +333,7 @@ module.exports = {
     "key": "transport-going",
     "title": "Transport",
     "sub-title": "going",
-    "desc": ""
+    "desc": "Everything will start at the church, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:"
   },
   "church": {
     "key": "church",
@@ -381,7 +381,7 @@ module.exports = {
     "key": "transporte-ida",
     "title": "Transporte",
     "sub-title": "ida",
-    "desc": ""
+    "desc": "Todo empezará en la iglesia, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:"
   },
   "church": {
     "key": "iglesia",
@@ -569,11 +569,19 @@ if (typeof define === 'function' && define.amd) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "<section class=\"slide\" id=\""
+  return "<section class=\"slide Slide\" id=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.key",{"name":"t","hash":{},"data":data}))
     + "\" data-title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.title",{"name":"t","hash":{},"data":data}))
-    + "\" data-background=\"#E2AB49\">\n  <div class=\"content\">\n    <div class=\"content-item\">Slide 2</div>\n    <div class=\"content-item\">paco</div>\n  </div>\n</section>";
+    + "\" data-background=\"#E2AB49\">\n  <div class=\"Slide-content\">\n    <i class=\"Color fa fa-bus fa-lg\"></i>\n    <h2 class=\"Color Text-title\">\n      "
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.title",{"name":"t","hash":{},"data":data}))
+    + "\n      <super class=\"Text-subTitle\">\n        ["
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.sub-title",{"name":"t","hash":{},"data":data}))
+    + "]\n      </super>\n    </h2>\n    <p class=\"Slide-contentParagraph Text Color Text-paragraph u-tSpace--xl\">"
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.desc",{"name":"t","hash":{},"data":data}))
+    + "</p>\n    <form>\n      <input type=\"text\" value=\"\" placeholder=\""
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.choose",{"name":"t","hash":{},"data":data}))
+    + "\" />\n    </form>\n  </div>\n</section>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
