@@ -9,17 +9,17 @@
     "key": "transport-going",
     "title": "Transport",
     "sub-title": "going",
-    "desc": "Everything will start at the church, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:"
+    "desc": "Everything will start at the <a class='Color Color--link' href='#/church'>church</a>, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:"
   },
   "church": {
     "key": "church",
     "title": "Church",
-    "desc": ""
+    "desc": "Our first stop will be for enjoying the ceremony, it will take place at <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Santísimo Corpus Christi church</a> at 6pm. It is located in <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>."
   },
   "banquet": {
     "key": "banquet",
     "title": "Banquet",
-    "desc": ""
+    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>."
   },
   "transport-return": {
     "key": "transport-return",

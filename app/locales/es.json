@@ -9,17 +9,17 @@
     "key": "transporte-ida",
     "title": "Transporte",
     "sub-title": "ida",
-    "desc": "Todo empezará en la iglesia, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:"
+    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:"
   },
   "church": {
     "key": "iglesia",
     "title": "Iglesia",
-    "desc": ""
+    "desc": "Nuestra primera parada será para disfrutar de la ceremonia, que tendrá lugar en la <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Parroquia Santísimo Corpus Christi</a> a las 18 horas. Esta se encuentra en <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>."
   },
   "banquet": {
     "key": "banquete",
     "title": "Banquete",
-    "desc": ""
+    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' targe='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>."
   },
   "transport-return": {
     "key": "transporte-vuelta",

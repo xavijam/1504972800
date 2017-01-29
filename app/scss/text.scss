@@ -1,12 +1,18 @@
 // Texts stylesheet
 
 .Text-title {
+  position: relative;
   font-family: 'Blanch Inline';
-  font-size: 80px;
-  line-height: 85px;
-  text-decoration: uppercase;
+  font-size: 45px;
+  font-weight: normal;
+  line-height: 55px;
+  text-transform: uppercase;
 }
 .Text-subTitle {
+  position: absolute;
+  top: -10px;
+  left: 100%;
+  margin-left: 5px;
   font-size: 30px;
   opacity: 0.5;
 }
@@ -14,7 +20,7 @@
   font-family: 'Lato';
   font-size: 16px;
   font-weight: 300;
-  letter-spacing: 0.5px;
+  letter-spacing: 0px;
   line-height: 25px;
   opacity: 0.86;
 }

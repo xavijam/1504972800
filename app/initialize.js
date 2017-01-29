@@ -1,32 +1,52 @@
 var $ = require('jquery');
+var Backbone = require('backbone');
 global.jQuery = $;
 require('protip');
+var DefaultView = require('js/default-view');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
 var NavigationView = require('js/navigation-view');
 var Reveal = require('reveal');
 require('js/handlebars-helpers');
 
-var templates = [
-  require('templates/home.hbs'),
-  require('templates/transport-going.hbs'),
-  require('templates/church.hbs'),
-  require('templates/banquet.hbs'),
-  require('templates/transport-return.hbs'),
-  require('templates/accomodation.hbs'),
-  require('templates/honeymoon.hbs'),
-  require('templates/contact.hbs')
-];
 
 document.addEventListener('DOMContentLoaded', init);
 
 function init () {
   // Render templates
   var $slides = $('#slides');
-  for (var i = 0, l = templates.length; i < l; i++) {
-    $slides.append(
-      templates[i]({})
-    );
-  }
+
+  // Home
+  var view = new DefaultView({
+    template: require('templates/home.hbs'),
+    background: '#97BDBB',
+    translateKey: 'home'
+  });
+  $slides.append(view.render().el);
+
+  // Transport going
+  var view = new DefaultView({
+    template: require('templates/transport-going.hbs'),
+    background: '#E2AB49',
+    translateKey: 'transport-going'
+  });
+  $slides.append(view.render().el);
+
+  // Church
+  var view = new DefaultView({
+    template: require('templates/church.hbs'),
+    background: '#6C818E',
+    translateKey: 'church'
+  });
+  $slides.append(view.render().el);
+
+  // Banquet
+  var view = new DefaultView({
+    template: require('templates/banquet.hbs'),
+    background: '#FA8072',
+    translateKey: 'banquet'
+  });
+  $slides.append(view.render().el);
+
 
   Reveal.initialize({
     controls: false,
