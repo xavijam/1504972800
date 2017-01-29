@@ -5,6 +5,12 @@
   color: #97BDBB; }
 
 
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+
 @charset "UTF-8";
 @font-face {
   font-family: 'Pacifico';
@@ -47,6 +53,15 @@
 
 .u-tSpace--xl {
   margin-top: 14px; }
+
+
+@media only screen {
+  #a {
+    background: url(data:image/png;base64,{96_dpi_encoded_image}); } }
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  #a {
+    background: url(data:image/png;base64,{192_dpi_encoded_image}); } }
 
 
 .Navigation {
@@ -133,16 +148,22 @@
   box-shadow: none !important; }
 
 .Slide-contentParagraph {
-  max-width: 400px; }
+  max-width: 380px; }
 
 
 .Text-title {
+  position: relative;
   font-family: 'Blanch Inline';
-  font-size: 80px;
-  line-height: 85px;
-  text-decoration: uppercase; }
+  font-size: 45px;
+  font-weight: normal;
+  line-height: 55px;
+  text-transform: uppercase; }
 
 .Text-subTitle {
+  position: absolute;
+  top: -10px;
+  left: 100%;
+  margin-left: 5px;
   font-size: 30px;
   opacity: 0.5; }
 
@@ -150,7 +171,7 @@
   font-family: 'Lato';
   font-size: 16px;
   font-weight: 300;
-  letter-spacing: 0.5px;
+  letter-spacing: 0px;
   line-height: 25px;
   opacity: 0.86; }
 
