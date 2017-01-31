@@ -150,13 +150,17 @@ body {
 .Slide-contentParagraph {
   max-width: 380px; }
 
+@media only screen and (min-width: 0) and (max-width: 450px) {
+  .Slide-contentParagraph {
+    max-width: 85%; } }
+
 
 .Text-title {
   position: relative;
   font-family: 'Blanch Inline';
-  font-size: 45px;
+  font-size: 60px;
   font-weight: normal;
-  line-height: 35px;
+  line-height: 55px;
   text-transform: uppercase; }
 
 .Text-subTitle {
@@ -164,15 +168,15 @@ body {
   top: -10px;
   left: 100%;
   margin-left: 5px;
-  font-size: 30px;
+  font-size: 32px;
   opacity: 0.5; }
 
 .Text-paragraph {
   font-family: 'Lato';
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 300;
   letter-spacing: 0px;
-  line-height: 25px;
+  line-height: 28px;
   opacity: 0.86; }
 
 .Text-highlight {
@@ -188,6 +192,20 @@ body {
   .Text-link:hover {
     opacity: 1;
     text-decoration: underline; }
+
+@media only screen and (min-width: 0) and (max-width: 450px) {
+  .Text-title {
+    font-size: 45px;
+    font-weight: normal;
+    line-height: 35px; }
+  .Text-subTitle {
+    font-size: 30px; }
+  .Text-highlight {
+    font-size: 25px;
+    line-height: 35px; }
+  .Text-paragraph {
+    font-size: 16px;
+    line-height: 25px; } }
 
 
 
