@@ -770,7 +770,7 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"home.title",{"name":"t","hash":{},"data":data}))
     + "\" title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"home.title",{"name":"t","hash":{},"data":data}))
-    + "\"/>\n  <h1 class=\"Color Text-title u-tSpace--xl\">JAVIER + LAURA</h1>\n  <h2 class=\"content-item Color-main Text-highlight u-tSpace--xl\">"
+    + "\"/>\n  <h1 class=\"Color Text-title\">JAVIER + LAURA</h1>\n  <h2 class=\"content-item Color-main Text-highlight u-tSpace--xl\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"date",{"name":"t","hash":{},"data":data}))
     + "</h2>\n  <a href=\"#/"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.key",{"name":"t","hash":{},"data":data}))
