@@ -156,7 +156,7 @@ body {
   font-family: 'Blanch Inline';
   font-size: 45px;
   font-weight: normal;
-  line-height: 55px;
+  line-height: 35px;
   text-transform: uppercase; }
 
 .Text-subTitle {
@@ -186,6 +186,7 @@ body {
 .Text-link {
   text-decoration: none; }
   .Text-link:hover {
+    opacity: 1;
     text-decoration: underline; }
 
 

@@ -1,0 +1,10 @@
+<ul class="RouteList">
+  {{#each routePoints}}
+    {{#ifCond route '==' ../selectedRoute}}
+      <li class="RouteList-item">
+        {{place}}
+        {{time}}
+      </li>
+    {{/ifCond}}
+  {{/each}}
+</ul>

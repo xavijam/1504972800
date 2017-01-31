@@ -19,7 +19,8 @@
   "banquet": {
     "key": "banquet",
     "title": "Banquet",
-    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>."
+    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.",
+    "comment": "Kiss each other!"
   },
   "transport-return": {
     "key": "transport-return",
