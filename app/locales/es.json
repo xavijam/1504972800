@@ -14,7 +14,8 @@
   "church": {
     "key": "iglesia",
     "title": "Iglesia",
-    "desc": "Nuestra primera parada será para disfrutar de la ceremonia, que tendrá lugar en la <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Parroquia Santísimo Corpus Christi</a> a las 18 horas. Esta se encuentra en <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>."
+    "desc": "Nuestra primera parada será para disfrutar de la ceremonia, que tendrá lugar en la <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Parroquia Santísimo Corpus Christi</a> a las 18 horas. Esta se encuentra en <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>.",
+    "comment": "¡Vivan los novios!"
   },
   "banquet": {
     "key": "banquete",

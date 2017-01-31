@@ -31,21 +31,26 @@ module.exports = Backbone.View.extend({
   },
 
   _initBinds: function () {
-    Reveal.addEventListener('ready', this._checkCurrentSlide.bind(this));
-    Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
+    Reveal.addEventListener('ready', function (event) {
+      this._checkCurrentSlide(event);
+      Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
+    }.bind(this));
   },
 
   _openTip: function () {
-    $.protip({
-      selector: '.js-comments',
-      observer: true
-    });
+    this.$('.js-comments').protipShow();
+  },
+
+  _hideTip: function () {
+    this.$('.js-comments').protipHide();
   },
 
   _checkCurrentSlide: function (event) {
     if (event.indexh === this.options.index) {
-      setTimeout(this._openTip.bind(this), 1000);
+      setTimeout(this._openTip.bind(this), 2000);
       document.title = DEFAULT_TITLE + ' · ' + $(event.currentSlide).data('title');
+    } else {
+      this._hideTip();
     }
   },
 

@@ -58,7 +58,7 @@ body .protip-container.protip-mixin--css-no-style {
   border-color: #da2e2b transparent transparent transparent; }
 
 .protip-skin-default--scheme-pro[data-pt-position="top-left"] .protip-arrow {
-  left: 20px; }
+  left: 20px;}
 
 .protip-skin-default--scheme-pro[data-pt-position="top"] .protip-arrow {
   left: 50%; }
@@ -546,7 +546,10 @@ body .protip-container.protip-mixin--css-no-style {
   border-color: rgba(#000000, 0.6) transparent transparent transparent; }
 
 .protip-skin-default--scheme-black[data-pt-position="top-left"] .protip-arrow {
-  left: 20px; }
+  right: 20px;
+  left: auto;
+  border-width: 8px 12px 8px 0;
+}
 
 .protip-skin-default--scheme-black[data-pt-position="top"] .protip-arrow {
   left: 50%; }
@@ -554,7 +557,9 @@ body .protip-container.protip-mixin--css-no-style {
 .protip-skin-default--scheme-black[data-pt-position="top-right"] .protip-arrow {
   left: auto;
   right: 20px;
-  margin-right: -8px; }
+  border-width: 8px 0 8px 12px;
+  margin-right: -8px;
+}
 
 .protip-skin-default--scheme-black[data-pt-position="bottom-left"] .protip-arrow,
 .protip-skin-default--scheme-black[data-pt-position="bottom"] .protip-arrow,
@@ -1393,7 +1398,7 @@ body .protip-container.protip-mixin--css-no-style {
   top: 100%;
   left: auto;
   margin: 0 0 0 -8px;
-  border-width: 8px 12px 8px 0;
+  // border-width: 8px 12px 8px 0;
   border-color: invalid transparent transparent transparent; }
 
 .protip-skin-default--size-normal[data-pt-position="top-left"] .protip-arrow {

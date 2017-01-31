@@ -12,6 +12,8 @@ require('js/handlebars-helpers');
 document.addEventListener('DOMContentLoaded', init);
 
 function init () {
+  $.protip();
+  
   // Render templates
   var $slides = $('#slides');
 

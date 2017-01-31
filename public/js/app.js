@@ -164,6 +164,8 @@ require('js/handlebars-helpers');
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
+  $.protip();
+
   // Render templates
   var $slides = $('#slides');
 
@@ -274,21 +276,26 @@ module.exports = Backbone.View.extend({
   },
 
   _initBinds: function _initBinds() {
-    Reveal.addEventListener('ready', this._checkCurrentSlide.bind(this));
-    Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
+    Reveal.addEventListener('ready', function (event) {
+      this._checkCurrentSlide(event);
+      Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
+    }.bind(this));
   },
 
   _openTip: function _openTip() {
-    $.protip({
-      selector: '.js-comments',
-      observer: true
-    });
+    this.$('.js-comments').protipShow();
+  },
+
+  _hideTip: function _hideTip() {
+    this.$('.js-comments').protipHide();
   },
 
   _checkCurrentSlide: function _checkCurrentSlide(event) {
     if (event.indexh === this.options.index) {
-      setTimeout(this._openTip.bind(this), 1000);
+      setTimeout(this._openTip.bind(this), 2000);
       document.title = DEFAULT_TITLE + ' · ' + $(event.currentSlide).data('title');
+    } else {
+      this._hideTip();
     }
   },
 
@@ -365,7 +372,9 @@ module.exports = Backbone.View.extend({
   className: 'Navigation-list',
 
   events: {
-    'click .js-slideButton': '_onButtonClick'
+    'click .js-slideButton': '_onButtonClick',
+    'mouseover .js-slideButton': '_onMouseOver',
+    'mouseout .js-slideButton': '_onMouseOut'
   },
 
   initialize: function initialize(opts) {
@@ -374,9 +383,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function render() {
-    // Remove all protips containers
-    $('.protip-container').remove();
-
     var selectedSlide = Reveal.getIndices().h;
     this.$el.html(template({
       slides: this.options.slides,
@@ -385,11 +391,6 @@ module.exports = Backbone.View.extend({
 
     this.$el.toggleClass('is-dark', selectedSlide === 6);
 
-    $.protip({
-      selector: '.js-slideButton',
-      observer: true
-    });
-
     return this;
   },
 
@@ -397,9 +398,20 @@ module.exports = Backbone.View.extend({
     Reveal.addEventListener('slidechanged', this.render.bind(this));
   },
 
+  _onMouseOut: function _onMouseOut(ev) {
+    var $el = $(ev.target);
+    $el.protipHide();
+  },
+
+  _onMouseOver: function _onMouseOver(ev) {
+    var $el = $(ev.target);
+    $el.protipShow();
+  },
+
   _onButtonClick: function _onButtonClick(ev) {
     var $el = $(ev.target);
     var slideNumber = $el.data('slide');
+    $el.protipHide();
     Reveal.slide(slideNumber);
   }
 
@@ -592,7 +604,8 @@ module.exports = {
   "church": {
     "key": "church",
     "title": "Church",
-    "desc": "Our first stop will be for enjoying the ceremony, it will take place at <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Santísimo Corpus Christi church</a> at 6pm. It is located in <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>."
+    "desc": "Our first stop will be for enjoying the ceremony, it will take place at <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Santísimo Corpus Christi church</a> at 6pm. It is located in <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>.",
+    "comment": "Live the bride and groom!"
   },
   "banquet": {
     "key": "banquet",
@@ -641,7 +654,8 @@ module.exports = {
   "church": {
     "key": "iglesia",
     "title": "Iglesia",
-    "desc": "Nuestra primera parada será para disfrutar de la ceremonia, que tendrá lugar en la <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Parroquia Santísimo Corpus Christi</a> a las 18 horas. Esta se encuentra en <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>."
+    "desc": "Nuestra primera parada será para disfrutar de la ceremonia, que tendrá lugar en la <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Parroquia Santísimo Corpus Christi</a> a las 18 horas. Esta se encuentra en <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>.",
+    "comment": "¡Vivan los novios!"
   },
   "banquet": {
     "key": "banquete",
@@ -695,9 +709,9 @@ if (typeof define === 'function' && define.amd) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "<div class=\"Slide-content\">\n  <div class=\"Slide-contentIcon js-comments\" data-pt-size=\"normal\" data-pt-scheme=\"black\" data-pt-offset-top=\"-5\" data-pt-gravity=\"false\" data-pt-position=\"top-left\" data-pt-trigger=\"sticky\" data-pt-offset-left=\"50\" data-pt-title=\""
+  return "<div class=\"Slide-content\">\n  <div class=\"Slide-contentIcon js-comments\" data-pt-size=\"normal\" data-pt-scheme=\"black\" data-pt-trigger=\"sticky\" data-pt-offset-top=\"-5\" data-pt-gravity=\"false\" data-pt-position=\"top-left\" data-pt-offset-left=\"50\" data-pt-title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"banquet.comment",{"name":"t","hash":{},"data":data}))
-    + "\" data-pt-delay-in=1000>\n    <img class=\"Slide-icon\" style=\"width:70px; background-size:70px 70px;\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH4AAAB+CAMAAADV/VW6AAAC61BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8JS/TAAAAA+HRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywuLzAxMjM0NTc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGJjZGVm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\" alt=\""
+    + "\">\n    <img class=\"Slide-icon\" style=\"width:70px; background-size:70px 70px;\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH4AAAB+CAMAAADV/VW6AAAC61BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8JS/TAAAAA+HRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywuLzAxMjM0NTc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGJjZGVm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\" alt=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"banquet.title",{"name":"t","hash":{},"data":data}))
     + "\" title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"banquet.title",{"name":"t","hash":{},"data":data}))
@@ -722,7 +736,7 @@ if (typeof define === 'function' && define.amd) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "<div class=\"Slide-content\">\n  <div class=\"Slide-contentIcon js-comments\" data-pt-size=\"normal\" data-pt-scheme=\"black\" data-pt-offset-top=\"-5\" data-pt-gravity=\"false\" data-pt-position=\"top-right\" data-pt-trigger=\"sticky\" data-pt-offset-right=\"200\" data-pt-title=\""
+  return "<div class=\"Slide-content\">\n  <div class=\"Slide-contentIcon js-comments\" data-pt-size=\"normal\" data-pt-scheme=\"black\" data-pt-offset-top=\"-10\" data-pt-gravity=\"false\" data-pt-position=\"top-right\" data-pt-trigger=\"sticky\" data-pt-offset-left=\"-20\" data-pt-title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"church.comment",{"name":"t","hash":{},"data":data}))
     + "\" data-pt-delay-in=1000>\n    <img class=\"Slide-icon\" style=\"height:70px; background-size:70px 70px;\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAACMCAMAAADLEU4CAAACNFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+dEmAAAAAAu3RSTlMAAQIDBAUGBwgJCgsMDQ4PEBITFBUWFxgZGhscHR8hIiMkJScoKSorLC0uLzEyMzU2ODk6Ozw9QEJER0hJTU5QUVNWV1laXF1fYWJmZ2prbm9wcXJzdHV2d3h6e3x9foCDhIWGh4iJiouMjY6PkJGSlZaXnJ6foaKmp6ipqqussbW3uLq7vb/AwcPExsjJysvMzc7P0NHS1djZ2tvc3d7g4eLj5OXn6Onq7O3u7/Dx8vP09vf4+fr7/P3+e2r99gAAAvxJREFUeAHt1flTI0UAxfEnJrvqbrKs6CpGWMmuuLqHNx6KhyKoeAseCuIBeCiIyiHe4oGKChpQCRLCgRxBkERIhvfPyeAQJ5DMdCZNVazqz89d36qu6lcNYafWSUYuhTCVVmlZLtfTi0WQyFXf0rzplU6NZKyjWdfyMGTYP8XdRuSkg9zt+7xPT3K3AGRwv/VBr65PI7n2aa/uwxchU/nW47tArVGlVVqlVTrP01fq6cVi7IEqjWTsWsjnC1M3cACyFXzCfzVDtodoWLsFcl0R4bbRIsh0zjf8TydkeoEmG/dBnhujNJs9ClkKf2Gqz1yQ5B3u9CTkuCvBnf46I3OGqX48KGOGHzOdV2XOMNX6rchVeYTpBS/MdYb9zKQHuWlkZjUyZ5hqrkzmDFP1ueFYB609Bafu1Ght9Wo4c0mYdoY8MmeY6g04UUsB8dsd/oYCQhcjW+d9qcVpL8EeN7J07qmT18/TEJ8Mm81oNATPnD5tTgvXp2mY8B0yu2qFhmE4452hIXQQZiXLNIwU5Jz2wqxUpVVapVVaSno4n9PjZ8PsyJ/y0svvtpu0da3JSlv4f6YDKq3Sln5WaZW29JPDtGfv0odmaWcIThTe/12CdpYeO4xsXdb0O4WM1Z2PLJxV0b1EYaH6IgjyVvdrzEro2SMQUNoYZPbCDRfBxg1dEToz1VBs0fVUfZWgc9NNPqRX8vxvzNHsS+ni1723QFuxvs+jtPTHyyVIceDeL+K0N34TUBGktbnWUiS5HvmVIhZOYtOJedtzrx/d3kc7xTyILTW0tfCmH7prNAr51m1c8mvai7xdBuBRiqmE4bYNCpi7A6ilkMB+GPYNUqjtg3+FIp5G0hMU8gBQGyO50t1CK9FyJPlXKaJOn0v7+88dQyWtDLqQVDDAzH4YpeFmbLubVtpg0srMnimsG6PuI7dguhom9zCzRuDw44HIxGseiKX/PgGT41HLNLCv2AsIpqPHYFK2ap3WiaePw8Sf32mVVmmVVmmVVmmVVul/AGNwTlJG9F4BAAAAAElFTkSuQmCC\" alt=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"church.title",{"name":"t","hash":{},"data":data}))

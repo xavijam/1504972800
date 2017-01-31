@@ -9,7 +9,9 @@ module.exports = Backbone.View.extend({
   className: 'Navigation-list',
 
   events: {
-    'click .js-slideButton': '_onButtonClick'
+    'click .js-slideButton': '_onButtonClick',
+    'mouseover .js-slideButton': '_onMouseOver',
+    'mouseout .js-slideButton': '_onMouseOut'
   },
 
   initialize: function (opts) {
@@ -18,9 +20,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function () {
-    // Remove all protips containers
-    $('.protip-container').remove();
-
     var selectedSlide = Reveal.getIndices().h;
     this.$el.html(
       template({
@@ -31,11 +30,6 @@ module.exports = Backbone.View.extend({
 
     this.$el.toggleClass('is-dark', selectedSlide === 6);
 
-    $.protip({
-      selector: '.js-slideButton',
-      observer: true
-    });
-
     return this;
   },
 
@@ -43,9 +37,20 @@ module.exports = Backbone.View.extend({
     Reveal.addEventListener('slidechanged', this.render.bind(this));
   },
 
+  _onMouseOut: function (ev) {
+    var $el = $(ev.target);
+    $el.protipHide();
+  },
+
+  _onMouseOver: function (ev) {
+    var $el = $(ev.target);
+    $el.protipShow();
+  },
+
   _onButtonClick: function (ev) {
     var $el = $(ev.target);
     var slideNumber = $el.data('slide');
+    $el.protipHide();
     Reveal.slide(slideNumber);
   }
 

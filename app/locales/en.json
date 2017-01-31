@@ -14,7 +14,8 @@
   "church": {
     "key": "church",
     "title": "Church",
-    "desc": "Our first stop will be for enjoying the ceremony, it will take place at <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Santísimo Corpus Christi church</a> at 6pm. It is located in <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>."
+    "desc": "Our first stop will be for enjoying the ceremony, it will take place at <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Santísimo Corpus Christi church</a> at 6pm. It is located in <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>.",
+    "comment": "Live the bride and groom!"
   },
   "banquet": {
     "key": "banquet",
