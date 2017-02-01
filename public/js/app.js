@@ -202,6 +202,15 @@ function init() {
     translateKey: 'banquet'
   }).render().el);
 
+  // Transport return
+  $slides.append(new TransportSlideView({
+    template: require('templates/transport-return.hbs'),
+    index: 4,
+    background: '#9B9B9B',
+    translateKey: 'transport-return',
+    routeOptions: require('js/transport-return-routes')
+  }).render().el);
+
   Reveal.initialize({
     controls: false,
     progress: false,
@@ -462,7 +471,7 @@ var $ = require('jquery');
 module.exports = Backbone.View.extend({
 
   tagName: 'form',
-  className: 'Form js-selectionRoutePointForm',
+  className: 'RouteForm js-selectionRoutePointForm',
 
   events: {
     'change .js-pointSelect': '_onSelectChange'
@@ -512,12 +521,6 @@ require.register("js/transport-going-routes.js", function(exports, require, modu
 
 module.exports = [{
   route: 'A',
-  time: '16:30',
-  place: 'Av. de los Poblados',
-  city: 'Madrid',
-  link: ''
-}, {
-  route: 'A',
   time: '17:00',
   place: 'Principe Pío',
   city: 'Madrid',
@@ -532,16 +535,10 @@ module.exports = [{
 }, {
   route: 'A',
   time: '17:50',
-  place: 'Parroquia Santísimo Corpus Christi',
-  city: 'Las Rozas',
+  place: 'Iglesia Santísimo Corpus Christi',
+  city: '',
   link: '',
   slideURL: ''
-}, {
-  route: 'B',
-  time: '16:30',
-  place: 'Los Arcos de Fuentepizarro',
-  city: 'El Escorial',
-  link: ''
 }, {
   route: 'B',
   time: '16:45',
@@ -558,8 +555,61 @@ module.exports = [{
 }, {
   route: 'B',
   time: '17:50',
-  place: 'Parroquia Santísimo Corpus Christi',
+  place: 'Iglesia Santísimo Corpus Christi',
+  city: '',
+  link: '',
+  slideURL: ''
+}];
+
+});
+
+require.register("js/transport-return-routes.js", function(exports, require, module) {
+'use strict';
+
+module.exports = [{
+  route: 'A',
+  time: '-',
+  place: 'Los Arcos de Fuentepizarro',
+  city: '',
+  link: '',
+  slideURL: ''
+}, {
+  route: 'A',
+  time: '+30 min',
+  place: 'Hotel las Rozas',
   city: 'Las Rozas',
+  link: '',
+  slideURL: ''
+}, {
+  route: 'A',
+  time: '+20 min',
+  place: 'Principe Pío',
+  city: 'Madrid',
+  link: ''
+}, {
+  route: 'A',
+  time: '+20 min',
+  place: 'Av. de los Poblados',
+  city: 'Madrid',
+  link: ''
+}, {
+  route: 'B',
+  time: '-',
+  place: 'Los Arcos de Fuentepizarro',
+  city: '',
+  link: '',
+  slideURL: ''
+}, {
+  route: 'B',
+  time: '+15 min',
+  place: 'El Escorial',
+  city: '',
+  link: ''
+}, {
+  route: 'B',
+  time: '+30 min',
+  place: 'Galapagar',
+  city: '',
   link: '',
   slideURL: ''
 }];
@@ -617,7 +667,7 @@ module.exports = {
     "key": "transport-return",
     "title": "Transport",
     "sub-title": "Return",
-    "desc": ""
+    "desc": "The party will finish between 5am and 6am. There will be buses at 1am, 3am and at the end of the party. As in the start, you will have two bus routes whom they will cover several places, look for your closer point:"
   },
   "accomodation": {
     "key": "accomodation",
@@ -667,7 +717,7 @@ module.exports = {
     "key": "transporte-vuelta",
     "title": "Transporte",
     "sub-title": "vuelta",
-    "desc": ""
+    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00, a las 3:00 y al final de la fiesta.  Como en la ida, dispondréis de 2 rutas que pasan por varios sitios, busca tu punto de llegada más cercano:"
   },
   "accomodation": {
     "key": "hoteles",
@@ -736,7 +786,7 @@ if (typeof define === 'function' && define.amd) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "<div class=\"Slide-content\">\n  <div class=\"Slide-contentIcon js-comments\" data-pt-size=\"normal\" data-pt-scheme=\"black\" data-pt-offset-top=\"-10\" data-pt-gravity=\"false\" data-pt-position=\"top-right\" data-pt-trigger=\"sticky\" data-pt-offset-left=\"-20\" data-pt-title=\""
+  return "<div class=\"Slide-content\">\n  <div class=\"Slide-contentIcon js-comments\" data-pt-size=\"normal\" data-pt-scheme=\"black\" data-pt-offset-top=\"0\" data-pt-gravity=\"false\" data-pt-position=\"top-right\" data-pt-trigger=\"sticky\" data-pt-offset-left=\"-20\" data-pt-title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"church.comment",{"name":"t","hash":{},"data":data}))
     + "\" data-pt-delay-in=1000>\n    <img class=\"Slide-icon\" style=\"height:70px; background-size:70px 70px;\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAACMCAMAAADLEU4CAAACNFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+dEmAAAAAAu3RSTlMAAQIDBAUGBwgJCgsMDQ4PEBITFBUWFxgZGhscHR8hIiMkJScoKSorLC0uLzEyMzU2ODk6Ozw9QEJER0hJTU5QUVNWV1laXF1fYWJmZ2prbm9wcXJzdHV2d3h6e3x9foCDhIWGh4iJiouMjY6PkJGSlZaXnJ6foaKmp6ipqqussbW3uLq7vb/AwcPExsjJysvMzc7P0NHS1djZ2tvc3d7g4eLj5OXn6Onq7O3u7/Dx8vP09vf4+fr7/P3+e2r99gAAAvxJREFUeAHt1flTI0UAxfEnJrvqbrKs6CpGWMmuuLqHNx6KhyKoeAseCuIBeCiIyiHe4oGKChpQCRLCgRxBkERIhvfPyeAQJ5DMdCZNVazqz89d36qu6lcNYafWSUYuhTCVVmlZLtfTi0WQyFXf0rzplU6NZKyjWdfyMGTYP8XdRuSkg9zt+7xPT3K3AGRwv/VBr65PI7n2aa/uwxchU/nW47tArVGlVVqlVTrP01fq6cVi7IEqjWTsWsjnC1M3cACyFXzCfzVDtodoWLsFcl0R4bbRIsh0zjf8TydkeoEmG/dBnhujNJs9ClkKf2Gqz1yQ5B3u9CTkuCvBnf46I3OGqX48KGOGHzOdV2XOMNX6rchVeYTpBS/MdYb9zKQHuWlkZjUyZ5hqrkzmDFP1ueFYB609Bafu1Ght9Wo4c0mYdoY8MmeY6g04UUsB8dsd/oYCQhcjW+d9qcVpL8EeN7J07qmT18/TEJ8Mm81oNATPnD5tTgvXp2mY8B0yu2qFhmE4452hIXQQZiXLNIwU5Jz2wqxUpVVapVVaSno4n9PjZ8PsyJ/y0svvtpu0da3JSlv4f6YDKq3Sln5WaZW29JPDtGfv0odmaWcIThTe/12CdpYeO4xsXdb0O4WM1Z2PLJxV0b1EYaH6IgjyVvdrzEro2SMQUNoYZPbCDRfBxg1dEToz1VBs0fVUfZWgc9NNPqRX8vxvzNHsS+ni1723QFuxvs+jtPTHyyVIceDeL+K0N34TUBGktbnWUiS5HvmVIhZOYtOJedtzrx/d3kc7xTyILTW0tfCmH7prNAr51m1c8mvai7xdBuBRiqmE4bYNCpi7A6ilkMB+GPYNUqjtg3+FIp5G0hMU8gBQGyO50t1CK9FyJPlXKaJOn0v7+88dQyWtDLqQVDDAzH4YpeFmbLubVtpg0srMnimsG6PuI7dguhom9zCzRuDw44HIxGseiKX/PgGT41HLNLCv2AsIpqPHYFK2ap3WiaePw8Sf32mVVmmVVmmVVmmVVul/AGNwTlJG9F4BAAAAAElFTkSuQmCC\" alt=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"church.title",{"name":"t","hash":{},"data":data}))
@@ -857,13 +907,51 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
 
   return ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.route : depth0),"==",(depths[1] != null ? depths[1].selectedRoute : depths[1]),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "      <li class=\"RouteList-item\">\n        "
-    + alias4(((helper = (helper = helpers.place || (depth0 != null ? depth0.place : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"place","hash":{},"data":data}) : helper)))
-    + "\n        "
+  return "      <li class=\"RouteList-item "
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.selected : depth0),"==",true,{"name":"ifCond","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\">\n        <span class=\"RouteList-itemTime\">"
     + alias4(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"time","hash":{},"data":data}) : helper)))
-    + "\n      </li>\n";
+    + "</span>\n\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n          class=\"RouteList-itemPoint\">\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n        "
+    + alias4(((helper = (helper = helpers.place || (depth0 != null ? depth0.place : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"place","hash":{},"data":data}) : helper)))
+    + "\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "      </li>\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return " is-selected ";
+},"5":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "          <a href=\""
+    + container.escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"link","hash":{},"data":data}) : helper)))
+    + "\" target=\"_blank\"\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "          <span\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "          </a>\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "          </span>\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "          <a href=\""
+    + container.escapeExpression(((helper = (helper = helpers.slideURL || (depth0 != null ? depth0.slideURL : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"slideURL","hash":{},"data":data}) : helper)))
+    + "\" target=\"_blank\" class=\"RouteList-itemName Text Text-item Color Color--link\">\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return "          <p class=\"RouteList-itemName Text Text-item\">\n";
+},"17":function(container,depth0,helpers,partials,data) {
+    return "          </p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -884,7 +972,7 @@ if (typeof define === 'function' && define.amd) {
 
 ;require.register("templates/selection-route-point.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<select class=\"js-pointSelect\"></select>\n<ul class=\"RouteList js-routeList\"></ul>";
+    return "<select class=\"RouteForm-select js-pointSelect\"></select>\n<ul class=\"RouteList js-routeList\"></ul>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
@@ -924,19 +1012,13 @@ if (typeof define === 'function' && define.amd) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "<section class=\"slide Slide\" id=\""
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.key",{"name":"t","hash":{},"data":data}))
-    + "\" data-title=\""
+  return "<div class=\"Slide-content\">\n  <i class=\"Color fa fa-bus fa-lg\"></i>\n  <h2 class=\"Color Text-title u-tSpace--xl\">\n    "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.title",{"name":"t","hash":{},"data":data}))
-    + "\" data-background=\"#9B9B9B\">\n  <div class=\"Slide-content\">\n    <i class=\"Color fa fa-bus fa-lg\"></i>\n    <h2 class=\"Color Text-title u-tSpace--xl\">\n      "
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.title",{"name":"t","hash":{},"data":data}))
-    + "\n      <super class=\"Text-subTitle\">\n        ("
+    + "\n    <super class=\"Text-subTitle\">\n      ("
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.sub-title",{"name":"t","hash":{},"data":data}))
-    + ")\n      </super>\n    </h2>\n    <p class=\"Slide-contentParagraph Text Color Text-paragraph u-tSpace--xl\">"
+    + ")\n    </super>\n  </h2>\n  <p class=\"Slide-contentParagraph Text Color Text-paragraph u-tSpace--xl\">"
     + ((stack1 = (helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.desc",{"name":"t","hash":{},"data":data})) != null ? stack1 : "")
-    + "</p>\n    <form>\n      <input type=\"text\" value=\"\" placeholder=\""
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.choose",{"name":"t","hash":{},"data":data}))
-    + "\" />\n    </form>\n  </div>\n</section>";
+    + "</p>\n</div>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {

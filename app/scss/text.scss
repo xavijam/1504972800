@@ -42,9 +42,10 @@
   }
 }
 
-@include screen(0, 450px) {
+
+@mixin mobile-content() {
   .Text-title {
-    font-size: 45px;
+    font-size: 40px;
     font-weight: normal;
     line-height: 35px;
   }
@@ -56,7 +57,14 @@
     line-height: 35px;
   }
   .Text-paragraph {
-    font-size: 16px;
-    line-height: 25px;
+    font-size: 14px;
+    line-height: 22px;
   }
+}
+
+@include screen(0, 450px) {
+  @include mobile-content();
+}
+@include screen-height(320px, 480px) {
+  @include mobile-content();
 }

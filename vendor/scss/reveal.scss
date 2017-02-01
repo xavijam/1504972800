@@ -13,11 +13,11 @@
  * RESET STYLES
  *********************************************/
 
-html, body, .reveal div, .reveal span, .reveal applet, .reveal object, .reveal iframe, .reveal blockquote, .reveal pre, .reveal abbr, .reveal acronym, .reveal address, .reveal big, .reveal cite, .reveal code,
+html, body, .reveal div, .reveal applet, .reveal object, .reveal iframe, .reveal blockquote, .reveal pre, .reveal abbr, .reveal acronym, .reveal address, .reveal big, .reveal cite, .reveal code,
 .reveal del, .reveal dfn, .reveal em, .reveal img, .reveal ins, .reveal kbd, .reveal q, .reveal s, .reveal samp,
 .reveal small, .reveal strike, .reveal strong, .reveal sub, .reveal sup, .reveal tt, .reveal var,
 .reveal b, .reveal u, .reveal center,
-.reveal dl, .reveal dt, .reveal dd, .reveal ol, .reveal ul, .reveal li,
+.reveal dl, .reveal dt, .reveal dd, .reveal ol, .reveal li,
 .reveal fieldset, .reveal label, .reveal legend,
 .reveal table, .reveal caption, .reveal tbody, .reveal tfoot, .reveal thead, .reveal tr, .reveal th, .reveal td,
 .reveal article, .reveal aside, .reveal canvas, .reveal details, .reveal embed,
@@ -222,36 +222,8 @@ body {
   font-weight: bold;
 }
 
-.reveal ol,
-.reveal ul {
-  display: inline-block;
-
-  text-align: left;
-  margin: 0 0 0 1em;
-}
-
 .reveal ol {
   list-style-type: decimal;
-}
-
-.reveal ul {
-  list-style-type: disc;
-}
-
-.reveal ul ul {
-  list-style-type: square;
-}
-
-.reveal ul ul ul {
-  list-style-type: circle;
-}
-
-.reveal ul ul,
-.reveal ul ol,
-.reveal ol ol,
-.reveal ol ul {
-  display: block;
-  margin-left: 40px;
 }
 
 .reveal q,

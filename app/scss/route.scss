@@ -1,0 +1,135 @@
+@import 'media-queries';
+
+// Route path styles
+
+.RouteForm {}
+.RouteForm-select {
+  width: auto;
+  padding: 5px 0;
+  line-height: 20px;
+  background: transparent;
+  border: 1px dashed white;
+  font-family: 'Lato';
+  font-size: 17px;
+  color: white;
+  outline: none;
+  text-overflow: ellipsis;
+}
+.RouteList-select:focus {
+  border-style: solid;
+}
+.RouteList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 620px;
+  margin-top: 20px;
+}
+.RouteList-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  opacity: 0.65;
+}
+.RouteList-itemPoint {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid white;
+  border-radius: 12px;
+}
+.RouteList-item:before,
+.RouteList-item:after {
+  content: '';
+  position: absolute;
+  top: 62px;
+  height: 1px;
+  background: white;
+}
+.RouteList-item:before {
+  right: calc(50% + 7px);
+  left: 0;
+}
+.RouteList-item:after {
+  left: calc(50% + 7px);
+  right: 0;
+}
+.RouteList-itemTime {
+  margin: 15px 0;
+  font-family: 'Lato';
+  font-size: 14px;
+  line-height: 25px;
+  border-radius: 4px;
+  color: white;
+}
+.RouteList-itemName {
+  margin-top: 10px;
+  font-family: 'Lato';
+  font-size: 12px;
+  letter-spacing: 0px;
+  line-height: 18px;
+  color: white;
+  text-transform: uppercase;
+}
+.RouteList-item.is-selected {
+  opacity: 1;
+  &:before,
+  &:after {
+    opacity: 0.65;
+  }
+
+  .RouteList-itemPoint {
+    background: white;
+  }
+  .RouteList-itemTime {
+    margin: 12px 0 13px;
+    padding: 0 12px;
+    font-size: 14px;
+    line-height: 30px;
+    color: rgba(black, 0.3);  
+    background: white;
+  }
+  .RouteList-itemName {
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+@mixin mobile-content() {
+  .RouteForm-select {
+    max-width: 280px;
+    margin-top: 20px;
+    text-align: center;
+    text-align-last:center;
+  }
+  .RouteList {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .RouteList-itemName {
+    font-size: 10px;
+  }
+  .RouteList-itemTime {
+    padding: 0 8px;
+    font-size: 11px;
+  }
+  .RouteList-item.is-selected {
+    .RouteList-itemTime {
+      padding: 0 8px;
+      font-size: 11px;
+    }
+    .RouteList-itemName {
+      font-size: 12px;
+    }
+  }  
+}
+
+@include screen(0, 450px) {
+  @include mobile-content();
+}
+@include screen-height(320px, 480px) {
+  @include mobile-content();
+}

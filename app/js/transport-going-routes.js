@@ -1,13 +1,6 @@
 module.exports = [
   {
     route: 'A',
-    time: '16:30',
-    place: 'Av. de los Poblados',
-    city: 'Madrid',
-    link: ''
-  },
-  {
-    route: 'A',
     time: '17:00',
     place: 'Principe Pío',
     city: 'Madrid',
@@ -24,17 +17,10 @@ module.exports = [
   {
     route: 'A',
     time: '17:50',
-    place: 'Parroquia Santísimo Corpus Christi',
-    city: 'Las Rozas',
+    place: 'Iglesia Santísimo Corpus Christi',
+    city: '',
     link: '',
     slideURL: '' 
-  },
-  {
-    route: 'B',
-    time: '16:30',
-    place: 'Los Arcos de Fuentepizarro',
-    city: 'El Escorial',
-    link: '' 
   },
   {
     route: 'B',
@@ -54,8 +40,8 @@ module.exports = [
   {
     route: 'B',
     time: '17:50',
-    place: 'Parroquia Santísimo Corpus Christi',
-    city: 'Las Rozas',
+    place: 'Iglesia Santísimo Corpus Christi',
+    city: '',
     link: '',
     slideURL: '' 
   }

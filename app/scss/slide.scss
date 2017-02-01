@@ -33,8 +33,18 @@
   max-width: 400px;
 }
 
-@include screen(0, 450px) {
+@mixin mobile-content() {
   .Slide-contentParagraph {
     max-width: 85%;
   }
+  .Slide-contentIcon {
+    transform: scale(0.8);
+  }
+}
+
+@include screen(0, 450px) {
+  @include mobile-content();
+}
+@include screen-height(320px, 480px) {
+  @include mobile-content();
 }

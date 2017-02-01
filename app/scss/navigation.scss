@@ -1,3 +1,5 @@
+@import 'media-queries';
+
 // Navigation styles
 
 .Navigation {
@@ -61,4 +63,23 @@
       cursor: normal;
     }
   }
+}
+
+@mixin mobile-content() {
+  .Navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(black, 0.1);
+  }
+}
+
+@include screen(0, 450px) {
+  @include mobile-content();
+}
+@include screen-height(320px, 480px) {
+  @include mobile-content();
 }

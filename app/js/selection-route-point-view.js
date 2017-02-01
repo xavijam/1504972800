@@ -8,7 +8,7 @@ var $ = require('jquery');
 module.exports = Backbone.View.extend({
 
   tagName: 'form',
-  className: 'Form js-selectionRoutePointForm',
+  className: 'RouteForm js-selectionRoutePointForm',
 
   events: {
     'change .js-pointSelect': '_onSelectChange'

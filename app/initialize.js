@@ -60,6 +60,18 @@ function init () {
     .render().el
   );
 
+  // Transport return
+  $slides.append(
+    new TransportSlideView({
+      template: require('templates/transport-return.hbs'),
+      index: 4,
+      background: '#9B9B9B',
+      translateKey: 'transport-return',
+      routeOptions: require('js/transport-return-routes')
+    })
+    .render().el
+  );
+
   Reveal.initialize({
     controls: false,
     progress: false,
