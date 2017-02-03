@@ -1,7 +1,6 @@
 // Default and no more js view
 var Backbone = require('backbone');
 var $ = require('jquery');
-var DEFAULT_TITLE = 'Javi ❥ Lau';
 
 module.exports = Backbone.View.extend({
 
@@ -10,6 +9,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function (opts) {
     this.options = opts;
+    this.Carousel = opts.Carousel;
     this._initBinds();
   },
 
@@ -21,7 +21,9 @@ module.exports = Backbone.View.extend({
     this.$el.attr({
       'id': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-background': this.options.background,
-      'data-title': Handlebars.helpers.t(this.options.translateKey + '.title')
+      'data-title': Handlebars.helpers.t(this.options.translateKey + '.title'),
+      'data-key': this.options.translateKey,
+      'data-index': this.options.index
     });
 
     this.$el.css('background-color', this.options.background);
@@ -32,26 +34,19 @@ module.exports = Backbone.View.extend({
   },
 
   _initBinds: function () {
-    // Reveal.addEventListener('ready', function (event) {
-    //   this._checkCurrentSlide(event);
-    //   Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
-    // }.bind(this));
+    this.Carousel.$element.on('select.flickity', this._checkCurrentSlide.bind(this));
   },
 
-  _openTip: function () {
-    this.$('.js-comments').protipShow();
+  _startAnimation: function () {
+    
   },
 
-  _hideTip: function () {
-    this.$('.js-comments').protipHide();
-  },
+  _checkCurrentSlide: function () {
+    var currentElement = this.Carousel.selectedCell.element;
+    var elementIndex = $(currentElement).data('index');
 
-  _checkCurrentSlide: function (event) {
-    if (event.indexh === this.options.index) {
-      setTimeout(this._openTip.bind(this), 2000);
-      document.title = DEFAULT_TITLE + ' · ' + $(event.currentSlide).data('title');
-    } else {
-      this._hideTip();
+    if (elementIndex === this.options.index) {
+      setTimeout(this._startAnimation.bind(this), 2000);
     }
   },
 

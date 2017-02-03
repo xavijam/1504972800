@@ -16,7 +16,6 @@
     "backbone": "1.3.3",
     "flickity": "^2.0.5",
     "jquery": "^3.1.1",
-    "protip": "^1.4.15",
     "underscore": "1.8.3"
   },
   "devDependencies": {
