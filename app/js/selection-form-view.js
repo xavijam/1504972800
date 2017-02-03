@@ -12,7 +12,7 @@ require('select2');
 module.exports = Backbone.View.extend({
 
   tagName: 'form',
-  className: 'Form js-selectionForm',
+  className: 'ItemsForm js-selectionForm',
 
   events: {
     'change .js-select': '_onSelectChange'
@@ -22,27 +22,36 @@ module.exports = Backbone.View.extend({
     this.collection = new FormOptionsCollection(options.selectionItems);
     this.itemTemplate = options.selectionItemTemplate;
     this.selectionItemListClassname = options.selectionItemListClassname;
+    this.selectPlaceholder = options.selectPlaceholder;
+    this.addDescription = options.addDescription;
     this._initBinds();
   },
 
   render: function () {
+    var optionsCollection = new Backbone.Collection();
     this.$el.append(template());
     var $select = this.$('.js-select');
 
+    $select.append($('<option>'));
     this.collection.each(function (item) {
-      var desc = item.get('desc') ? ' (' + item.get('desc') + ')' : '';
-      var $option = $('<option>')
-        .val(item.get('name'))
-        .text(item.get('name') + desc);
-      $select.append($option);
-    });
+      if (!optionsCollection.findWhere({ name: item.get('name') })) {
+        optionsCollection.add({ name: item.get('name') });
+        var desc = item.get('desc') ? ' (' + item.get('desc') + ')' : '';
+        var $option = $('<option>')
+          .val(item.get('name'))
+          .text(item.get('name') + (this.addDescription ? desc : ''));
+        $select.append($option);
+      }
+    }, this);
 
     if (this.selectionItemListClassname) {
       this.$('.js-list').addClass(this.selectionItemListClassname);
     }
 
-    $select.select2();
-
+    $select.select2({
+      placeholder: this.selectPlaceholder,
+      minimumResultsForSearch: Infinity
+    });
 
     return this;
   },

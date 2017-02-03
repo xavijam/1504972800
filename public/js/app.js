@@ -174,10 +174,7 @@ function init() {
     pageDots: true,
     setGallerySize: false,
     contain: true,
-    wrapAround: true,
-    select: function select() {
-      console.log("paco2");
-    }
+    wrapAround: true
   });
 
   // Add slides
@@ -204,6 +201,8 @@ function init() {
     index: 0,
     background: '#E2AB49',
     translateKey: 'transport-going',
+    addDescription: true,
+    selectPlaceholder: Handlebars.helpers.t('transport-going.placeholder'),
     selectionItems: require('js/transport-going-routes')
   }).render().el);
   items.add({
@@ -242,6 +241,8 @@ function init() {
     selectionItemListClassname: 'List--horizontal',
     index: 3,
     background: '#9B9B9B',
+    addDescription: true,
+    selectPlaceholder: Handlebars.helpers.t('transport-return.placeholder'),
     translateKey: 'transport-return',
     selectionItems: require('js/transport-return-routes')
   }).render().el);
@@ -258,6 +259,8 @@ function init() {
     index: 4,
     background: '#4A4A4A',
     translateKey: 'accomodation',
+    addDescription: false,
+    selectPlaceholder: Handlebars.helpers.t('accomodation.placeholder'),
     selectionItems: require('js/accomodation-options')
   }).render().el);
   items.add({
@@ -502,7 +505,7 @@ require('select2');
 module.exports = Backbone.View.extend({
 
   tagName: 'form',
-  className: 'Form js-selectionForm',
+  className: 'ItemsForm js-selectionForm',
 
   events: {
     'change .js-select': '_onSelectChange'
@@ -512,24 +515,34 @@ module.exports = Backbone.View.extend({
     this.collection = new FormOptionsCollection(options.selectionItems);
     this.itemTemplate = options.selectionItemTemplate;
     this.selectionItemListClassname = options.selectionItemListClassname;
+    this.selectPlaceholder = options.selectPlaceholder;
+    this.addDescription = options.addDescription;
     this._initBinds();
   },
 
   render: function render() {
+    var optionsCollection = new Backbone.Collection();
     this.$el.append(template());
     var $select = this.$('.js-select');
 
+    $select.append($('<option>'));
     this.collection.each(function (item) {
-      var desc = item.get('desc') ? ' (' + item.get('desc') + ')' : '';
-      var $option = $('<option>').val(item.get('name')).text(item.get('name') + desc);
-      $select.append($option);
-    });
+      if (!optionsCollection.findWhere({ name: item.get('name') })) {
+        optionsCollection.add({ name: item.get('name') });
+        var desc = item.get('desc') ? ' (' + item.get('desc') + ')' : '';
+        var $option = $('<option>').val(item.get('name')).text(item.get('name') + (this.addDescription ? desc : ''));
+        $select.append($option);
+      }
+    }, this);
 
     if (this.selectionItemListClassname) {
       this.$('.js-list').addClass(this.selectionItemListClassname);
     }
 
-    $select.select2();
+    $select.select2({
+      placeholder: this.selectPlaceholder,
+      minimumResultsForSearch: Infinity
+    });
 
     return this;
   },
@@ -571,6 +584,8 @@ module.exports = DefaultSlideView.extend({
       var view = new SelectionFormView({
         selectionItemTemplate: this.options.selectionItemTemplate,
         selectionItemListClassname: this.options.selectionItemListClassname,
+        selectPlaceholder: this.options.selectPlaceholder,
+        addDescription: this.options.addDescription,
         selectionItems: this.options.selectionItems
       });
       this.$('.Slide-content').append(view.render().el);
@@ -600,7 +615,7 @@ module.exports = [{
 }, {
   category: 'A',
   data: '17:50',
-  name: 'Parroquia Santísimo Corpus Christi',
+  name: 'Iglesia Santísimo Corpus Christi',
   desc: 'Las Rozas',
   link: '',
   slideURL: ''
@@ -620,7 +635,7 @@ module.exports = [{
 }, {
   category: 'B',
   data: '17:50',
-  name: 'Parroquia Santísimo Corpus Christi',
+  name: 'Iglesia Santísimo Corpus Christi',
   desc: 'Las Rozas',
   link: '',
   slideURL: ''
@@ -693,7 +708,8 @@ module.exports = {
     "key": "transport-going",
     "title": "Transport",
     "sub-title": "going",
-    "desc": "Everything will start at the <a class='Color Color--link' href='#/church'>church</a>, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:"
+    "desc": "Everything will start at the <a class='Color Color--link' href='#/church'>church</a>, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:",
+    "placeholder": "Select a place"
   },
   "church": {
     "key": "church",
@@ -711,12 +727,14 @@ module.exports = {
     "key": "transport-return",
     "title": "Transport",
     "sub-title": "Return",
-    "desc": "The party will finish between 5am and 6am. There will be buses at 1am, 3am and at the end of the party. As in the start, you will have two bus routes whom they will cover several places, look for your closer point:"
+    "desc": "The party will finish between 5am and 6am. There will be buses at 1am, 3am and at the end of the party. As in the start, you will have two bus routes whom they will cover several places, look for your closer point:",
+    "placeholder": "Select a place"
   },
   "accomodation": {
     "key": "accomodation",
     "title": "Accomodation",
-    "desc": "If you want to sleep something after the party, we recomend you some places in Escorial and in Las Rozas, our buses will stop super close to them. Are you interested in?:"
+    "desc": "If you want to sleep something after the party, we recomend you some places in Escorial and in Las Rozas, our buses will stop super close to them. Are you interested in?:",
+    "placeholder": "Select a city"
   },
   "honeymoon": {
     "key": "honeymoon",
@@ -743,7 +761,8 @@ module.exports = {
     "key": "transporte-ida",
     "title": "Transporte",
     "sub-title": "ida",
-    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:"
+    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:",
+    "placeholder": "Selecciona un lugar"
   },
   "church": {
     "key": "iglesia",
@@ -761,13 +780,15 @@ module.exports = {
     "key": "transporte-vuelta",
     "title": "Transporte",
     "sub-title": "vuelta",
-    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00, a las 3:00 y al final de la fiesta.  Como en la ida, dispondréis de 2 rutas que pasan por varios sitios, busca tu punto de llegada más cercano:"
+    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00, a las 3:00 y al final de la fiesta.  Como en la ida, dispondréis de 2 rutas que pasan por varios sitios, busca tu punto de llegada más cercano:",
+    "placeholder": "Selecciona un lugar"
   },
   "accomodation": {
     "key": "hoteles",
     "title": "Hoteles",
     "sub-title": "vuelta",
-    "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:"
+    "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:",
+    "placeholder": "Selecciona una ciudad"
   },
   "honeymoon": {
     "key": "viaje",
@@ -794,7 +815,7 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
     + ((stack1 = (helpers.times || (depth0 && depth0.times) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.stars : stack1),{"name":"times","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "      </p>\n      <a class=\"Color Color--link\" href=\""
     + alias4(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"link","hash":{},"data":data}) : helper)))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias4(((helper = (helper = helpers.desc || (depth0 != null ? depth0.desc : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"desc","hash":{},"data":data}) : helper)))
     + "</a>\n      <p class=\"Color Text Text--paragraph\">~"
     + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.price : stack1), depth0))

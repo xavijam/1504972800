@@ -17,7 +17,7 @@ module.exports = [
   {
     category: 'A',
     data: '17:50',
-    name: 'Parroquia Santísimo Corpus Christi',
+    name: 'Iglesia Santísimo Corpus Christi',
     desc: 'Las Rozas',
     link: '',
     slideURL: '' 
@@ -40,7 +40,7 @@ module.exports = [
   {
     category: 'B',
     data: '17:50',
-    name: 'Parroquia Santísimo Corpus Christi',
+    name: 'Iglesia Santísimo Corpus Christi',
     desc: 'Las Rozas',
     link: '',
     slideURL: '' 

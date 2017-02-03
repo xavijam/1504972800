@@ -9,7 +9,8 @@
     "key": "transport-going",
     "title": "Transport",
     "sub-title": "going",
-    "desc": "Everything will start at the <a class='Color Color--link' href='#/church'>church</a>, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:"
+    "desc": "Everything will start at the <a class='Color Color--link' href='#/church'>church</a>, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:",
+    "placeholder": "Select a place"
   },
   "church": {
     "key": "church",
@@ -27,12 +28,14 @@
     "key": "transport-return",
     "title": "Transport",
     "sub-title": "Return",
-    "desc": "The party will finish between 5am and 6am. There will be buses at 1am, 3am and at the end of the party. As in the start, you will have two bus routes whom they will cover several places, look for your closer point:"
+    "desc": "The party will finish between 5am and 6am. There will be buses at 1am, 3am and at the end of the party. As in the start, you will have two bus routes whom they will cover several places, look for your closer point:",
+    "placeholder": "Select a place"
   },
   "accomodation": {
     "key": "accomodation",
     "title": "Accomodation",
-    "desc": "If you want to sleep something after the party, we recomend you some places in Escorial and in Las Rozas, our buses will stop super close to them. Are you interested in?:"
+    "desc": "If you want to sleep something after the party, we recomend you some places in Escorial and in Las Rozas, our buses will stop super close to them. Are you interested in?:",
+    "placeholder": "Select a city"
   },
   "honeymoon": {
     "key": "honeymoon",

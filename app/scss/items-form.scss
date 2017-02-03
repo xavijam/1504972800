@@ -2,25 +2,14 @@
 
 // Route path styles
 
-.ItemsForm {}
-.ItemsForm-select {
-  width: auto;
-  padding: 5px 0;
-  line-height: 20px;
-  background: transparent;
-  border: 1px dashed white;
-  font-family: 'Lato';
-  font-size: 17px;
-  color: white;
-  outline: none;
-  text-overflow: ellipsis;
-}
-.ItemsForm-select:focus {
-  border-style: solid;
+.ItemsForm {
+  margin-top: 30px;
+  text-align: center;
 }
 
 .List {
   display: flex;
+  margin-top: 30px;
 }
 .List--horizontal {
   flex-direction: row;
@@ -35,6 +24,21 @@
 .HotelList-item {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+  font-size: 16px;
+  font-family: 'Lato';
+  text-align: center;
+}
+.HotelList-item > *:after {
+  content: '·';
+  margin: 0 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: normal;
+}
+.HotelList-item > *:last-child:after {
+  content: '';
 }
 .RouteList-item {
   position: relative;

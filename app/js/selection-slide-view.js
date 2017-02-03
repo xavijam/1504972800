@@ -12,6 +12,8 @@ module.exports = DefaultSlideView.extend({
       var view = new SelectionFormView({
         selectionItemTemplate: this.options.selectionItemTemplate,
         selectionItemListClassname: this.options.selectionItemListClassname,
+        selectPlaceholder: this.options.selectPlaceholder,
+        addDescription: this.options.addDescription,
         selectionItems: this.options.selectionItems
       });
       this.$('.Slide-content').append(view.render().el);

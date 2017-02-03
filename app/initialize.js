@@ -8,7 +8,6 @@ require('js/handlebars-helpers');
 var isMobile = require('ismobilejs');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
 
-
 document.addEventListener('DOMContentLoaded', init);
 
 function init () {
@@ -22,10 +21,7 @@ function init () {
     pageDots: true,
     setGallerySize: false,
     contain: true,
-    wrapAround: true,
-    select: function () {
-      console.log("paco2");  
-    }
+    wrapAround: true
   });
   
   // Add slides
@@ -55,6 +51,8 @@ function init () {
       index: 0,
       background: '#E2AB49',
       translateKey: 'transport-going',
+      addDescription: true,
+      selectPlaceholder: Handlebars.helpers.t('transport-going.placeholder'),
       selectionItems: require('js/transport-going-routes')
     }).render().el
   );
@@ -101,6 +99,8 @@ function init () {
       selectionItemListClassname: 'List--horizontal',
       index: 3,
       background: '#9B9B9B',
+      addDescription: true,
+      selectPlaceholder: Handlebars.helpers.t('transport-return.placeholder'),
       translateKey: 'transport-return',
       selectionItems: require('js/transport-return-routes')
     })
@@ -120,6 +120,8 @@ function init () {
       index: 4,
       background: '#4A4A4A',
       translateKey: 'accomodation',
+      addDescription: false,
+      selectPlaceholder: Handlebars.helpers.t('accomodation.placeholder'),
       selectionItems: require('js/accomodation-options')
     })
     .render().el

@@ -9,7 +9,8 @@
     "key": "transporte-ida",
     "title": "Transporte",
     "sub-title": "ida",
-    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:"
+    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:",
+    "placeholder": "Selecciona un lugar"
   },
   "church": {
     "key": "iglesia",
@@ -27,13 +28,15 @@
     "key": "transporte-vuelta",
     "title": "Transporte",
     "sub-title": "vuelta",
-    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00, a las 3:00 y al final de la fiesta.  Como en la ida, dispondréis de 2 rutas que pasan por varios sitios, busca tu punto de llegada más cercano:"
+    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00, a las 3:00 y al final de la fiesta.  Como en la ida, dispondréis de 2 rutas que pasan por varios sitios, busca tu punto de llegada más cercano:",
+    "placeholder": "Selecciona un lugar"
   },
   "accomodation": {
     "key": "hoteles",
     "title": "Hoteles",
     "sub-title": "vuelta",
-    "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:"
+    "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:",
+    "placeholder": "Selecciona una ciudad"
   },
   "honeymoon": {
     "key": "viaje",
