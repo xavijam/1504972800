@@ -1,37 +1,35 @@
-<ul class="RouteList">
-  {{#each items}}
-    {{#ifCond category '==' ../selectedCategory}}
-      <li class="RouteList-item {{#ifCond selected '==' true }} is-selected {{/ifCond}}">
-        <span class="RouteList-itemTime">{{data}}</span>
+{{#each items}}
+  {{#ifCond category '==' ../selectedCategory}}
+    <li class="RouteList-item {{#ifCond selected '==' true }} is-selected {{/ifCond}}">
+      <span class="RouteList-itemTime">{{data}}</span>
 
-        {{#ifCond link '!=' '' }}
-          <a href="{{link}}" target="_blank"
-        {{/ifCond}}
-        {{#ifCond link '==' '' }}
-          <span
-        {{/ifCond}}
-          class="RouteList-itemPoint">
-        {{#ifCond link '!=' '' }}
-          </a>
-        {{/ifCond}}
-        {{#ifCond link '==' '' }}
-          </span>
-        {{/ifCond}}
+      {{#ifCond link '!=' '' }}
+        <a href="{{link}}" target="_blank"
+      {{/ifCond}}
+      {{#ifCond link '==' '' }}
+        <span
+      {{/ifCond}}
+        class="RouteList-itemPoint">
+      {{#ifCond link '!=' '' }}
+        </a>
+      {{/ifCond}}
+      {{#ifCond link '==' '' }}
+        </span>
+      {{/ifCond}}
 
-        {{#ifCond slideURL '!=' '' }}
-          <a href="{{slideURL}}" target="_blank" class="RouteList-itemName Text Text-item Color Color--link">
-        {{/ifCond}}
-        {{#ifCond slideURL '==' '' }}
-          <p class="RouteList-itemName Text Text-item">
-        {{/ifCond}}
-        {{name}}
-        {{#ifCond slideURL '!=' '' }}
-          </a>
-        {{/ifCond}}
-        {{#ifCond slideURL '==' '' }}
-          </p>
-        {{/ifCond}}
-      </li>
-    {{/ifCond}}
-  {{/each}}
-</ul>
+      {{#ifCond slideURL '!=' '' }}
+        <a href="{{slideURL}}" target="_blank" class="RouteList-itemName Text Text-item Color Color--link">
+      {{/ifCond}}
+      {{#ifCond slideURL '==' '' }}
+        <p class="RouteList-itemName Text Text-item">
+      {{/ifCond}}
+      {{name}}
+      {{#ifCond slideURL '!=' '' }}
+        </a>
+      {{/ifCond}}
+      {{#ifCond slideURL '==' '' }}
+        </p>
+      {{/ifCond}}
+    </li>
+  {{/ifCond}}
+{{/each}}

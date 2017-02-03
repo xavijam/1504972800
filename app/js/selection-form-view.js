@@ -20,6 +20,7 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.collection = new FormOptionsCollection(options.selectionItems);
     this.itemTemplate = options.selectionItemTemplate;
+    this.selectionItemListClassname = options.selectionItemListClassname;
     this._initBinds();
   },
 
@@ -34,6 +35,10 @@ module.exports = Backbone.View.extend({
         .text(item.get('name') + desc);
       $select.append($option);
     });
+
+    if (this.selectionItemListClassname) {
+      this.$('.js-list').addClass(this.selectionItemListClassname);
+    }
 
     $select[0].selectedIndex = -1;
     return this;

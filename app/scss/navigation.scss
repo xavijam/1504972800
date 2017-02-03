@@ -2,12 +2,19 @@
 
 // Navigation styles, taken from flickity
 
-.flickity-page-dots {
+.flickity-prev-next-button {
   position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 50%;
+  transform: translateY(-50%);
+  background: red;
+  border: none;
   z-index: 10;
+}
+.flickity-prev-next-button.previous {
+  left: 20px;
+}
+.flickity-prev-next-button.next {
+  right: 20px;
 }
 .flickity-page-dots {
   position: fixed;

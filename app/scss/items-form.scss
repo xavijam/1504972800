@@ -2,8 +2,8 @@
 
 // Route path styles
 
-.RouteForm {}
-.RouteForm-select {
+.ItemsForm {}
+.ItemsForm-select {
   width: auto;
   padding: 5px 0;
   line-height: 20px;
@@ -15,16 +15,26 @@
   outline: none;
   text-overflow: ellipsis;
 }
-.RouteList-select:focus {
+.ItemsForm-select:focus {
   border-style: solid;
 }
-.RouteList {
+
+.List {
   display: flex;
+}
+.List--horizontal {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
   max-width: 620px;
-  margin-top: 20px;
+}
+.List--vertical {
+  flex-direction: column;
+}
+
+.HotelList-item {
+  display: flex;
+  flex-direction: row;
 }
 .RouteList-item {
   position: relative;

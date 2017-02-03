@@ -30,6 +30,8 @@ function init () {
   $carousel.append(
     new SelectionSlideView({
       template: require('templates/transport-going.hbs'),
+      selectionItemTemplate: require('./templates/route-options.hbs'),
+      selectionItemListClassname: 'List--horizontal',
       index: 1,
       background: '#E2AB49',
       translateKey: 'transport-going',
@@ -63,6 +65,8 @@ function init () {
   $carousel.append(
     new SelectionSlideView({
       template: require('templates/transport-return.hbs'),
+      selectionItemTemplate: require('./templates/route-options.hbs'),
+      selectionItemListClassname: 'List--horizontal',
       index: 4,
       background: '#9B9B9B',
       translateKey: 'transport-return',
@@ -75,7 +79,8 @@ function init () {
   $carousel.append(
     new SelectionSlideView({
       template: require('templates/accomodation.hbs'),
-      // selectionItemTemplate: require(),
+      selectionItemTemplate: require('./templates/accomodation-options.hbs'),
+      selectionItemListClassname: 'List--vertical',
       index: 5,
       background: '#4A4A4A',
       translateKey: 'accomodation',
@@ -84,17 +89,19 @@ function init () {
     .render().el
   );
 
-  var flky = new Flickity( '.carousel', {
+  var Carousel = new Flickity( '.carousel', {
     cellAlign: 'center',
     percentPosition: false,
     dragThreshold: 10,
     initialIndex: 0,
-    prevNextButtons: false,
+    prevNextButtons: true,
     pageDots: true,
     setGallerySize: false,
     contain: true,
     wrapAround: true
   });
 
-  console.log(flky);
+  Carousel.on('', function () {
+    console.log('moved?');
+  })
 }

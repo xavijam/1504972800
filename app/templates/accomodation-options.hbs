@@ -1,0 +1,13 @@
+{{#each items}}
+  {{#ifCond category '==' ../selectedCategory}}
+    <li class="HotelList-item">
+      <p class="Color Text Text--paragraph">
+        {{#times data.stars}}
+          <i class="fa fa-star-o"></i>
+        {{/times}}
+      </p>
+      <a class="Color Color--link" href="{{link}}">{{desc}}</a>
+      <p class="Color Text Text--paragraph">~{{data.price}}€</p>
+    </li>
+  {{/ifCond}}
+{{/each}}

@@ -3,8 +3,6 @@ Pending things
 
 - [x] Review mobile CSS for dots navigation.
 - [ ] Add accomodation slide!.
-- [ ] Add honeymoon slide!.
-- [ ] Create contact slide.
 - [ ] Deep linking (URL).
 - [ ] Dots tooltip.
 - [ ] Now current slide everywhere.
@@ -16,3 +14,8 @@ Pending things
 - [ ] Local Storage.
 - [ ] Chosen for custom selects? :S
 - [ ] Add checker in order to know if it is a mobile device.
+- [ ] Different animations for each slide.
+- [ ] Notes in each slide (links, notes, etc...).
+
+- [ ] Create contact slide.
+- [ ] Add honeymoon slide!.
