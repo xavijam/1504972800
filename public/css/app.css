@@ -5,10 +5,15 @@
   color: #97BDBB; }
 
 
+html,
 body {
+  position: relative;
+  width: 100%;
+  height: 100%;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; }
 
 
 @charset "UTF-8";
@@ -64,67 +69,199 @@ body {
     background: url(data:image/png;base64,{192_dpi_encoded_image}); } }
 
 
-.Navigation {
+.flickity-page-dots {
   position: fixed;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10; }
 
-.Navigation-list {
-  display: flex; }
-
-.Navigation-item {
-  position: relative;
+.flickity-page-dots {
+  position: fixed;
   display: flex;
-  margin-left: 6px; }
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; }
 
-.Navigation-button {
+.dot {
   position: relative;
-  display: block;
   width: 9px;
   height: 9px;
+  margin: 0 3px;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 8px;
   background: none;
   text-indent: -9999px;
   outline: none; }
-  .Navigation-button:hover {
+  .dot:hover {
     background: white;
     border-color: white;
     cursor: pointer; }
 
-.Navigation-button.is-selected {
+.dot.is-selected {
   width: 13px;
   height: 13px;
   margin-top: -2px;
   background: white;
   border-color: white; }
-  .Navigation-button.is-selected:hover {
+  .dot.is-selected:hover {
     cursor: normal; }
 
-.Navigation-list.is-dark .Navigation-item:after {
-  background: rgba(102, 102, 102, 0.6); }
 
-.Navigation-list.is-dark .Navigation-button {
-  border-color: rgba(102, 102, 102, 0.6); }
-  .Navigation-list.is-dark .Navigation-button:hover {
-    background: #333;
-    border-color: #333; }
+.RouteForm-select {
+  width: auto;
+  padding: 5px 0;
+  line-height: 20px;
+  background: transparent;
+  border: 1px dashed white;
+  font-family: 'Lato';
+  font-size: 17px;
+  color: white;
+  outline: none;
+  text-overflow: ellipsis; }
 
-.Navigation-list.is-dark .Navigation-button.is-selected {
-  background: #333;
-  border-color: #333; }
-  .Navigation-list.is-dark .Navigation-button.is-selected:hover {
-    cursor: normal; }
+.RouteList-select:focus {
+  border-style: solid; }
 
+.RouteList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 620px;
+  margin-top: 20px; }
+
+.RouteList-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  opacity: 0.65; }
+
+.RouteList-itemPoint {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid white;
+  border-radius: 12px; }
+
+.RouteList-item:before,
+.RouteList-item:after {
+  content: '';
+  position: absolute;
+  top: 62px;
+  height: 1px;
+  background: white; }
+
+.RouteList-item:before {
+  right: calc(50% + 7px);
+  left: 0; }
+
+.RouteList-item:after {
+  left: calc(50% + 7px);
+  right: 0; }
+
+.RouteList-itemTime {
+  margin: 15px 0;
+  font-family: 'Lato';
+  font-size: 14px;
+  line-height: 25px;
+  border-radius: 4px;
+  color: white; }
+
+.RouteList-itemName {
+  margin-top: 10px;
+  font-family: 'Lato';
+  font-size: 12px;
+  letter-spacing: 0px;
+  line-height: 18px;
+  color: white;
+  text-transform: uppercase; }
+
+.RouteList-item.is-selected {
+  opacity: 1; }
+  .RouteList-item.is-selected:before, .RouteList-item.is-selected:after {
+    opacity: 0.65; }
+  .RouteList-item.is-selected .RouteList-itemPoint {
+    background: white; }
+  .RouteList-item.is-selected .RouteList-itemTime {
+    margin: 12px 0 13px;
+    padding: 0 12px;
+    font-size: 14px;
+    line-height: 30px;
+    color: rgba(0, 0, 0, 0.3);
+    background: white; }
+  .RouteList-item.is-selected .RouteList-itemName {
+    font-size: 14px;
+    font-weight: bold; }
+
+@media only screen and (min-width: 0) and (max-width: 450px) {
+  .RouteForm-select {
+    max-width: 280px;
+    margin-top: 20px;
+    text-align: center;
+    text-align-last: center; }
+  .RouteList {
+    width: 100%;
+    margin-top: 10px; }
+  .RouteList-itemName {
+    font-size: 10px; }
+  .RouteList-itemTime {
+    padding: 0 8px;
+    font-size: 11px; }
+  .RouteList-item.is-selected .RouteList-itemTime {
+    padding: 0 8px;
+    font-size: 11px; }
+  .RouteList-item.is-selected .RouteList-itemName {
+    font-size: 12px; } }
+
+@media only screen and (min-height: 320px) and (max-height: 480px) {
+  .RouteForm-select {
+    max-width: 280px;
+    margin-top: 20px;
+    text-align: center;
+    text-align-last: center; }
+  .RouteList {
+    width: 100%;
+    margin-top: 10px; }
+  .RouteList-itemName {
+    font-size: 10px; }
+  .RouteList-itemTime {
+    padding: 0 8px;
+    font-size: 11px; }
+  .RouteList-item.is-selected .RouteList-itemTime {
+    padding: 0 8px;
+    font-size: 11px; }
+  .RouteList-item.is-selected .RouteList-itemName {
+    font-size: 12px; } }
+
+
+.flickity-viewport,
+.flickity-slider {
+  position: relative;
+  height: 100%; }
 
 .Slides {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100% !important;
-  height: 100vh !important; }
+  height: 100% !important; }
 
 .Slide {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
   padding: 0 !important; }
 
 .Slide-content {
@@ -134,7 +271,7 @@ body {
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden; }
 
@@ -145,7 +282,9 @@ body {
   margin: 0 !important;
   border: none !important;
   background: none !important;
-  box-shadow: none !important; }
+  box-shadow: none !important;
+  font-size: 50px;
+  line-height: 53px; }
 
 .Slide-contentParagraph {
   max-width: 400px; }

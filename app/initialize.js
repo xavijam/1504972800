@@ -1,11 +1,10 @@
 var $ = require('jquery');
 var Backbone = require('backbone');
+var Flickity = require('flickity');
 global.jQuery = $;
 require('protip');
 var DefaultSlideView = require('js/default-slide-view');
 var TransportSlideView = require('js/transport-slide-view');
-var NavigationView = require('js/navigation-view');
-var Reveal = require('reveal');
 require('js/handlebars-helpers');
 
 
@@ -15,10 +14,10 @@ function init () {
   $.protip();
   
   // Render templates
-  var $slides = $('#slides');
+  var $carousel = $('.js-carousel');
 
   // Home
-  $slides.append(
+  $carousel.append(
     new DefaultSlideView({
       template: require('templates/home.hbs'),
       index: 0,
@@ -28,7 +27,7 @@ function init () {
   );
 
   // Transport going
-  $slides.append(
+  $carousel.append(
     new TransportSlideView({
       template: require('templates/transport-going.hbs'),
       index: 1,
@@ -39,7 +38,7 @@ function init () {
   );
 
   // Church
-  $slides.append(
+  $carousel.append(
     new DefaultSlideView({
       template: require('templates/church.hbs'),
       index: 2,
@@ -50,7 +49,7 @@ function init () {
   );
 
   // Banquet
-  $slides.append(
+  $carousel.append(
     new DefaultSlideView({
       template: require('templates/banquet.hbs'),
       index: 3,
@@ -60,38 +59,28 @@ function init () {
     .render().el
   );
 
-  Reveal.initialize({
-    controls: false,
-    progress: false,
-    slideNumber: false,
-    history: true,
-    keyboard: true,
-    overview: false,
-    center: false,
-    touch: true,
-    loop: true,
-    rtl: false,
-    shuffle: false,
-    fragments: true,
-    embedded: false,
-    help: false,
-    showNotes: false,
-    autoSlide: 0,
-    minScale: 1,
-    maxScale: 1,
-    mouseWheel: false,
-    hideAddressBar: false,
-    previewLinks: false,
-    transition: 'linear'
+  // Transport return
+  $carousel.append(
+    new TransportSlideView({
+      template: require('templates/transport-return.hbs'),
+      index: 4,
+      background: '#9B9B9B',
+      translateKey: 'transport-return',
+      routeOptions: require('js/transport-return-routes')
+    })
+    .render().el
+  );
+
+  var flky = new Flickity( '.carousel', {
+    cellAlign: 'center',
+    percentPosition: false,
+    dragThreshold: 10,
+    initialIndex: 0,
+    prevNextButtons: false,
+    pageDots: true,
+    setGallerySize: false,
+    contain: true
   });
 
-  var slides = [];
-  $('.reveal section').each(function (i, el) {
-    slides.push($(el).data('title'));
-  });
-
-  var navigation = new NavigationView({
-    slides: slides
-  });
-  $('.js-navigation').append(navigation.render().el);
+  console.log(flky);
 }

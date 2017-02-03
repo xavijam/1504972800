@@ -2318,6 +2318,4304 @@ require.register("es-to-primitive/helpers/isPrimitive.js", function(exports, req
   })();
 });
 
+require.register("flickity/js/add-remove-cell.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // add, remove cell
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      './flickity',
+      'fizzy-ui-utils/utils'
+    ], function( Flickity, utils ) {
+      return factory( window, Flickity, utils );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('./flickity'),
+      require('fizzy-ui-utils')
+    );
+  } else {
+    // browser global
+    factory(
+      window,
+      window.Flickity,
+      window.fizzyUIUtils
+    );
+  }
+
+}( window, function factory( window, Flickity, utils ) {
+
+'use strict';
+
+// append cells to a document fragment
+function getCellsFragment( cells ) {
+  var fragment = document.createDocumentFragment();
+  cells.forEach( function( cell ) {
+    fragment.appendChild( cell.element );
+  });
+  return fragment;
+}
+
+// -------------------------- add/remove cell prototype -------------------------- //
+
+var proto = Flickity.prototype;
+
+/**
+ * Insert, prepend, or append cells
+ * @param {Element, Array, NodeList} elems
+ * @param {Integer} index
+ */
+proto.insert = function( elems, index ) {
+  var cells = this._makeCells( elems );
+  if ( !cells || !cells.length ) {
+    return;
+  }
+  var len = this.cells.length;
+  // default to append
+  index = index === undefined ? len : index;
+  // add cells with document fragment
+  var fragment = getCellsFragment( cells );
+  // append to slider
+  var isAppend = index == len;
+  if ( isAppend ) {
+    this.slider.appendChild( fragment );
+  } else {
+    var insertCellElement = this.cells[ index ].element;
+    this.slider.insertBefore( fragment, insertCellElement );
+  }
+  // add to this.cells
+  if ( index === 0 ) {
+    // prepend, add to start
+    this.cells = cells.concat( this.cells );
+  } else if ( isAppend ) {
+    // append, add to end
+    this.cells = this.cells.concat( cells );
+  } else {
+    // insert in this.cells
+    var endCells = this.cells.splice( index, len - index );
+    this.cells = this.cells.concat( cells ).concat( endCells );
+  }
+
+  this._sizeCells( cells );
+
+  var selectedIndexDelta = index > this.selectedIndex ? 0 : cells.length;
+  this._cellAddedRemoved( index, selectedIndexDelta );
+};
+
+proto.append = function( elems ) {
+  this.insert( elems, this.cells.length );
+};
+
+proto.prepend = function( elems ) {
+  this.insert( elems, 0 );
+};
+
+/**
+ * Remove cells
+ * @param {Element, Array, NodeList} elems
+ */
+proto.remove = function( elems ) {
+  var cells = this.getCells( elems );
+  var selectedIndexDelta = 0;
+  var len = cells.length;
+  var i, cell;
+  // calculate selectedIndexDelta, easier if done in seperate loop
+  for ( i=0; i < len; i++ ) {
+    cell = cells[i];
+    var wasBefore = this.cells.indexOf( cell ) < this.selectedIndex;
+    selectedIndexDelta -= wasBefore ? 1 : 0;
+  }
+
+  for ( i=0; i < len; i++ ) {
+    cell = cells[i];
+    cell.remove();
+    // remove item from collection
+    utils.removeFrom( this.cells, cell );
+  }
+
+  if ( cells.length ) {
+    // update stuff
+    this._cellAddedRemoved( 0, selectedIndexDelta );
+  }
+};
+
+// updates when cells are added or removed
+proto._cellAddedRemoved = function( changedCellIndex, selectedIndexDelta ) {
+  // TODO this math isn't perfect with grouped slides
+  selectedIndexDelta = selectedIndexDelta || 0;
+  this.selectedIndex += selectedIndexDelta;
+  this.selectedIndex = Math.max( 0, Math.min( this.slides.length - 1, this.selectedIndex ) );
+
+  this.cellChange( changedCellIndex, true );
+  // backwards compatibility
+  this.emitEvent( 'cellAddedRemoved', [ changedCellIndex, selectedIndexDelta ] );
+};
+
+/**
+ * logic to be run after a cell's size changes
+ * @param {Element} elem - cell's element
+ */
+proto.cellSizeChange = function( elem ) {
+  var cell = this.getCell( elem );
+  if ( !cell ) {
+    return;
+  }
+  cell.getSize();
+
+  var index = this.cells.indexOf( cell );
+  this.cellChange( index );
+};
+
+/**
+ * logic any time a cell is changed: added, removed, or size changed
+ * @param {Integer} changedCellIndex - index of the changed cell, optional
+ */
+proto.cellChange = function( changedCellIndex, isPositioningSlider ) {
+  var prevSlideableWidth = this.slideableWidth;
+  this._positionCells( changedCellIndex );
+  this._getWrapShiftCells();
+  this.setGallerySize();
+  this.emitEvent( 'cellChange', [ changedCellIndex ] );
+  // position slider
+  if ( this.options.freeScroll ) {
+    // shift x by change in slideableWidth
+    // TODO fix position shifts when prepending w/ freeScroll
+    var deltaX = prevSlideableWidth - this.slideableWidth;
+    this.x += deltaX * this.cellAlign;
+    this.positionSlider();
+  } else {
+    // do not position slider after lazy load
+    if ( isPositioningSlider ) {
+      this.positionSliderAtSelected();
+    }
+    this.select( this.selectedIndex );
+  }
+};
+
+// -----  ----- //
+
+return Flickity;
+
+}));
+  })();
+});
+
+require.register("flickity/js/animate.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // animate
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'fizzy-ui-utils/utils'
+    ], function( utils ) {
+      return factory( window, utils );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('fizzy-ui-utils')
+    );
+  } else {
+    // browser global
+    window.Flickity = window.Flickity || {};
+    window.Flickity.animatePrototype = factory(
+      window,
+      window.fizzyUIUtils
+    );
+  }
+
+}( window, function factory( window, utils ) {
+
+'use strict';
+
+// -------------------------- requestAnimationFrame -------------------------- //
+
+// get rAF, prefixed, if present
+var requestAnimationFrame = window.requestAnimationFrame ||
+  window.webkitRequestAnimationFrame;
+
+// fallback to setTimeout
+var lastTime = 0;
+if ( !requestAnimationFrame )  {
+  requestAnimationFrame = function( callback ) {
+    var currTime = new Date().getTime();
+    var timeToCall = Math.max( 0, 16 - ( currTime - lastTime ) );
+    var id = setTimeout( callback, timeToCall );
+    lastTime = currTime + timeToCall;
+    return id;
+  };
+}
+
+// -------------------------- animate -------------------------- //
+
+var proto = {};
+
+proto.startAnimation = function() {
+  if ( this.isAnimating ) {
+    return;
+  }
+
+  this.isAnimating = true;
+  this.restingFrames = 0;
+  this.animate();
+};
+
+proto.animate = function() {
+  this.applyDragForce();
+  this.applySelectedAttraction();
+
+  var previousX = this.x;
+
+  this.integratePhysics();
+  this.positionSlider();
+  this.settle( previousX );
+  // animate next frame
+  if ( this.isAnimating ) {
+    var _this = this;
+    requestAnimationFrame( function animateFrame() {
+      _this.animate();
+    });
+  }
+};
+
+
+var transformProperty = ( function () {
+  var style = document.documentElement.style;
+  if ( typeof style.transform == 'string' ) {
+    return 'transform';
+  }
+  return 'WebkitTransform';
+})();
+
+proto.positionSlider = function() {
+  var x = this.x;
+  // wrap position around
+  if ( this.options.wrapAround && this.cells.length > 1 ) {
+    x = utils.modulo( x, this.slideableWidth );
+    x = x - this.slideableWidth;
+    this.shiftWrapCells( x );
+  }
+
+  x = x + this.cursorPosition;
+  // reverse if right-to-left and using transform
+  x = this.options.rightToLeft && transformProperty ? -x : x;
+  var value = this.getPositionValue( x );
+  // use 3D tranforms for hardware acceleration on iOS
+  // but use 2D when settled, for better font-rendering
+  this.slider.style[ transformProperty ] = this.isAnimating ?
+    'translate3d(' + value + ',0,0)' : 'translateX(' + value + ')';
+
+  // scroll event
+  var firstSlide = this.slides[0];
+  if ( firstSlide ) {
+    var positionX = -this.x - firstSlide.target;
+    var progress = positionX / this.slidesWidth;
+    this.dispatchEvent( 'scroll', null, [ progress, positionX ] );
+  }
+};
+
+proto.positionSliderAtSelected = function() {
+  if ( !this.cells.length ) {
+    return;
+  }
+  this.x = -this.selectedSlide.target;
+  this.positionSlider();
+};
+
+proto.getPositionValue = function( position ) {
+  if ( this.options.percentPosition ) {
+    // percent position, round to 2 digits, like 12.34%
+    return ( Math.round( ( position / this.size.innerWidth ) * 10000 ) * 0.01 )+ '%';
+  } else {
+    // pixel positioning
+    return Math.round( position ) + 'px';
+  }
+};
+
+proto.settle = function( previousX ) {
+  // keep track of frames where x hasn't moved
+  if ( !this.isPointerDown && Math.round( this.x * 100 ) == Math.round( previousX * 100 ) ) {
+    this.restingFrames++;
+  }
+  // stop animating if resting for 3 or more frames
+  if ( this.restingFrames > 2 ) {
+    this.isAnimating = false;
+    delete this.isFreeScrolling;
+    // render position with translateX when settled
+    this.positionSlider();
+    this.dispatchEvent('settle');
+  }
+};
+
+proto.shiftWrapCells = function( x ) {
+  // shift before cells
+  var beforeGap = this.cursorPosition + x;
+  this._shiftCells( this.beforeShiftCells, beforeGap, -1 );
+  // shift after cells
+  var afterGap = this.size.innerWidth - ( x + this.slideableWidth + this.cursorPosition );
+  this._shiftCells( this.afterShiftCells, afterGap, 1 );
+};
+
+proto._shiftCells = function( cells, gap, shift ) {
+  for ( var i=0; i < cells.length; i++ ) {
+    var cell = cells[i];
+    var cellShift = gap > 0 ? shift : 0;
+    cell.wrapShift( cellShift );
+    gap -= cell.size.outerWidth;
+  }
+};
+
+proto._unshiftCells = function( cells ) {
+  if ( !cells || !cells.length ) {
+    return;
+  }
+  for ( var i=0; i < cells.length; i++ ) {
+    cells[i].wrapShift( 0 );
+  }
+};
+
+// -------------------------- physics -------------------------- //
+
+proto.integratePhysics = function() {
+  this.x += this.velocity;
+  this.velocity *= this.getFrictionFactor();
+};
+
+proto.applyForce = function( force ) {
+  this.velocity += force;
+};
+
+proto.getFrictionFactor = function() {
+  return 1 - this.options[ this.isFreeScrolling ? 'freeScrollFriction' : 'friction' ];
+};
+
+proto.getRestingPosition = function() {
+  // my thanks to Steven Wittens, who simplified this math greatly
+  return this.x + this.velocity / ( 1 - this.getFrictionFactor() );
+};
+
+proto.applyDragForce = function() {
+  if ( !this.isPointerDown ) {
+    return;
+  }
+  // change the position to drag position by applying force
+  var dragVelocity = this.dragX - this.x;
+  var dragForce = dragVelocity - this.velocity;
+  this.applyForce( dragForce );
+};
+
+proto.applySelectedAttraction = function() {
+  // do not attract if pointer down or no cells
+  if ( this.isPointerDown || this.isFreeScrolling || !this.cells.length ) {
+    return;
+  }
+  var distance = this.selectedSlide.target * -1 - this.x;
+  var force = distance * this.options.selectedAttraction;
+  this.applyForce( force );
+};
+
+return proto;
+
+}));
+  })();
+});
+
+require.register("flickity/js/cell.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // Flickity.Cell
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'get-size/get-size'
+    ], function( getSize ) {
+      return factory( window, getSize );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('get-size')
+    );
+  } else {
+    // browser global
+    window.Flickity = window.Flickity || {};
+    window.Flickity.Cell = factory(
+      window,
+      window.getSize
+    );
+  }
+
+}( window, function factory( window, getSize ) {
+
+'use strict';
+
+function Cell( elem, parent ) {
+  this.element = elem;
+  this.parent = parent;
+
+  this.create();
+}
+
+var proto = Cell.prototype;
+
+proto.create = function() {
+  this.element.style.position = 'absolute';
+  this.x = 0;
+  this.shift = 0;
+};
+
+proto.destroy = function() {
+  // reset style
+  this.element.style.position = '';
+  var side = this.parent.originSide;
+  this.element.style[ side ] = '';
+};
+
+proto.getSize = function() {
+  this.size = getSize( this.element );
+};
+
+proto.setPosition = function( x ) {
+  this.x = x;
+  this.updateTarget();
+  this.renderPosition( x );
+};
+
+// setDefaultTarget v1 method, backwards compatibility, remove in v3
+proto.updateTarget = proto.setDefaultTarget = function() {
+  var marginProperty = this.parent.originSide == 'left' ? 'marginLeft' : 'marginRight';
+  this.target = this.x + this.size[ marginProperty ] +
+    this.size.width * this.parent.cellAlign;
+};
+
+proto.renderPosition = function( x ) {
+  // render position of cell with in slider
+  var side = this.parent.originSide;
+  this.element.style[ side ] = this.parent.getPositionValue( x );
+};
+
+/**
+ * @param {Integer} factor - 0, 1, or -1
+**/
+proto.wrapShift = function( shift ) {
+  this.shift = shift;
+  this.renderPosition( this.x + this.parent.slideableWidth * shift );
+};
+
+proto.remove = function() {
+  this.element.parentNode.removeChild( this.element );
+};
+
+return Cell;
+
+}));
+  })();
+});
+
+require.register("flickity/js/drag.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // drag
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      './flickity',
+      'unidragger/unidragger',
+      'fizzy-ui-utils/utils'
+    ], function( Flickity, Unidragger, utils ) {
+      return factory( window, Flickity, Unidragger, utils );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('./flickity'),
+      require('unidragger'),
+      require('fizzy-ui-utils')
+    );
+  } else {
+    // browser global
+    window.Flickity = factory(
+      window,
+      window.Flickity,
+      window.Unidragger,
+      window.fizzyUIUtils
+    );
+  }
+
+}( window, function factory( window, Flickity, Unidragger, utils ) {
+
+'use strict';
+
+// ----- defaults ----- //
+
+utils.extend( Flickity.defaults, {
+  draggable: true,
+  dragThreshold: 3,
+});
+
+// ----- create ----- //
+
+Flickity.createMethods.push('_createDrag');
+
+// -------------------------- drag prototype -------------------------- //
+
+var proto = Flickity.prototype;
+utils.extend( proto, Unidragger.prototype );
+
+// --------------------------  -------------------------- //
+
+var isTouch = 'createTouch' in document;
+var isTouchmoveScrollCanceled = false;
+
+proto._createDrag = function() {
+  this.on( 'activate', this.bindDrag );
+  this.on( 'uiChange', this._uiChangeDrag );
+  this.on( 'childUIPointerDown', this._childUIPointerDownDrag );
+  this.on( 'deactivate', this.unbindDrag );
+  // HACK - add seemingly innocuous handler to fix iOS 10 scroll behavior
+  // #457, RubaXa/Sortable#973
+  if ( isTouch && !isTouchmoveScrollCanceled ) {
+    window.addEventListener( 'touchmove', function() {});
+    isTouchmoveScrollCanceled = true;
+  }
+};
+
+proto.bindDrag = function() {
+  if ( !this.options.draggable || this.isDragBound ) {
+    return;
+  }
+  this.element.classList.add('is-draggable');
+  this.handles = [ this.viewport ];
+  this.bindHandles();
+  this.isDragBound = true;
+};
+
+proto.unbindDrag = function() {
+  if ( !this.isDragBound ) {
+    return;
+  }
+  this.element.classList.remove('is-draggable');
+  this.unbindHandles();
+  delete this.isDragBound;
+};
+
+proto._uiChangeDrag = function() {
+  delete this.isFreeScrolling;
+};
+
+proto._childUIPointerDownDrag = function( event ) {
+  event.preventDefault();
+  this.pointerDownFocus( event );
+};
+
+// -------------------------- pointer events -------------------------- //
+
+// nodes that have text fields
+var cursorNodes = {
+  TEXTAREA: true,
+  INPUT: true,
+  OPTION: true,
+};
+
+// input types that do not have text fields
+var clickTypes = {
+  radio: true,
+  checkbox: true,
+  button: true,
+  submit: true,
+  image: true,
+  file: true,
+};
+
+proto.pointerDown = function( event, pointer ) {
+  // dismiss inputs with text fields. #403, #404
+  var isCursorInput = cursorNodes[ event.target.nodeName ] &&
+    !clickTypes[ event.target.type ];
+  if ( isCursorInput ) {
+    // reset pointerDown logic
+    this.isPointerDown = false;
+    delete this.pointerIdentifier;
+    return;
+  }
+
+  this._dragPointerDown( event, pointer );
+
+  // kludge to blur focused inputs in dragger
+  var focused = document.activeElement;
+  if ( focused && focused.blur && focused != this.element &&
+    // do not blur body for IE9 & 10, #117
+    focused != document.body ) {
+    focused.blur();
+  }
+  this.pointerDownFocus( event );
+  // stop if it was moving
+  this.dragX = this.x;
+  this.viewport.classList.add('is-pointer-down');
+  // bind move and end events
+  this._bindPostStartEvents( event );
+  // track scrolling
+  this.pointerDownScroll = getScrollPosition();
+  window.addEventListener( 'scroll', this );
+
+  this.dispatchEvent( 'pointerDown', event, [ pointer ] );
+};
+
+var touchStartEvents = {
+  touchstart: true,
+  MSPointerDown: true
+};
+
+var focusNodes = {
+  INPUT: true,
+  SELECT: true
+};
+
+proto.pointerDownFocus = function( event ) {
+  // focus element, if not touch, and its not an input or select
+  if ( !this.options.accessibility || touchStartEvents[ event.type ] ||
+      focusNodes[ event.target.nodeName ] ) {
+    return;
+  }
+  var prevScrollY = window.pageYOffset;
+  this.element.focus();
+  // hack to fix scroll jump after focus, #76
+  if ( window.pageYOffset != prevScrollY ) {
+    window.scrollTo( window.pageXOffset, prevScrollY );
+  }
+};
+
+proto.canPreventDefaultOnPointerDown = function( event ) {
+  // prevent default, unless touchstart or <select>
+  var isTouchstart = event.type == 'touchstart';
+  var targetNodeName = event.target.nodeName;
+  return !isTouchstart && targetNodeName != 'SELECT';
+};
+
+// ----- move ----- //
+
+proto.hasDragStarted = function( moveVector ) {
+  return Math.abs( moveVector.x ) > this.options.dragThreshold;
+};
+
+// ----- up ----- //
+
+proto.pointerUp = function( event, pointer ) {
+  delete this.isTouchScrolling;
+  this.viewport.classList.remove('is-pointer-down');
+  this.dispatchEvent( 'pointerUp', event, [ pointer ] );
+  this._dragPointerUp( event, pointer );
+};
+
+proto.pointerDone = function() {
+  window.removeEventListener( 'scroll', this );
+  delete this.pointerDownScroll;
+};
+
+// -------------------------- dragging -------------------------- //
+
+proto.dragStart = function( event, pointer ) {
+  this.dragStartPosition = this.x;
+  this.startAnimation();
+  window.removeEventListener( 'scroll', this );
+  this.dispatchEvent( 'dragStart', event, [ pointer ] );
+};
+
+proto.pointerMove = function( event, pointer ) {
+  var moveVector = this._dragPointerMove( event, pointer );
+  this.dispatchEvent( 'pointerMove', event, [ pointer, moveVector ] );
+  this._dragMove( event, pointer, moveVector );
+};
+
+proto.dragMove = function( event, pointer, moveVector ) {
+  event.preventDefault();
+
+  this.previousDragX = this.dragX;
+  // reverse if right-to-left
+  var direction = this.options.rightToLeft ? -1 : 1;
+  var dragX = this.dragStartPosition + moveVector.x * direction;
+
+  if ( !this.options.wrapAround && this.slides.length ) {
+    // slow drag
+    var originBound = Math.max( -this.slides[0].target, this.dragStartPosition );
+    dragX = dragX > originBound ? ( dragX + originBound ) * 0.5 : dragX;
+    var endBound = Math.min( -this.getLastSlide().target, this.dragStartPosition );
+    dragX = dragX < endBound ? ( dragX + endBound ) * 0.5 : dragX;
+  }
+
+  this.dragX = dragX;
+
+  this.dragMoveTime = new Date();
+  this.dispatchEvent( 'dragMove', event, [ pointer, moveVector ] );
+};
+
+proto.dragEnd = function( event, pointer ) {
+  if ( this.options.freeScroll ) {
+    this.isFreeScrolling = true;
+  }
+  // set selectedIndex based on where flick will end up
+  var index = this.dragEndRestingSelect();
+
+  if ( this.options.freeScroll && !this.options.wrapAround ) {
+    // if free-scroll & not wrap around
+    // do not free-scroll if going outside of bounding slides
+    // so bounding slides can attract slider, and keep it in bounds
+    var restingX = this.getRestingPosition();
+    this.isFreeScrolling = -restingX > this.slides[0].target &&
+      -restingX < this.getLastSlide().target;
+  } else if ( !this.options.freeScroll && index == this.selectedIndex ) {
+    // boost selection if selected index has not changed
+    index += this.dragEndBoostSelect();
+  }
+  delete this.previousDragX;
+  // apply selection
+  // TODO refactor this, selecting here feels weird
+  // HACK, set flag so dragging stays in correct direction
+  this.isDragSelect = this.options.wrapAround;
+  this.select( index );
+  delete this.isDragSelect;
+  this.dispatchEvent( 'dragEnd', event, [ pointer ] );
+};
+
+proto.dragEndRestingSelect = function() {
+  var restingX = this.getRestingPosition();
+  // how far away from selected slide
+  var distance = Math.abs( this.getSlideDistance( -restingX, this.selectedIndex ) );
+  // get closet resting going up and going down
+  var positiveResting = this._getClosestResting( restingX, distance, 1 );
+  var negativeResting = this._getClosestResting( restingX, distance, -1 );
+  // use closer resting for wrap-around
+  var index = positiveResting.distance < negativeResting.distance ?
+    positiveResting.index : negativeResting.index;
+  return index;
+};
+
+/**
+ * given resting X and distance to selected cell
+ * get the distance and index of the closest cell
+ * @param {Number} restingX - estimated post-flick resting position
+ * @param {Number} distance - distance to selected cell
+ * @param {Integer} increment - +1 or -1, going up or down
+ * @returns {Object} - { distance: {Number}, index: {Integer} }
+ */
+proto._getClosestResting = function( restingX, distance, increment ) {
+  var index = this.selectedIndex;
+  var minDistance = Infinity;
+  var condition = this.options.contain && !this.options.wrapAround ?
+    // if contain, keep going if distance is equal to minDistance
+    function( d, md ) { return d <= md; } : function( d, md ) { return d < md; };
+  while ( condition( distance, minDistance ) ) {
+    // measure distance to next cell
+    index += increment;
+    minDistance = distance;
+    distance = this.getSlideDistance( -restingX, index );
+    if ( distance === null ) {
+      break;
+    }
+    distance = Math.abs( distance );
+  }
+  return {
+    distance: minDistance,
+    // selected was previous index
+    index: index - increment
+  };
+};
+
+/**
+ * measure distance between x and a slide target
+ * @param {Number} x
+ * @param {Integer} index - slide index
+ */
+proto.getSlideDistance = function( x, index ) {
+  var len = this.slides.length;
+  // wrap around if at least 2 slides
+  var isWrapAround = this.options.wrapAround && len > 1;
+  var slideIndex = isWrapAround ? utils.modulo( index, len ) : index;
+  var slide = this.slides[ slideIndex ];
+  if ( !slide ) {
+    return null;
+  }
+  // add distance for wrap-around slides
+  var wrap = isWrapAround ? this.slideableWidth * Math.floor( index / len ) : 0;
+  return x - ( slide.target + wrap );
+};
+
+proto.dragEndBoostSelect = function() {
+  // do not boost if no previousDragX or dragMoveTime
+  if ( this.previousDragX === undefined || !this.dragMoveTime ||
+    // or if drag was held for 100 ms
+    new Date() - this.dragMoveTime > 100 ) {
+    return 0;
+  }
+
+  var distance = this.getSlideDistance( -this.dragX, this.selectedIndex );
+  var delta = this.previousDragX - this.dragX;
+  if ( distance > 0 && delta > 0 ) {
+    // boost to next if moving towards the right, and positive velocity
+    return 1;
+  } else if ( distance < 0 && delta < 0 ) {
+    // boost to previous if moving towards the left, and negative velocity
+    return -1;
+  }
+  return 0;
+};
+
+// ----- staticClick ----- //
+
+proto.staticClick = function( event, pointer ) {
+  // get clickedCell, if cell was clicked
+  var clickedCell = this.getParentCell( event.target );
+  var cellElem = clickedCell && clickedCell.element;
+  var cellIndex = clickedCell && this.cells.indexOf( clickedCell );
+  this.dispatchEvent( 'staticClick', event, [ pointer, cellElem, cellIndex ] );
+};
+
+// ----- scroll ----- //
+
+proto.onscroll = function() {
+  var scroll = getScrollPosition();
+  var scrollMoveX = this.pointerDownScroll.x - scroll.x;
+  var scrollMoveY = this.pointerDownScroll.y - scroll.y;
+  // cancel click/tap if scroll is too much
+  if ( Math.abs( scrollMoveX ) > 3 || Math.abs( scrollMoveY ) > 3 ) {
+    this._pointerDone();
+  }
+};
+
+// ----- utils ----- //
+
+function getScrollPosition() {
+  return {
+    x: window.pageXOffset,
+    y: window.pageYOffset
+  };
+}
+
+// -----  ----- //
+
+return Flickity;
+
+}));
+  })();
+});
+
+require.register("flickity/js/flickity.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // Flickity main
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'ev-emitter/ev-emitter',
+      'get-size/get-size',
+      'fizzy-ui-utils/utils',
+      './cell',
+      './slide',
+      './animate'
+    ], function( EvEmitter, getSize, utils, Cell, Slide, animatePrototype ) {
+      return factory( window, EvEmitter, getSize, utils, Cell, Slide, animatePrototype );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('ev-emitter'),
+      require('get-size'),
+      require('fizzy-ui-utils'),
+      require('./cell'),
+      require('./slide'),
+      require('./animate')
+    );
+  } else {
+    // browser global
+    var _Flickity = window.Flickity;
+
+    window.Flickity = factory(
+      window,
+      window.EvEmitter,
+      window.getSize,
+      window.fizzyUIUtils,
+      _Flickity.Cell,
+      _Flickity.Slide,
+      _Flickity.animatePrototype
+    );
+  }
+
+}( window, function factory( window, EvEmitter, getSize,
+  utils, Cell, Slide, animatePrototype ) {
+
+'use strict';
+
+// vars
+var jQuery = window.jQuery;
+var getComputedStyle = window.getComputedStyle;
+var console = window.console;
+
+function moveElements( elems, toElem ) {
+  elems = utils.makeArray( elems );
+  while ( elems.length ) {
+    toElem.appendChild( elems.shift() );
+  }
+}
+
+// -------------------------- Flickity -------------------------- //
+
+// globally unique identifiers
+var GUID = 0;
+// internal store of all Flickity intances
+var instances = {};
+
+function Flickity( element, options ) {
+  var queryElement = utils.getQueryElement( element );
+  if ( !queryElement ) {
+    if ( console ) {
+      console.error( 'Bad element for Flickity: ' + ( queryElement || element ) );
+    }
+    return;
+  }
+  this.element = queryElement;
+  // do not initialize twice on same element
+  if ( this.element.flickityGUID ) {
+    var instance = instances[ this.element.flickityGUID ];
+    instance.option( options );
+    return instance;
+  }
+
+  // add jQuery
+  if ( jQuery ) {
+    this.$element = jQuery( this.element );
+  }
+  // options
+  this.options = utils.extend( {}, this.constructor.defaults );
+  this.option( options );
+
+  // kick things off
+  this._create();
+}
+
+Flickity.defaults = {
+  accessibility: true,
+  // adaptiveHeight: false,
+  cellAlign: 'center',
+  // cellSelector: undefined,
+  // contain: false,
+  freeScrollFriction: 0.075, // friction when free-scrolling
+  friction: 0.28, // friction when selecting
+  namespaceJQueryEvents: true,
+  // initialIndex: 0,
+  percentPosition: true,
+  resize: true,
+  selectedAttraction: 0.025,
+  setGallerySize: true
+  // watchCSS: false,
+  // wrapAround: false
+};
+
+// hash of methods triggered on _create()
+Flickity.createMethods = [];
+
+var proto = Flickity.prototype;
+// inherit EventEmitter
+utils.extend( proto, EvEmitter.prototype );
+
+proto._create = function() {
+  // add id for Flickity.data
+  var id = this.guid = ++GUID;
+  this.element.flickityGUID = id; // expando
+  instances[ id ] = this; // associate via id
+  // initial properties
+  this.selectedIndex = 0;
+  // how many frames slider has been in same position
+  this.restingFrames = 0;
+  // initial physics properties
+  this.x = 0;
+  this.velocity = 0;
+  this.originSide = this.options.rightToLeft ? 'right' : 'left';
+  // create viewport & slider
+  this.viewport = document.createElement('div');
+  this.viewport.className = 'flickity-viewport';
+  this._createSlider();
+
+  if ( this.options.resize || this.options.watchCSS ) {
+    window.addEventListener( 'resize', this );
+  }
+
+  Flickity.createMethods.forEach( function( method ) {
+    this[ method ]();
+  }, this );
+
+  if ( this.options.watchCSS ) {
+    this.watchCSS();
+  } else {
+    this.activate();
+  }
+
+};
+
+/**
+ * set options
+ * @param {Object} opts
+ */
+proto.option = function( opts ) {
+  utils.extend( this.options, opts );
+};
+
+proto.activate = function() {
+  if ( this.isActive ) {
+    return;
+  }
+  this.isActive = true;
+  this.element.classList.add('flickity-enabled');
+  if ( this.options.rightToLeft ) {
+    this.element.classList.add('flickity-rtl');
+  }
+
+  this.getSize();
+  // move initial cell elements so they can be loaded as cells
+  var cellElems = this._filterFindCellElements( this.element.children );
+  moveElements( cellElems, this.slider );
+  this.viewport.appendChild( this.slider );
+  this.element.appendChild( this.viewport );
+  // get cells from children
+  this.reloadCells();
+
+  if ( this.options.accessibility ) {
+    // allow element to focusable
+    this.element.tabIndex = 0;
+    // listen for key presses
+    this.element.addEventListener( 'keydown', this );
+  }
+
+  this.emitEvent('activate');
+
+  var index;
+  var initialIndex = this.options.initialIndex;
+  if ( this.isInitActivated ) {
+    index = this.selectedIndex;
+  } else if ( initialIndex !== undefined ) {
+    index = this.cells[ initialIndex ] ? initialIndex : 0;
+  } else {
+    index = 0;
+  }
+  // select instantly
+  this.select( index, false, true );
+  // flag for initial activation, for using initialIndex
+  this.isInitActivated = true;
+};
+
+// slider positions the cells
+proto._createSlider = function() {
+  // slider element does all the positioning
+  var slider = document.createElement('div');
+  slider.className = 'flickity-slider';
+  slider.style[ this.originSide ] = 0;
+  this.slider = slider;
+};
+
+proto._filterFindCellElements = function( elems ) {
+  return utils.filterFindElements( elems, this.options.cellSelector );
+};
+
+// goes through all children
+proto.reloadCells = function() {
+  // collection of item elements
+  this.cells = this._makeCells( this.slider.children );
+  this.positionCells();
+  this._getWrapShiftCells();
+  this.setGallerySize();
+};
+
+/**
+ * turn elements into Flickity.Cells
+ * @param {Array or NodeList or HTMLElement} elems
+ * @returns {Array} items - collection of new Flickity Cells
+ */
+proto._makeCells = function( elems ) {
+  var cellElems = this._filterFindCellElements( elems );
+
+  // create new Flickity for collection
+  var cells = cellElems.map( function( cellElem ) {
+    return new Cell( cellElem, this );
+  }, this );
+
+  return cells;
+};
+
+proto.getLastCell = function() {
+  return this.cells[ this.cells.length - 1 ];
+};
+
+proto.getLastSlide = function() {
+  return this.slides[ this.slides.length - 1 ];
+};
+
+// positions all cells
+proto.positionCells = function() {
+  // size all cells
+  this._sizeCells( this.cells );
+  // position all cells
+  this._positionCells( 0 );
+};
+
+/**
+ * position certain cells
+ * @param {Integer} index - which cell to start with
+ */
+proto._positionCells = function( index ) {
+  index = index || 0;
+  // also measure maxCellHeight
+  // start 0 if positioning all cells
+  this.maxCellHeight = index ? this.maxCellHeight || 0 : 0;
+  var cellX = 0;
+  // get cellX
+  if ( index > 0 ) {
+    var startCell = this.cells[ index - 1 ];
+    cellX = startCell.x + startCell.size.outerWidth;
+  }
+  var len = this.cells.length;
+  for ( var i=index; i < len; i++ ) {
+    var cell = this.cells[i];
+    cell.setPosition( cellX );
+    cellX += cell.size.outerWidth;
+    this.maxCellHeight = Math.max( cell.size.outerHeight, this.maxCellHeight );
+  }
+  // keep track of cellX for wrap-around
+  this.slideableWidth = cellX;
+  // slides
+  this.updateSlides();
+  // contain slides target
+  this._containSlides();
+  // update slidesWidth
+  this.slidesWidth = len ? this.getLastSlide().target - this.slides[0].target : 0;
+};
+
+/**
+ * cell.getSize() on multiple cells
+ * @param {Array} cells
+ */
+proto._sizeCells = function( cells ) {
+  cells.forEach( function( cell ) {
+    cell.getSize();
+  });
+};
+
+// --------------------------  -------------------------- //
+
+proto.updateSlides = function() {
+  this.slides = [];
+  if ( !this.cells.length ) {
+    return;
+  }
+
+  var slide = new Slide( this );
+  this.slides.push( slide );
+  var isOriginLeft = this.originSide == 'left';
+  var nextMargin = isOriginLeft ? 'marginRight' : 'marginLeft';
+
+  var canCellFit = this._getCanCellFit();
+
+  this.cells.forEach( function( cell, i ) {
+    // just add cell if first cell in slide
+    if ( !slide.cells.length ) {
+      slide.addCell( cell );
+      return;
+    }
+
+    var slideWidth = ( slide.outerWidth - slide.firstMargin ) +
+      ( cell.size.outerWidth - cell.size[ nextMargin ] );
+
+    if ( canCellFit.call( this, i, slideWidth ) ) {
+      slide.addCell( cell );
+    } else {
+      // doesn't fit, new slide
+      slide.updateTarget();
+
+      slide = new Slide( this );
+      this.slides.push( slide );
+      slide.addCell( cell );
+    }
+  }, this );
+  // last slide
+  slide.updateTarget();
+  // update .selectedSlide
+  this.updateSelectedSlide();
+};
+
+proto._getCanCellFit = function() {
+  var groupCells = this.options.groupCells;
+  if ( !groupCells ) {
+    return function() {
+      return false;
+    };
+  } else if ( typeof groupCells == 'number' ) {
+    // group by number. 3 -> [0,1,2], [3,4,5], ...
+    var number = parseInt( groupCells, 10 );
+    return function( i ) {
+      return ( i % number ) !== 0;
+    };
+  }
+  // default, group by width of slide
+  // parse '75%
+  var percentMatch = typeof groupCells == 'string' &&
+    groupCells.match(/^(\d+)%$/);
+  var percent = percentMatch ? parseInt( percentMatch[1], 10 ) / 100 : 1;
+  return function( i, slideWidth ) {
+    return slideWidth <= ( this.size.innerWidth + 1 ) * percent;
+  };
+};
+
+// alias _init for jQuery plugin .flickity()
+proto._init =
+proto.reposition = function() {
+  this.positionCells();
+  this.positionSliderAtSelected();
+};
+
+proto.getSize = function() {
+  this.size = getSize( this.element );
+  this.setCellAlign();
+  this.cursorPosition = this.size.innerWidth * this.cellAlign;
+};
+
+var cellAlignShorthands = {
+  // cell align, then based on origin side
+  center: {
+    left: 0.5,
+    right: 0.5
+  },
+  left: {
+    left: 0,
+    right: 1
+  },
+  right: {
+    right: 0,
+    left: 1
+  }
+};
+
+proto.setCellAlign = function() {
+  var shorthand = cellAlignShorthands[ this.options.cellAlign ];
+  this.cellAlign = shorthand ? shorthand[ this.originSide ] : this.options.cellAlign;
+};
+
+proto.setGallerySize = function() {
+  if ( this.options.setGallerySize ) {
+    var height = this.options.adaptiveHeight && this.selectedSlide ?
+      this.selectedSlide.height : this.maxCellHeight;
+    this.viewport.style.height = height + 'px';
+  }
+};
+
+proto._getWrapShiftCells = function() {
+  // only for wrap-around
+  if ( !this.options.wrapAround ) {
+    return;
+  }
+  // unshift previous cells
+  this._unshiftCells( this.beforeShiftCells );
+  this._unshiftCells( this.afterShiftCells );
+  // get before cells
+  // initial gap
+  var gapX = this.cursorPosition;
+  var cellIndex = this.cells.length - 1;
+  this.beforeShiftCells = this._getGapCells( gapX, cellIndex, -1 );
+  // get after cells
+  // ending gap between last cell and end of gallery viewport
+  gapX = this.size.innerWidth - this.cursorPosition;
+  // start cloning at first cell, working forwards
+  this.afterShiftCells = this._getGapCells( gapX, 0, 1 );
+};
+
+proto._getGapCells = function( gapX, cellIndex, increment ) {
+  // keep adding cells until the cover the initial gap
+  var cells = [];
+  while ( gapX > 0 ) {
+    var cell = this.cells[ cellIndex ];
+    if ( !cell ) {
+      break;
+    }
+    cells.push( cell );
+    cellIndex += increment;
+    gapX -= cell.size.outerWidth;
+  }
+  return cells;
+};
+
+// ----- contain ----- //
+
+// contain cell targets so no excess sliding
+proto._containSlides = function() {
+  if ( !this.options.contain || this.options.wrapAround || !this.cells.length ) {
+    return;
+  }
+  var isRightToLeft = this.options.rightToLeft;
+  var beginMargin = isRightToLeft ? 'marginRight' : 'marginLeft';
+  var endMargin = isRightToLeft ? 'marginLeft' : 'marginRight';
+  var contentWidth = this.slideableWidth - this.getLastCell().size[ endMargin ];
+  // content is less than gallery size
+  var isContentSmaller = contentWidth < this.size.innerWidth;
+  // bounds
+  var beginBound = this.cursorPosition + this.cells[0].size[ beginMargin ];
+  var endBound = contentWidth - this.size.innerWidth * ( 1 - this.cellAlign );
+  // contain each cell target
+  this.slides.forEach( function( slide ) {
+    if ( isContentSmaller ) {
+      // all cells fit inside gallery
+      slide.target = contentWidth * this.cellAlign;
+    } else {
+      // contain to bounds
+      slide.target = Math.max( slide.target, beginBound );
+      slide.target = Math.min( slide.target, endBound );
+    }
+  }, this );
+};
+
+// -----  ----- //
+
+/**
+ * emits events via eventEmitter and jQuery events
+ * @param {String} type - name of event
+ * @param {Event} event - original event
+ * @param {Array} args - extra arguments
+ */
+proto.dispatchEvent = function( type, event, args ) {
+  var emitArgs = event ? [ event ].concat( args ) : args;
+  this.emitEvent( type, emitArgs );
+
+  if ( jQuery && this.$element ) {
+    // default trigger with type if no event
+    type += this.options.namespaceJQueryEvents ? '.flickity' : '';
+    var $event = type;
+    if ( event ) {
+      // create jQuery event
+      var jQEvent = jQuery.Event( event );
+      jQEvent.type = type;
+      $event = jQEvent;
+    }
+    this.$element.trigger( $event, args );
+  }
+};
+
+// -------------------------- select -------------------------- //
+
+/**
+ * @param {Integer} index - index of the slide
+ * @param {Boolean} isWrap - will wrap-around to last/first if at the end
+ * @param {Boolean} isInstant - will immediately set position at selected cell
+ */
+proto.select = function( index, isWrap, isInstant ) {
+  if ( !this.isActive ) {
+    return;
+  }
+  index = parseInt( index, 10 );
+  this._wrapSelect( index );
+
+  if ( this.options.wrapAround || isWrap ) {
+    index = utils.modulo( index, this.slides.length );
+  }
+  // bail if invalid index
+  if ( !this.slides[ index ] ) {
+    return;
+  }
+  this.selectedIndex = index;
+  this.updateSelectedSlide();
+  if ( isInstant ) {
+    this.positionSliderAtSelected();
+  } else {
+    this.startAnimation();
+  }
+  if ( this.options.adaptiveHeight ) {
+    this.setGallerySize();
+  }
+
+  this.dispatchEvent('select');
+  // old v1 event name, remove in v3
+  this.dispatchEvent('cellSelect');
+};
+
+// wraps position for wrapAround, to move to closest slide. #113
+proto._wrapSelect = function( index ) {
+  var len = this.slides.length;
+  var isWrapping = this.options.wrapAround && len > 1;
+  if ( !isWrapping ) {
+    return index;
+  }
+  var wrapIndex = utils.modulo( index, len );
+  // go to shortest
+  var delta = Math.abs( wrapIndex - this.selectedIndex );
+  var backWrapDelta = Math.abs( ( wrapIndex + len ) - this.selectedIndex );
+  var forewardWrapDelta = Math.abs( ( wrapIndex - len ) - this.selectedIndex );
+  if ( !this.isDragSelect && backWrapDelta < delta ) {
+    index += len;
+  } else if ( !this.isDragSelect && forewardWrapDelta < delta ) {
+    index -= len;
+  }
+  // wrap position so slider is within normal area
+  if ( index < 0 ) {
+    this.x -= this.slideableWidth;
+  } else if ( index >= len ) {
+    this.x += this.slideableWidth;
+  }
+};
+
+proto.previous = function( isWrap, isInstant ) {
+  this.select( this.selectedIndex - 1, isWrap, isInstant );
+};
+
+proto.next = function( isWrap, isInstant ) {
+  this.select( this.selectedIndex + 1, isWrap, isInstant );
+};
+
+proto.updateSelectedSlide = function() {
+  var slide = this.slides[ this.selectedIndex ];
+  // selectedIndex could be outside of slides, if triggered before resize()
+  if ( !slide ) {
+    return;
+  }
+  // unselect previous selected slide
+  this.unselectSelectedSlide();
+  // update new selected slide
+  this.selectedSlide = slide;
+  slide.select();
+  this.selectedCells = slide.cells;
+  this.selectedElements = slide.getCellElements();
+  // HACK: selectedCell & selectedElement is first cell in slide, backwards compatibility
+  // Remove in v3?
+  this.selectedCell = slide.cells[0];
+  this.selectedElement = this.selectedElements[0];
+};
+
+proto.unselectSelectedSlide = function() {
+  if ( this.selectedSlide ) {
+    this.selectedSlide.unselect();
+  }
+};
+
+/**
+ * select slide from number or cell element
+ * @param {Element or Number} elem
+ */
+proto.selectCell = function( value, isWrap, isInstant ) {
+  // get cell
+  var cell;
+  if ( typeof value == 'number' ) {
+    cell = this.cells[ value ];
+  } else {
+    // use string as selector
+    if ( typeof value == 'string' ) {
+      value = this.element.querySelector( value );
+    }
+    // get cell from element
+    cell = this.getCell( value );
+  }
+  // select slide that has cell
+  for ( var i=0; cell && i < this.slides.length; i++ ) {
+    var slide = this.slides[i];
+    var index = slide.cells.indexOf( cell );
+    if ( index != -1 ) {
+      this.select( i, isWrap, isInstant );
+      return;
+    }
+  }
+};
+
+// -------------------------- get cells -------------------------- //
+
+/**
+ * get Flickity.Cell, given an Element
+ * @param {Element} elem
+ * @returns {Flickity.Cell} item
+ */
+proto.getCell = function( elem ) {
+  // loop through cells to get the one that matches
+  for ( var i=0; i < this.cells.length; i++ ) {
+    var cell = this.cells[i];
+    if ( cell.element == elem ) {
+      return cell;
+    }
+  }
+};
+
+/**
+ * get collection of Flickity.Cells, given Elements
+ * @param {Element, Array, NodeList} elems
+ * @returns {Array} cells - Flickity.Cells
+ */
+proto.getCells = function( elems ) {
+  elems = utils.makeArray( elems );
+  var cells = [];
+  elems.forEach( function( elem ) {
+    var cell = this.getCell( elem );
+    if ( cell ) {
+      cells.push( cell );
+    }
+  }, this );
+  return cells;
+};
+
+/**
+ * get cell elements
+ * @returns {Array} cellElems
+ */
+proto.getCellElements = function() {
+  return this.cells.map( function( cell ) {
+    return cell.element;
+  });
+};
+
+/**
+ * get parent cell from an element
+ * @param {Element} elem
+ * @returns {Flickit.Cell} cell
+ */
+proto.getParentCell = function( elem ) {
+  // first check if elem is cell
+  var cell = this.getCell( elem );
+  if ( cell ) {
+    return cell;
+  }
+  // try to get parent cell elem
+  elem = utils.getParent( elem, '.flickity-slider > *' );
+  return this.getCell( elem );
+};
+
+/**
+ * get cells adjacent to a slide
+ * @param {Integer} adjCount - number of adjacent slides
+ * @param {Integer} index - index of slide to start
+ * @returns {Array} cells - array of Flickity.Cells
+ */
+proto.getAdjacentCellElements = function( adjCount, index ) {
+  if ( !adjCount ) {
+    return this.selectedSlide.getCellElements();
+  }
+  index = index === undefined ? this.selectedIndex : index;
+
+  var len = this.slides.length;
+  if ( 1 + ( adjCount * 2 ) >= len ) {
+    return this.getCellElements();
+  }
+
+  var cellElems = [];
+  for ( var i = index - adjCount; i <= index + adjCount ; i++ ) {
+    var slideIndex = this.options.wrapAround ? utils.modulo( i, len ) : i;
+    var slide = this.slides[ slideIndex ];
+    if ( slide ) {
+      cellElems = cellElems.concat( slide.getCellElements() );
+    }
+  }
+  return cellElems;
+};
+
+// -------------------------- events -------------------------- //
+
+proto.uiChange = function() {
+  this.emitEvent('uiChange');
+};
+
+proto.childUIPointerDown = function( event ) {
+  this.emitEvent( 'childUIPointerDown', [ event ] );
+};
+
+// ----- resize ----- //
+
+proto.onresize = function() {
+  this.watchCSS();
+  this.resize();
+};
+
+utils.debounceMethod( Flickity, 'onresize', 150 );
+
+proto.resize = function() {
+  if ( !this.isActive ) {
+    return;
+  }
+  this.getSize();
+  // wrap values
+  if ( this.options.wrapAround ) {
+    this.x = utils.modulo( this.x, this.slideableWidth );
+  }
+  this.positionCells();
+  this._getWrapShiftCells();
+  this.setGallerySize();
+  this.emitEvent('resize');
+  // update selected index for group slides, instant
+  // TODO: position can be lost between groups of various numbers
+  var selectedElement = this.selectedElements && this.selectedElements[0];
+  this.selectCell( selectedElement, false, true );
+};
+
+// watches the :after property, activates/deactivates
+proto.watchCSS = function() {
+  var watchOption = this.options.watchCSS;
+  if ( !watchOption ) {
+    return;
+  }
+
+  var afterContent = getComputedStyle( this.element, ':after' ).content;
+  // activate if :after { content: 'flickity' }
+  if ( afterContent.indexOf('flickity') != -1 ) {
+    this.activate();
+  } else {
+    this.deactivate();
+  }
+};
+
+// ----- keydown ----- //
+
+// go previous/next if left/right keys pressed
+proto.onkeydown = function( event ) {
+  // only work if element is in focus
+  if ( !this.options.accessibility ||
+    ( document.activeElement && document.activeElement != this.element ) ) {
+    return;
+  }
+
+  if ( event.keyCode == 37 ) {
+    // go left
+    var leftMethod = this.options.rightToLeft ? 'next' : 'previous';
+    this.uiChange();
+    this[ leftMethod ]();
+  } else if ( event.keyCode == 39 ) {
+    // go right
+    var rightMethod = this.options.rightToLeft ? 'previous' : 'next';
+    this.uiChange();
+    this[ rightMethod ]();
+  }
+};
+
+// -------------------------- destroy -------------------------- //
+
+// deactivate all Flickity functionality, but keep stuff available
+proto.deactivate = function() {
+  if ( !this.isActive ) {
+    return;
+  }
+  this.element.classList.remove('flickity-enabled');
+  this.element.classList.remove('flickity-rtl');
+  // destroy cells
+  this.cells.forEach( function( cell ) {
+    cell.destroy();
+  });
+  this.unselectSelectedSlide();
+  this.element.removeChild( this.viewport );
+  // move child elements back into element
+  moveElements( this.slider.children, this.element );
+  if ( this.options.accessibility ) {
+    this.element.removeAttribute('tabIndex');
+    this.element.removeEventListener( 'keydown', this );
+  }
+  // set flags
+  this.isActive = false;
+  this.emitEvent('deactivate');
+};
+
+proto.destroy = function() {
+  this.deactivate();
+  window.removeEventListener( 'resize', this );
+  this.emitEvent('destroy');
+  if ( jQuery && this.$element ) {
+    jQuery.removeData( this.element, 'flickity' );
+  }
+  delete this.element.flickityGUID;
+  delete instances[ this.guid ];
+};
+
+// -------------------------- prototype -------------------------- //
+
+utils.extend( proto, animatePrototype );
+
+// -------------------------- extras -------------------------- //
+
+/**
+ * get Flickity instance from element
+ * @param {Element} elem
+ * @returns {Flickity}
+ */
+Flickity.data = function( elem ) {
+  elem = utils.getQueryElement( elem );
+  var id = elem && elem.flickityGUID;
+  return id && instances[ id ];
+};
+
+utils.htmlInit( Flickity, 'flickity' );
+
+if ( jQuery && jQuery.bridget ) {
+  jQuery.bridget( 'flickity', Flickity );
+}
+
+Flickity.Cell = Cell;
+
+return Flickity;
+
+}));
+  })();
+});
+
+require.register("flickity/js/index.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    /*!
+ * Flickity v2.0.5
+ * Touch, responsive, flickable carousels
+ *
+ * Licensed GPLv3 for open source use
+ * or Flickity Commercial License for commercial use
+ *
+ * http://flickity.metafizzy.co
+ * Copyright 2016 Metafizzy
+ */
+
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      './flickity',
+      './drag',
+      './prev-next-button',
+      './page-dots',
+      './player',
+      './add-remove-cell',
+      './lazyload'
+    ], factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      require('./flickity'),
+      require('./drag'),
+      require('./prev-next-button'),
+      require('./page-dots'),
+      require('./player'),
+      require('./add-remove-cell'),
+      require('./lazyload')
+    );
+  }
+
+})( window, function factory( Flickity ) {
+  /*jshint strict: false*/
+  return Flickity;
+});
+  })();
+});
+
+require.register("flickity/js/lazyload.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // lazyload
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      './flickity',
+      'fizzy-ui-utils/utils'
+    ], function( Flickity, utils ) {
+      return factory( window, Flickity, utils );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('./flickity'),
+      require('fizzy-ui-utils')
+    );
+  } else {
+    // browser global
+    factory(
+      window,
+      window.Flickity,
+      window.fizzyUIUtils
+    );
+  }
+
+}( window, function factory( window, Flickity, utils ) {
+'use strict';
+
+Flickity.createMethods.push('_createLazyload');
+var proto = Flickity.prototype;
+
+proto._createLazyload = function() {
+  this.on( 'select', this.lazyLoad );
+};
+
+proto.lazyLoad = function() {
+  var lazyLoad = this.options.lazyLoad;
+  if ( !lazyLoad ) {
+    return;
+  }
+  // get adjacent cells, use lazyLoad option for adjacent count
+  var adjCount = typeof lazyLoad == 'number' ? lazyLoad : 0;
+  var cellElems = this.getAdjacentCellElements( adjCount );
+  // get lazy images in those cells
+  var lazyImages = [];
+  cellElems.forEach( function( cellElem ) {
+    var lazyCellImages = getCellLazyImages( cellElem );
+    lazyImages = lazyImages.concat( lazyCellImages );
+  });
+  // load lazy images
+  lazyImages.forEach( function( img ) {
+    new LazyLoader( img, this );
+  }, this );
+};
+
+function getCellLazyImages( cellElem ) {
+  // check if cell element is lazy image
+  if ( cellElem.nodeName == 'IMG' &&
+    cellElem.getAttribute('data-flickity-lazyload') ) {
+    return [ cellElem ];
+  }
+  // select lazy images in cell
+  var imgs = cellElem.querySelectorAll('img[data-flickity-lazyload]');
+  return utils.makeArray( imgs );
+}
+
+// -------------------------- LazyLoader -------------------------- //
+
+/**
+ * class to handle loading images
+ */
+function LazyLoader( img, flickity ) {
+  this.img = img;
+  this.flickity = flickity;
+  this.load();
+}
+
+LazyLoader.prototype.handleEvent = utils.handleEvent;
+
+LazyLoader.prototype.load = function() {
+  this.img.addEventListener( 'load', this );
+  this.img.addEventListener( 'error', this );
+  // load image
+  this.img.src = this.img.getAttribute('data-flickity-lazyload');
+  // remove attr
+  this.img.removeAttribute('data-flickity-lazyload');
+};
+
+LazyLoader.prototype.onload = function( event ) {
+  this.complete( event, 'flickity-lazyloaded' );
+};
+
+LazyLoader.prototype.onerror = function( event ) {
+  this.complete( event, 'flickity-lazyerror' );
+};
+
+LazyLoader.prototype.complete = function( event, className ) {
+  // unbind events
+  this.img.removeEventListener( 'load', this );
+  this.img.removeEventListener( 'error', this );
+
+  var cell = this.flickity.getParentCell( this.img );
+  var cellElem = cell && cell.element;
+  this.flickity.cellSizeChange( cellElem );
+
+  this.img.classList.add( className );
+  this.flickity.dispatchEvent( 'lazyLoad', event, cellElem );
+};
+
+// -----  ----- //
+
+Flickity.LazyLoader = LazyLoader;
+
+return Flickity;
+
+}));
+  })();
+});
+
+require.register("flickity/js/page-dots.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // page dots
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      './flickity',
+      'tap-listener/tap-listener',
+      'fizzy-ui-utils/utils'
+    ], function( Flickity, TapListener, utils ) {
+      return factory( window, Flickity, TapListener, utils );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('./flickity'),
+      require('tap-listener'),
+      require('fizzy-ui-utils')
+    );
+  } else {
+    // browser global
+    factory(
+      window,
+      window.Flickity,
+      window.TapListener,
+      window.fizzyUIUtils
+    );
+  }
+
+}( window, function factory( window, Flickity, TapListener, utils ) {
+
+// -------------------------- PageDots -------------------------- //
+
+'use strict';
+
+function PageDots( parent ) {
+  this.parent = parent;
+  this._create();
+}
+
+PageDots.prototype = new TapListener();
+
+PageDots.prototype._create = function() {
+  // create holder element
+  this.holder = document.createElement('ol');
+  this.holder.className = 'flickity-page-dots';
+  // create dots, array of elements
+  this.dots = [];
+  // events
+  this.on( 'tap', this.onTap );
+  this.on( 'pointerDown', this.parent.childUIPointerDown.bind( this.parent ) );
+};
+
+PageDots.prototype.activate = function() {
+  this.setDots();
+  this.bindTap( this.holder );
+  // add to DOM
+  this.parent.element.appendChild( this.holder );
+};
+
+PageDots.prototype.deactivate = function() {
+  // remove from DOM
+  this.parent.element.removeChild( this.holder );
+  TapListener.prototype.destroy.call( this );
+};
+
+PageDots.prototype.setDots = function() {
+  // get difference between number of slides and number of dots
+  var delta = this.parent.slides.length - this.dots.length;
+  if ( delta > 0 ) {
+    this.addDots( delta );
+  } else if ( delta < 0 ) {
+    this.removeDots( -delta );
+  }
+};
+
+PageDots.prototype.addDots = function( count ) {
+  var fragment = document.createDocumentFragment();
+  var newDots = [];
+  while ( count ) {
+    var dot = document.createElement('li');
+    dot.className = 'dot';
+    fragment.appendChild( dot );
+    newDots.push( dot );
+    count--;
+  }
+  this.holder.appendChild( fragment );
+  this.dots = this.dots.concat( newDots );
+};
+
+PageDots.prototype.removeDots = function( count ) {
+  // remove from this.dots collection
+  var removeDots = this.dots.splice( this.dots.length - count, count );
+  // remove from DOM
+  removeDots.forEach( function( dot ) {
+    this.holder.removeChild( dot );
+  }, this );
+};
+
+PageDots.prototype.updateSelected = function() {
+  // remove selected class on previous
+  if ( this.selectedDot ) {
+    this.selectedDot.className = 'dot';
+  }
+  // don't proceed if no dots
+  if ( !this.dots.length ) {
+    return;
+  }
+  this.selectedDot = this.dots[ this.parent.selectedIndex ];
+  this.selectedDot.className = 'dot is-selected';
+};
+
+PageDots.prototype.onTap = function( event ) {
+  var target = event.target;
+  // only care about dot clicks
+  if ( target.nodeName != 'LI' ) {
+    return;
+  }
+
+  this.parent.uiChange();
+  var index = this.dots.indexOf( target );
+  this.parent.select( index );
+};
+
+PageDots.prototype.destroy = function() {
+  this.deactivate();
+};
+
+Flickity.PageDots = PageDots;
+
+// -------------------------- Flickity -------------------------- //
+
+utils.extend( Flickity.defaults, {
+  pageDots: true
+});
+
+Flickity.createMethods.push('_createPageDots');
+
+var proto = Flickity.prototype;
+
+proto._createPageDots = function() {
+  if ( !this.options.pageDots ) {
+    return;
+  }
+  this.pageDots = new PageDots( this );
+  // events
+  this.on( 'activate', this.activatePageDots );
+  this.on( 'select', this.updateSelectedPageDots );
+  this.on( 'cellChange', this.updatePageDots );
+  this.on( 'resize', this.updatePageDots );
+  this.on( 'deactivate', this.deactivatePageDots );
+};
+
+proto.activatePageDots = function() {
+  this.pageDots.activate();
+};
+
+proto.updateSelectedPageDots = function() {
+  this.pageDots.updateSelected();
+};
+
+proto.updatePageDots = function() {
+  this.pageDots.setDots();
+};
+
+proto.deactivatePageDots = function() {
+  this.pageDots.deactivate();
+};
+
+// -----  ----- //
+
+Flickity.PageDots = PageDots;
+
+return Flickity;
+
+}));
+  })();
+});
+
+require.register("flickity/js/player.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // player & autoPlay
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'ev-emitter/ev-emitter',
+      'fizzy-ui-utils/utils',
+      './flickity'
+    ], function( EvEmitter, utils, Flickity ) {
+      return factory( EvEmitter, utils, Flickity );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      require('ev-emitter'),
+      require('fizzy-ui-utils'),
+      require('./flickity')
+    );
+  } else {
+    // browser global
+    factory(
+      window.EvEmitter,
+      window.fizzyUIUtils,
+      window.Flickity
+    );
+  }
+
+}( window, function factory( EvEmitter, utils, Flickity ) {
+
+'use strict';
+
+// -------------------------- Page Visibility -------------------------- //
+// https://developer.mozilla.org/en-US/docs/Web/Guide/User_experience/Using_the_Page_Visibility_API
+
+var hiddenProperty, visibilityEvent;
+if ( 'hidden' in document ) {
+  hiddenProperty = 'hidden';
+  visibilityEvent = 'visibilitychange';
+} else if ( 'webkitHidden' in document ) {
+  hiddenProperty = 'webkitHidden';
+  visibilityEvent = 'webkitvisibilitychange';
+}
+
+// -------------------------- Player -------------------------- //
+
+function Player( parent ) {
+  this.parent = parent;
+  this.state = 'stopped';
+  // visibility change event handler
+  if ( visibilityEvent ) {
+    this.onVisibilityChange = function() {
+      this.visibilityChange();
+    }.bind( this );
+    this.onVisibilityPlay = function() {
+      this.visibilityPlay();
+    }.bind( this );
+  }
+}
+
+Player.prototype = Object.create( EvEmitter.prototype );
+
+// start play
+Player.prototype.play = function() {
+  if ( this.state == 'playing' ) {
+    return;
+  }
+  // do not play if page is hidden, start playing when page is visible
+  var isPageHidden = document[ hiddenProperty ];
+  if ( visibilityEvent && isPageHidden ) {
+    document.addEventListener( visibilityEvent, this.onVisibilityPlay );
+    return;
+  }
+
+  this.state = 'playing';
+  // listen to visibility change
+  if ( visibilityEvent ) {
+    document.addEventListener( visibilityEvent, this.onVisibilityChange );
+  }
+  // start ticking
+  this.tick();
+};
+
+Player.prototype.tick = function() {
+  // do not tick if not playing
+  if ( this.state != 'playing' ) {
+    return;
+  }
+
+  var time = this.parent.options.autoPlay;
+  // default to 3 seconds
+  time = typeof time == 'number' ? time : 3000;
+  var _this = this;
+  // HACK: reset ticks if stopped and started within interval
+  this.clear();
+  this.timeout = setTimeout( function() {
+    _this.parent.next( true );
+    _this.tick();
+  }, time );
+};
+
+Player.prototype.stop = function() {
+  this.state = 'stopped';
+  this.clear();
+  // remove visibility change event
+  if ( visibilityEvent ) {
+    document.removeEventListener( visibilityEvent, this.onVisibilityChange );
+  }
+};
+
+Player.prototype.clear = function() {
+  clearTimeout( this.timeout );
+};
+
+Player.prototype.pause = function() {
+  if ( this.state == 'playing' ) {
+    this.state = 'paused';
+    this.clear();
+  }
+};
+
+Player.prototype.unpause = function() {
+  // re-start play if paused
+  if ( this.state == 'paused' ) {
+    this.play();
+  }
+};
+
+// pause if page visibility is hidden, unpause if visible
+Player.prototype.visibilityChange = function() {
+  var isPageHidden = document[ hiddenProperty ];
+  this[ isPageHidden ? 'pause' : 'unpause' ]();
+};
+
+Player.prototype.visibilityPlay = function() {
+  this.play();
+  document.removeEventListener( visibilityEvent, this.onVisibilityPlay );
+};
+
+// -------------------------- Flickity -------------------------- //
+
+utils.extend( Flickity.defaults, {
+  pauseAutoPlayOnHover: true
+});
+
+Flickity.createMethods.push('_createPlayer');
+var proto = Flickity.prototype;
+
+proto._createPlayer = function() {
+  this.player = new Player( this );
+
+  this.on( 'activate', this.activatePlayer );
+  this.on( 'uiChange', this.stopPlayer );
+  this.on( 'pointerDown', this.stopPlayer );
+  this.on( 'deactivate', this.deactivatePlayer );
+};
+
+proto.activatePlayer = function() {
+  if ( !this.options.autoPlay ) {
+    return;
+  }
+  this.player.play();
+  this.element.addEventListener( 'mouseenter', this );
+};
+
+// Player API, don't hate the ... thanks I know where the door is
+
+proto.playPlayer = function() {
+  this.player.play();
+};
+
+proto.stopPlayer = function() {
+  this.player.stop();
+};
+
+proto.pausePlayer = function() {
+  this.player.pause();
+};
+
+proto.unpausePlayer = function() {
+  this.player.unpause();
+};
+
+proto.deactivatePlayer = function() {
+  this.player.stop();
+  this.element.removeEventListener( 'mouseenter', this );
+};
+
+// ----- mouseenter/leave ----- //
+
+// pause auto-play on hover
+proto.onmouseenter = function() {
+  if ( !this.options.pauseAutoPlayOnHover ) {
+    return;
+  }
+  this.player.pause();
+  this.element.addEventListener( 'mouseleave', this );
+};
+
+// resume auto-play on hover off
+proto.onmouseleave = function() {
+  this.player.unpause();
+  this.element.removeEventListener( 'mouseleave', this );
+};
+
+// -----  ----- //
+
+Flickity.Player = Player;
+
+return Flickity;
+
+}));
+  })();
+});
+
+require.register("flickity/js/prev-next-button.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // prev/next buttons
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      './flickity',
+      'tap-listener/tap-listener',
+      'fizzy-ui-utils/utils'
+    ], function( Flickity, TapListener, utils ) {
+      return factory( window, Flickity, TapListener, utils );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('./flickity'),
+      require('tap-listener'),
+      require('fizzy-ui-utils')
+    );
+  } else {
+    // browser global
+    factory(
+      window,
+      window.Flickity,
+      window.TapListener,
+      window.fizzyUIUtils
+    );
+  }
+
+}( window, function factory( window, Flickity, TapListener, utils ) {
+'use strict';
+
+var svgURI = 'http://www.w3.org/2000/svg';
+
+// -------------------------- PrevNextButton -------------------------- //
+
+function PrevNextButton( direction, parent ) {
+  this.direction = direction;
+  this.parent = parent;
+  this._create();
+}
+
+PrevNextButton.prototype = new TapListener();
+
+PrevNextButton.prototype._create = function() {
+  // properties
+  this.isEnabled = true;
+  this.isPrevious = this.direction == -1;
+  var leftDirection = this.parent.options.rightToLeft ? 1 : -1;
+  this.isLeft = this.direction == leftDirection;
+
+  var element = this.element = document.createElement('button');
+  element.className = 'flickity-prev-next-button';
+  element.className += this.isPrevious ? ' previous' : ' next';
+  // prevent button from submitting form http://stackoverflow.com/a/10836076/182183
+  element.setAttribute( 'type', 'button' );
+  // init as disabled
+  this.disable();
+
+  element.setAttribute( 'aria-label', this.isPrevious ? 'previous' : 'next' );
+
+  // create arrow
+  var svg = this.createSVG();
+  element.appendChild( svg );
+  // events
+  this.on( 'tap', this.onTap );
+  this.parent.on( 'select', this.update.bind( this ) );
+  this.on( 'pointerDown', this.parent.childUIPointerDown.bind( this.parent ) );
+};
+
+PrevNextButton.prototype.activate = function() {
+  this.bindTap( this.element );
+  // click events from keyboard
+  this.element.addEventListener( 'click', this );
+  // add to DOM
+  this.parent.element.appendChild( this.element );
+};
+
+PrevNextButton.prototype.deactivate = function() {
+  // remove from DOM
+  this.parent.element.removeChild( this.element );
+  // do regular TapListener destroy
+  TapListener.prototype.destroy.call( this );
+  // click events from keyboard
+  this.element.removeEventListener( 'click', this );
+};
+
+PrevNextButton.prototype.createSVG = function() {
+  var svg = document.createElementNS( svgURI, 'svg');
+  svg.setAttribute( 'viewBox', '0 0 100 100' );
+  var path = document.createElementNS( svgURI, 'path');
+  var pathMovements = getArrowMovements( this.parent.options.arrowShape );
+  path.setAttribute( 'd', pathMovements );
+  path.setAttribute( 'class', 'arrow' );
+  // rotate arrow
+  if ( !this.isLeft ) {
+    path.setAttribute( 'transform', 'translate(100, 100) rotate(180) ' );
+  }
+  svg.appendChild( path );
+  return svg;
+};
+
+// get SVG path movmement
+function getArrowMovements( shape ) {
+  // use shape as movement if string
+  if ( typeof shape == 'string' ) {
+    return shape;
+  }
+  // create movement string
+  return 'M ' + shape.x0 + ',50' +
+    ' L ' + shape.x1 + ',' + ( shape.y1 + 50 ) +
+    ' L ' + shape.x2 + ',' + ( shape.y2 + 50 ) +
+    ' L ' + shape.x3 + ',50 ' +
+    ' L ' + shape.x2 + ',' + ( 50 - shape.y2 ) +
+    ' L ' + shape.x1 + ',' + ( 50 - shape.y1 ) +
+    ' Z';
+}
+
+PrevNextButton.prototype.onTap = function() {
+  if ( !this.isEnabled ) {
+    return;
+  }
+  this.parent.uiChange();
+  var method = this.isPrevious ? 'previous' : 'next';
+  this.parent[ method ]();
+};
+
+PrevNextButton.prototype.handleEvent = utils.handleEvent;
+
+PrevNextButton.prototype.onclick = function() {
+  // only allow clicks from keyboard
+  var focused = document.activeElement;
+  if ( focused && focused == this.element ) {
+    this.onTap();
+  }
+};
+
+// -----  ----- //
+
+PrevNextButton.prototype.enable = function() {
+  if ( this.isEnabled ) {
+    return;
+  }
+  this.element.disabled = false;
+  this.isEnabled = true;
+};
+
+PrevNextButton.prototype.disable = function() {
+  if ( !this.isEnabled ) {
+    return;
+  }
+  this.element.disabled = true;
+  this.isEnabled = false;
+};
+
+PrevNextButton.prototype.update = function() {
+  // index of first or last slide, if previous or next
+  var slides = this.parent.slides;
+  // enable is wrapAround and at least 2 slides
+  if ( this.parent.options.wrapAround && slides.length > 1 ) {
+    this.enable();
+    return;
+  }
+  var lastIndex = slides.length ? slides.length - 1 : 0;
+  var boundIndex = this.isPrevious ? 0 : lastIndex;
+  var method = this.parent.selectedIndex == boundIndex ? 'disable' : 'enable';
+  this[ method ]();
+};
+
+PrevNextButton.prototype.destroy = function() {
+  this.deactivate();
+};
+
+// -------------------------- Flickity prototype -------------------------- //
+
+utils.extend( Flickity.defaults, {
+  prevNextButtons: true,
+  arrowShape: {
+    x0: 10,
+    x1: 60, y1: 50,
+    x2: 70, y2: 40,
+    x3: 30
+  }
+});
+
+Flickity.createMethods.push('_createPrevNextButtons');
+var proto = Flickity.prototype;
+
+proto._createPrevNextButtons = function() {
+  if ( !this.options.prevNextButtons ) {
+    return;
+  }
+
+  this.prevButton = new PrevNextButton( -1, this );
+  this.nextButton = new PrevNextButton( 1, this );
+
+  this.on( 'activate', this.activatePrevNextButtons );
+};
+
+proto.activatePrevNextButtons = function() {
+  this.prevButton.activate();
+  this.nextButton.activate();
+  this.on( 'deactivate', this.deactivatePrevNextButtons );
+};
+
+proto.deactivatePrevNextButtons = function() {
+  this.prevButton.deactivate();
+  this.nextButton.deactivate();
+  this.off( 'deactivate', this.deactivatePrevNextButtons );
+};
+
+// --------------------------  -------------------------- //
+
+Flickity.PrevNextButton = PrevNextButton;
+
+return Flickity;
+
+}));
+  })();
+});
+
+require.register("flickity/js/slide.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity");
+  (function() {
+    // slide
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory();
+  } else {
+    // browser global
+    window.Flickity = window.Flickity || {};
+    window.Flickity.Slide = factory();
+  }
+
+}( window, function factory() {
+'use strict';
+
+function Slide( parent ) {
+  this.parent = parent;
+  this.isOriginLeft = parent.originSide == 'left';
+  this.cells = [];
+  this.outerWidth = 0;
+  this.height = 0;
+}
+
+var proto = Slide.prototype;
+
+proto.addCell = function( cell ) {
+  this.cells.push( cell );
+  this.outerWidth += cell.size.outerWidth;
+  this.height = Math.max( cell.size.outerHeight, this.height );
+  // first cell stuff
+  if ( this.cells.length == 1 ) {
+    this.x = cell.x; // x comes from first cell
+    var beginMargin = this.isOriginLeft ? 'marginLeft' : 'marginRight';
+    this.firstMargin = cell.size[ beginMargin ];
+  }
+};
+
+proto.updateTarget = function() {
+  var endMargin = this.isOriginLeft ? 'marginRight' : 'marginLeft';
+  var lastCell = this.getLastCell();
+  var lastMargin = lastCell ? lastCell.size[ endMargin ] : 0;
+  var slideWidth = this.outerWidth - ( this.firstMargin + lastMargin );
+  this.target = this.x + this.firstMargin + slideWidth * this.parent.cellAlign;
+};
+
+proto.getLastCell = function() {
+  return this.cells[ this.cells.length - 1 ];
+};
+
+proto.select = function() {
+  this.changeSelectedClass('add');
+};
+
+proto.unselect = function() {
+  this.changeSelectedClass('remove');
+};
+
+proto.changeSelectedClass = function( method ) {
+  this.cells.forEach( function( cell ) {
+    cell.element.classList[ method ]('is-selected');
+  });
+};
+
+proto.getCellElements = function() {
+  return this.cells.map( function( cell ) {
+    return cell.element;
+  });
+};
+
+return Slide;
+
+}));
+  })();
+});
+
+require.register("flickity/node_modules/desandro-matches-selector/matches-selector.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/desandro-matches-selector");
+  (function() {
+    /**
+ * matchesSelector v2.0.1
+ * matchesSelector( element, '.selector' )
+ * MIT license
+ */
+
+/*jshint browser: true, strict: true, undef: true, unused: true */
+
+( function( window, factory ) {
+  /*global define: false, module: false */
+  'use strict';
+  // universal module definition
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory();
+  } else {
+    // browser global
+    window.matchesSelector = factory();
+  }
+
+}( window, function factory() {
+  'use strict';
+
+  var matchesMethod = ( function() {
+    var ElemProto = Element.prototype;
+    // check for the standard method name first
+    if ( ElemProto.matches ) {
+      return 'matches';
+    }
+    // check un-prefixed
+    if ( ElemProto.matchesSelector ) {
+      return 'matchesSelector';
+    }
+    // check vendor prefixes
+    var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
+
+    for ( var i=0; i < prefixes.length; i++ ) {
+      var prefix = prefixes[i];
+      var method = prefix + 'MatchesSelector';
+      if ( ElemProto[ method ] ) {
+        return method;
+      }
+    }
+  })();
+
+  return function matchesSelector( elem, selector ) {
+    return elem[ matchesMethod ]( selector );
+  };
+
+}));
+  })();
+});
+
+require.register("flickity/node_modules/ev-emitter/ev-emitter.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/ev-emitter");
+  (function() {
+    /**
+ * EvEmitter v1.0.3
+ * Lil' event emitter
+ * MIT License
+ */
+
+/* jshint unused: true, undef: true, strict: true */
+
+( function( global, factory ) {
+  // universal module definition
+  /* jshint strict: false */ /* globals define, module, window */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD - RequireJS
+    define( factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS - Browserify, Webpack
+    module.exports = factory();
+  } else {
+    // Browser globals
+    global.EvEmitter = factory();
+  }
+
+}( typeof window != 'undefined' ? window : this, function() {
+
+"use strict";
+
+function EvEmitter() {}
+
+var proto = EvEmitter.prototype;
+
+proto.on = function( eventName, listener ) {
+  if ( !eventName || !listener ) {
+    return;
+  }
+  // set events hash
+  var events = this._events = this._events || {};
+  // set listeners array
+  var listeners = events[ eventName ] = events[ eventName ] || [];
+  // only add once
+  if ( listeners.indexOf( listener ) == -1 ) {
+    listeners.push( listener );
+  }
+
+  return this;
+};
+
+proto.once = function( eventName, listener ) {
+  if ( !eventName || !listener ) {
+    return;
+  }
+  // add event
+  this.on( eventName, listener );
+  // set once flag
+  // set onceEvents hash
+  var onceEvents = this._onceEvents = this._onceEvents || {};
+  // set onceListeners object
+  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || {};
+  // set flag
+  onceListeners[ listener ] = true;
+
+  return this;
+};
+
+proto.off = function( eventName, listener ) {
+  var listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) {
+    return;
+  }
+  var index = listeners.indexOf( listener );
+  if ( index != -1 ) {
+    listeners.splice( index, 1 );
+  }
+
+  return this;
+};
+
+proto.emitEvent = function( eventName, args ) {
+  var listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) {
+    return;
+  }
+  var i = 0;
+  var listener = listeners[i];
+  args = args || [];
+  // once stuff
+  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
+
+  while ( listener ) {
+    var isOnce = onceListeners && onceListeners[ listener ];
+    if ( isOnce ) {
+      // remove listener
+      // remove before trigger to prevent recursion
+      this.off( eventName, listener );
+      // unset once flag
+      delete onceListeners[ listener ];
+    }
+    // trigger listener
+    listener.apply( this, args );
+    // get next listener
+    i += isOnce ? 0 : 1;
+    listener = listeners[i];
+  }
+
+  return this;
+};
+
+return EvEmitter;
+
+}));
+  })();
+});
+
+require.register("flickity/node_modules/fizzy-ui-utils/utils.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/fizzy-ui-utils");
+  (function() {
+    /**
+ * Fizzy UI utils v2.0.3
+ * MIT license
+ */
+
+/*jshint browser: true, undef: true, unused: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false */ /*globals define, module, require */
+
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'desandro-matches-selector/matches-selector'
+    ], function( matchesSelector ) {
+      return factory( window, matchesSelector );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('desandro-matches-selector')
+    );
+  } else {
+    // browser global
+    window.fizzyUIUtils = factory(
+      window,
+      window.matchesSelector
+    );
+  }
+
+}( window, function factory( window, matchesSelector ) {
+
+'use strict';
+
+var utils = {};
+
+// ----- extend ----- //
+
+// extends objects
+utils.extend = function( a, b ) {
+  for ( var prop in b ) {
+    a[ prop ] = b[ prop ];
+  }
+  return a;
+};
+
+// ----- modulo ----- //
+
+utils.modulo = function( num, div ) {
+  return ( ( num % div ) + div ) % div;
+};
+
+// ----- makeArray ----- //
+
+// turn element or nodeList into an array
+utils.makeArray = function( obj ) {
+  var ary = [];
+  if ( Array.isArray( obj ) ) {
+    // use object if already an array
+    ary = obj;
+  } else if ( obj && typeof obj.length == 'number' ) {
+    // convert nodeList to array
+    for ( var i=0; i < obj.length; i++ ) {
+      ary.push( obj[i] );
+    }
+  } else {
+    // array of single index
+    ary.push( obj );
+  }
+  return ary;
+};
+
+// ----- removeFrom ----- //
+
+utils.removeFrom = function( ary, obj ) {
+  var index = ary.indexOf( obj );
+  if ( index != -1 ) {
+    ary.splice( index, 1 );
+  }
+};
+
+// ----- getParent ----- //
+
+utils.getParent = function( elem, selector ) {
+  while ( elem != document.body ) {
+    elem = elem.parentNode;
+    if ( matchesSelector( elem, selector ) ) {
+      return elem;
+    }
+  }
+};
+
+// ----- getQueryElement ----- //
+
+// use element as selector string
+utils.getQueryElement = function( elem ) {
+  if ( typeof elem == 'string' ) {
+    return document.querySelector( elem );
+  }
+  return elem;
+};
+
+// ----- handleEvent ----- //
+
+// enable .ontype to trigger from .addEventListener( elem, 'type' )
+utils.handleEvent = function( event ) {
+  var method = 'on' + event.type;
+  if ( this[ method ] ) {
+    this[ method ]( event );
+  }
+};
+
+// ----- filterFindElements ----- //
+
+utils.filterFindElements = function( elems, selector ) {
+  // make array of elems
+  elems = utils.makeArray( elems );
+  var ffElems = [];
+
+  elems.forEach( function( elem ) {
+    // check that elem is an actual element
+    if ( !( elem instanceof HTMLElement ) ) {
+      return;
+    }
+    // add elem if no selector
+    if ( !selector ) {
+      ffElems.push( elem );
+      return;
+    }
+    // filter & find items if we have a selector
+    // filter
+    if ( matchesSelector( elem, selector ) ) {
+      ffElems.push( elem );
+    }
+    // find children
+    var childElems = elem.querySelectorAll( selector );
+    // concat childElems to filterFound array
+    for ( var i=0; i < childElems.length; i++ ) {
+      ffElems.push( childElems[i] );
+    }
+  });
+
+  return ffElems;
+};
+
+// ----- debounceMethod ----- //
+
+utils.debounceMethod = function( _class, methodName, threshold ) {
+  // original method
+  var method = _class.prototype[ methodName ];
+  var timeoutName = methodName + 'Timeout';
+
+  _class.prototype[ methodName ] = function() {
+    var timeout = this[ timeoutName ];
+    if ( timeout ) {
+      clearTimeout( timeout );
+    }
+    var args = arguments;
+
+    var _this = this;
+    this[ timeoutName ] = setTimeout( function() {
+      method.apply( _this, args );
+      delete _this[ timeoutName ];
+    }, threshold || 100 );
+  };
+};
+
+// ----- docReady ----- //
+
+utils.docReady = function( callback ) {
+  var readyState = document.readyState;
+  if ( readyState == 'complete' || readyState == 'interactive' ) {
+    // do async to allow for other scripts to run. metafizzy/flickity#441
+    setTimeout( callback );
+  } else {
+    document.addEventListener( 'DOMContentLoaded', callback );
+  }
+};
+
+// ----- htmlInit ----- //
+
+// http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/
+utils.toDashed = function( str ) {
+  return str.replace( /(.)([A-Z])/g, function( match, $1, $2 ) {
+    return $1 + '-' + $2;
+  }).toLowerCase();
+};
+
+var console = window.console;
+/**
+ * allow user to initialize classes via [data-namespace] or .js-namespace class
+ * htmlInit( Widget, 'widgetName' )
+ * options are parsed from data-namespace-options
+ */
+utils.htmlInit = function( WidgetClass, namespace ) {
+  utils.docReady( function() {
+    var dashedNamespace = utils.toDashed( namespace );
+    var dataAttr = 'data-' + dashedNamespace;
+    var dataAttrElems = document.querySelectorAll( '[' + dataAttr + ']' );
+    var jsDashElems = document.querySelectorAll( '.js-' + dashedNamespace );
+    var elems = utils.makeArray( dataAttrElems )
+      .concat( utils.makeArray( jsDashElems ) );
+    var dataOptionsAttr = dataAttr + '-options';
+    var jQuery = window.jQuery;
+
+    elems.forEach( function( elem ) {
+      var attr = elem.getAttribute( dataAttr ) ||
+        elem.getAttribute( dataOptionsAttr );
+      var options;
+      try {
+        options = attr && JSON.parse( attr );
+      } catch ( error ) {
+        // log error, do not initialize
+        if ( console ) {
+          console.error( 'Error parsing ' + dataAttr + ' on ' + elem.className +
+          ': ' + error );
+        }
+        return;
+      }
+      // initialize
+      var instance = new WidgetClass( elem, options );
+      // make available via $().data('namespace')
+      if ( jQuery ) {
+        jQuery.data( elem, namespace, instance );
+      }
+    });
+
+  });
+};
+
+// -----  ----- //
+
+return utils;
+
+}));
+  })();
+});
+
+require.register("flickity/node_modules/get-size/get-size.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/get-size");
+  (function() {
+    /*!
+ * getSize v2.0.2
+ * measure size of elements
+ * MIT license
+ */
+
+/*jshint browser: true, strict: true, undef: true, unused: true */
+/*global define: false, module: false, console: false */
+
+( function( window, factory ) {
+  'use strict';
+
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( function() {
+      return factory();
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory();
+  } else {
+    // browser global
+    window.getSize = factory();
+  }
+
+})( window, function factory() {
+'use strict';
+
+// -------------------------- helpers -------------------------- //
+
+// get a number from a string, not a percentage
+function getStyleSize( value ) {
+  var num = parseFloat( value );
+  // not a percent like '100%', and a number
+  var isValid = value.indexOf('%') == -1 && !isNaN( num );
+  return isValid && num;
+}
+
+function noop() {}
+
+var logError = typeof console == 'undefined' ? noop :
+  function( message ) {
+    console.error( message );
+  };
+
+// -------------------------- measurements -------------------------- //
+
+var measurements = [
+  'paddingLeft',
+  'paddingRight',
+  'paddingTop',
+  'paddingBottom',
+  'marginLeft',
+  'marginRight',
+  'marginTop',
+  'marginBottom',
+  'borderLeftWidth',
+  'borderRightWidth',
+  'borderTopWidth',
+  'borderBottomWidth'
+];
+
+var measurementsLength = measurements.length;
+
+function getZeroSize() {
+  var size = {
+    width: 0,
+    height: 0,
+    innerWidth: 0,
+    innerHeight: 0,
+    outerWidth: 0,
+    outerHeight: 0
+  };
+  for ( var i=0; i < measurementsLength; i++ ) {
+    var measurement = measurements[i];
+    size[ measurement ] = 0;
+  }
+  return size;
+}
+
+// -------------------------- getStyle -------------------------- //
+
+/**
+ * getStyle, get style of element, check for Firefox bug
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+ */
+function getStyle( elem ) {
+  var style = getComputedStyle( elem );
+  if ( !style ) {
+    logError( 'Style returned ' + style +
+      '. Are you running this code in a hidden iframe on Firefox? ' +
+      'See http://bit.ly/getsizebug1' );
+  }
+  return style;
+}
+
+// -------------------------- setup -------------------------- //
+
+var isSetup = false;
+
+var isBoxSizeOuter;
+
+/**
+ * setup
+ * check isBoxSizerOuter
+ * do on first getSize() rather than on page load for Firefox bug
+ */
+function setup() {
+  // setup once
+  if ( isSetup ) {
+    return;
+  }
+  isSetup = true;
+
+  // -------------------------- box sizing -------------------------- //
+
+  /**
+   * WebKit measures the outer-width on style.width on border-box elems
+   * IE & Firefox<29 measures the inner-width
+   */
+  var div = document.createElement('div');
+  div.style.width = '200px';
+  div.style.padding = '1px 2px 3px 4px';
+  div.style.borderStyle = 'solid';
+  div.style.borderWidth = '1px 2px 3px 4px';
+  div.style.boxSizing = 'border-box';
+
+  var body = document.body || document.documentElement;
+  body.appendChild( div );
+  var style = getStyle( div );
+
+  getSize.isBoxSizeOuter = isBoxSizeOuter = getStyleSize( style.width ) == 200;
+  body.removeChild( div );
+
+}
+
+// -------------------------- getSize -------------------------- //
+
+function getSize( elem ) {
+  setup();
+
+  // use querySeletor if elem is string
+  if ( typeof elem == 'string' ) {
+    elem = document.querySelector( elem );
+  }
+
+  // do not proceed on non-objects
+  if ( !elem || typeof elem != 'object' || !elem.nodeType ) {
+    return;
+  }
+
+  var style = getStyle( elem );
+
+  // if hidden, everything is 0
+  if ( style.display == 'none' ) {
+    return getZeroSize();
+  }
+
+  var size = {};
+  size.width = elem.offsetWidth;
+  size.height = elem.offsetHeight;
+
+  var isBorderBox = size.isBorderBox = style.boxSizing == 'border-box';
+
+  // get all measurements
+  for ( var i=0; i < measurementsLength; i++ ) {
+    var measurement = measurements[i];
+    var value = style[ measurement ];
+    var num = parseFloat( value );
+    // any 'auto', 'medium' value will be 0
+    size[ measurement ] = !isNaN( num ) ? num : 0;
+  }
+
+  var paddingWidth = size.paddingLeft + size.paddingRight;
+  var paddingHeight = size.paddingTop + size.paddingBottom;
+  var marginWidth = size.marginLeft + size.marginRight;
+  var marginHeight = size.marginTop + size.marginBottom;
+  var borderWidth = size.borderLeftWidth + size.borderRightWidth;
+  var borderHeight = size.borderTopWidth + size.borderBottomWidth;
+
+  var isBorderBoxSizeOuter = isBorderBox && isBoxSizeOuter;
+
+  // overwrite width and height if we can get it from style
+  var styleWidth = getStyleSize( style.width );
+  if ( styleWidth !== false ) {
+    size.width = styleWidth +
+      // add padding and border unless it's already including it
+      ( isBorderBoxSizeOuter ? 0 : paddingWidth + borderWidth );
+  }
+
+  var styleHeight = getStyleSize( style.height );
+  if ( styleHeight !== false ) {
+    size.height = styleHeight +
+      // add padding and border unless it's already including it
+      ( isBorderBoxSizeOuter ? 0 : paddingHeight + borderHeight );
+  }
+
+  size.innerWidth = size.width - ( paddingWidth + borderWidth );
+  size.innerHeight = size.height - ( paddingHeight + borderHeight );
+
+  size.outerWidth = size.width + marginWidth;
+  size.outerHeight = size.height + marginHeight;
+
+  return size;
+}
+
+return getSize;
+
+});
+  })();
+});
+
+require.register("flickity/node_modules/tap-listener/node_modules/unipointer/unipointer.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/tap-listener/node_modules/unipointer");
+  (function() {
+    /*!
+ * Unipointer v2.1.0
+ * base class for doing one thing with pointer event
+ * MIT license
+ */
+
+/*jshint browser: true, undef: true, unused: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */ /*global define, module, require */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'ev-emitter/ev-emitter'
+    ], function( EvEmitter ) {
+      return factory( window, EvEmitter );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('ev-emitter')
+    );
+  } else {
+    // browser global
+    window.Unipointer = factory(
+      window,
+      window.EvEmitter
+    );
+  }
+
+}( window, function factory( window, EvEmitter ) {
+
+'use strict';
+
+function noop() {}
+
+function Unipointer() {}
+
+// inherit EvEmitter
+var proto = Unipointer.prototype = Object.create( EvEmitter.prototype );
+
+proto.bindStartEvent = function( elem ) {
+  this._bindStartEvent( elem, true );
+};
+
+proto.unbindStartEvent = function( elem ) {
+  this._bindStartEvent( elem, false );
+};
+
+/**
+ * works as unbinder, as you can ._bindStart( false ) to unbind
+ * @param {Boolean} isBind - will unbind if falsey
+ */
+proto._bindStartEvent = function( elem, isBind ) {
+  // munge isBind, default to true
+  isBind = isBind === undefined ? true : !!isBind;
+  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
+
+  if ( window.navigator.pointerEnabled ) {
+    // W3C Pointer Events, IE11. See https://coderwall.com/p/mfreca
+    elem[ bindMethod ]( 'pointerdown', this );
+  } else if ( window.navigator.msPointerEnabled ) {
+    // IE10 Pointer Events
+    elem[ bindMethod ]( 'MSPointerDown', this );
+  } else {
+    // listen for both, for devices like Chrome Pixel
+    elem[ bindMethod ]( 'mousedown', this );
+    elem[ bindMethod ]( 'touchstart', this );
+  }
+};
+
+// trigger handler methods for events
+proto.handleEvent = function( event ) {
+  var method = 'on' + event.type;
+  if ( this[ method ] ) {
+    this[ method ]( event );
+  }
+};
+
+// returns the touch that we're keeping track of
+proto.getTouch = function( touches ) {
+  for ( var i=0; i < touches.length; i++ ) {
+    var touch = touches[i];
+    if ( touch.identifier == this.pointerIdentifier ) {
+      return touch;
+    }
+  }
+};
+
+// ----- start event ----- //
+
+proto.onmousedown = function( event ) {
+  // dismiss clicks from right or middle buttons
+  var button = event.button;
+  if ( button && ( button !== 0 && button !== 1 ) ) {
+    return;
+  }
+  this._pointerDown( event, event );
+};
+
+proto.ontouchstart = function( event ) {
+  this._pointerDown( event, event.changedTouches[0] );
+};
+
+proto.onMSPointerDown =
+proto.onpointerdown = function( event ) {
+  this._pointerDown( event, event );
+};
+
+/**
+ * pointer start
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto._pointerDown = function( event, pointer ) {
+  // dismiss other pointers
+  if ( this.isPointerDown ) {
+    return;
+  }
+
+  this.isPointerDown = true;
+  // save pointer identifier to match up touch events
+  this.pointerIdentifier = pointer.pointerId !== undefined ?
+    // pointerId for pointer events, touch.indentifier for touch events
+    pointer.pointerId : pointer.identifier;
+
+  this.pointerDown( event, pointer );
+};
+
+proto.pointerDown = function( event, pointer ) {
+  this._bindPostStartEvents( event );
+  this.emitEvent( 'pointerDown', [ event, pointer ] );
+};
+
+// hash of events to be bound after start event
+var postStartEvents = {
+  mousedown: [ 'mousemove', 'mouseup' ],
+  touchstart: [ 'touchmove', 'touchend', 'touchcancel' ],
+  pointerdown: [ 'pointermove', 'pointerup', 'pointercancel' ],
+  MSPointerDown: [ 'MSPointerMove', 'MSPointerUp', 'MSPointerCancel' ]
+};
+
+proto._bindPostStartEvents = function( event ) {
+  if ( !event ) {
+    return;
+  }
+  // get proper events to match start event
+  var events = postStartEvents[ event.type ];
+  // bind events to node
+  events.forEach( function( eventName ) {
+    window.addEventListener( eventName, this );
+  }, this );
+  // save these arguments
+  this._boundPointerEvents = events;
+};
+
+proto._unbindPostStartEvents = function() {
+  // check for _boundEvents, in case dragEnd triggered twice (old IE8 bug)
+  if ( !this._boundPointerEvents ) {
+    return;
+  }
+  this._boundPointerEvents.forEach( function( eventName ) {
+    window.removeEventListener( eventName, this );
+  }, this );
+
+  delete this._boundPointerEvents;
+};
+
+// ----- move event ----- //
+
+proto.onmousemove = function( event ) {
+  this._pointerMove( event, event );
+};
+
+proto.onMSPointerMove =
+proto.onpointermove = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerMove( event, event );
+  }
+};
+
+proto.ontouchmove = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerMove( event, touch );
+  }
+};
+
+/**
+ * pointer move
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerMove = function( event, pointer ) {
+  this.pointerMove( event, pointer );
+};
+
+// public
+proto.pointerMove = function( event, pointer ) {
+  this.emitEvent( 'pointerMove', [ event, pointer ] );
+};
+
+// ----- end event ----- //
+
+
+proto.onmouseup = function( event ) {
+  this._pointerUp( event, event );
+};
+
+proto.onMSPointerUp =
+proto.onpointerup = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerUp( event, event );
+  }
+};
+
+proto.ontouchend = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerUp( event, touch );
+  }
+};
+
+/**
+ * pointer up
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerUp = function( event, pointer ) {
+  this._pointerDone();
+  this.pointerUp( event, pointer );
+};
+
+// public
+proto.pointerUp = function( event, pointer ) {
+  this.emitEvent( 'pointerUp', [ event, pointer ] );
+};
+
+// ----- pointer done ----- //
+
+// triggered on pointer up & pointer cancel
+proto._pointerDone = function() {
+  // reset properties
+  this.isPointerDown = false;
+  delete this.pointerIdentifier;
+  // remove events
+  this._unbindPostStartEvents();
+  this.pointerDone();
+};
+
+proto.pointerDone = noop;
+
+// ----- pointer cancel ----- //
+
+proto.onMSPointerCancel =
+proto.onpointercancel = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerCancel( event, event );
+  }
+};
+
+proto.ontouchcancel = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerCancel( event, touch );
+  }
+};
+
+/**
+ * pointer cancel
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerCancel = function( event, pointer ) {
+  this._pointerDone();
+  this.pointerCancel( event, pointer );
+};
+
+// public
+proto.pointerCancel = function( event, pointer ) {
+  this.emitEvent( 'pointerCancel', [ event, pointer ] );
+};
+
+// -----  ----- //
+
+// utility function for getting x/y coords from event
+Unipointer.getPointerPoint = function( pointer ) {
+  return {
+    x: pointer.pageX,
+    y: pointer.pageY
+  };
+};
+
+// -----  ----- //
+
+return Unipointer;
+
+}));
+  })();
+});
+
+require.register("flickity/node_modules/tap-listener/tap-listener.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/tap-listener");
+  (function() {
+    /*!
+ * Tap listener v2.0.0
+ * listens to taps
+ * MIT license
+ */
+
+/*jshint browser: true, unused: true, undef: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false*/ /*globals define, module, require */
+
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'unipointer/unipointer'
+    ], function( Unipointer ) {
+      return factory( window, Unipointer );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('unipointer')
+    );
+  } else {
+    // browser global
+    window.TapListener = factory(
+      window,
+      window.Unipointer
+    );
+  }
+
+}( window, function factory( window, Unipointer ) {
+
+'use strict';
+
+// --------------------------  TapListener -------------------------- //
+
+function TapListener( elem ) {
+  this.bindTap( elem );
+}
+
+// inherit Unipointer & EventEmitter
+var proto = TapListener.prototype = Object.create( Unipointer.prototype );
+
+/**
+ * bind tap event to element
+ * @param {Element} elem
+ */
+proto.bindTap = function( elem ) {
+  if ( !elem ) {
+    return;
+  }
+  this.unbindTap();
+  this.tapElement = elem;
+  this._bindStartEvent( elem, true );
+};
+
+proto.unbindTap = function() {
+  if ( !this.tapElement ) {
+    return;
+  }
+  this._bindStartEvent( this.tapElement, true );
+  delete this.tapElement;
+};
+
+/**
+ * pointer up
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerUp = function( event, pointer ) {
+  // ignore emulated mouse up clicks
+  if ( this.isIgnoringMouseUp && event.type == 'mouseup' ) {
+    return;
+  }
+
+  var pointerPoint = Unipointer.getPointerPoint( pointer );
+  var boundingRect = this.tapElement.getBoundingClientRect();
+  var scrollX = window.pageXOffset;
+  var scrollY = window.pageYOffset;
+  // calculate if pointer is inside tapElement
+  var isInside = pointerPoint.x >= boundingRect.left + scrollX &&
+    pointerPoint.x <= boundingRect.right + scrollX &&
+    pointerPoint.y >= boundingRect.top + scrollY &&
+    pointerPoint.y <= boundingRect.bottom + scrollY;
+  // trigger callback if pointer is inside element
+  if ( isInside ) {
+    this.emitEvent( 'tap', [ event, pointer ] );
+  }
+
+  // set flag for emulated clicks 300ms after touchend
+  if ( event.type != 'mouseup' ) {
+    this.isIgnoringMouseUp = true;
+    // reset flag after 300ms
+    var _this = this;
+    setTimeout( function() {
+      delete _this.isIgnoringMouseUp;
+    }, 400 );
+  }
+};
+
+proto.destroy = function() {
+  this.pointerDone();
+  this.unbindTap();
+};
+
+// -----  ----- //
+
+return TapListener;
+
+}));
+  })();
+});
+
+require.register("flickity/node_modules/unidragger/node_modules/unipointer/unipointer.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/unidragger/node_modules/unipointer");
+  (function() {
+    /*!
+ * Unipointer v2.1.0
+ * base class for doing one thing with pointer event
+ * MIT license
+ */
+
+/*jshint browser: true, undef: true, unused: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */ /*global define, module, require */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'ev-emitter/ev-emitter'
+    ], function( EvEmitter ) {
+      return factory( window, EvEmitter );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('ev-emitter')
+    );
+  } else {
+    // browser global
+    window.Unipointer = factory(
+      window,
+      window.EvEmitter
+    );
+  }
+
+}( window, function factory( window, EvEmitter ) {
+
+'use strict';
+
+function noop() {}
+
+function Unipointer() {}
+
+// inherit EvEmitter
+var proto = Unipointer.prototype = Object.create( EvEmitter.prototype );
+
+proto.bindStartEvent = function( elem ) {
+  this._bindStartEvent( elem, true );
+};
+
+proto.unbindStartEvent = function( elem ) {
+  this._bindStartEvent( elem, false );
+};
+
+/**
+ * works as unbinder, as you can ._bindStart( false ) to unbind
+ * @param {Boolean} isBind - will unbind if falsey
+ */
+proto._bindStartEvent = function( elem, isBind ) {
+  // munge isBind, default to true
+  isBind = isBind === undefined ? true : !!isBind;
+  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
+
+  if ( window.navigator.pointerEnabled ) {
+    // W3C Pointer Events, IE11. See https://coderwall.com/p/mfreca
+    elem[ bindMethod ]( 'pointerdown', this );
+  } else if ( window.navigator.msPointerEnabled ) {
+    // IE10 Pointer Events
+    elem[ bindMethod ]( 'MSPointerDown', this );
+  } else {
+    // listen for both, for devices like Chrome Pixel
+    elem[ bindMethod ]( 'mousedown', this );
+    elem[ bindMethod ]( 'touchstart', this );
+  }
+};
+
+// trigger handler methods for events
+proto.handleEvent = function( event ) {
+  var method = 'on' + event.type;
+  if ( this[ method ] ) {
+    this[ method ]( event );
+  }
+};
+
+// returns the touch that we're keeping track of
+proto.getTouch = function( touches ) {
+  for ( var i=0; i < touches.length; i++ ) {
+    var touch = touches[i];
+    if ( touch.identifier == this.pointerIdentifier ) {
+      return touch;
+    }
+  }
+};
+
+// ----- start event ----- //
+
+proto.onmousedown = function( event ) {
+  // dismiss clicks from right or middle buttons
+  var button = event.button;
+  if ( button && ( button !== 0 && button !== 1 ) ) {
+    return;
+  }
+  this._pointerDown( event, event );
+};
+
+proto.ontouchstart = function( event ) {
+  this._pointerDown( event, event.changedTouches[0] );
+};
+
+proto.onMSPointerDown =
+proto.onpointerdown = function( event ) {
+  this._pointerDown( event, event );
+};
+
+/**
+ * pointer start
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto._pointerDown = function( event, pointer ) {
+  // dismiss other pointers
+  if ( this.isPointerDown ) {
+    return;
+  }
+
+  this.isPointerDown = true;
+  // save pointer identifier to match up touch events
+  this.pointerIdentifier = pointer.pointerId !== undefined ?
+    // pointerId for pointer events, touch.indentifier for touch events
+    pointer.pointerId : pointer.identifier;
+
+  this.pointerDown( event, pointer );
+};
+
+proto.pointerDown = function( event, pointer ) {
+  this._bindPostStartEvents( event );
+  this.emitEvent( 'pointerDown', [ event, pointer ] );
+};
+
+// hash of events to be bound after start event
+var postStartEvents = {
+  mousedown: [ 'mousemove', 'mouseup' ],
+  touchstart: [ 'touchmove', 'touchend', 'touchcancel' ],
+  pointerdown: [ 'pointermove', 'pointerup', 'pointercancel' ],
+  MSPointerDown: [ 'MSPointerMove', 'MSPointerUp', 'MSPointerCancel' ]
+};
+
+proto._bindPostStartEvents = function( event ) {
+  if ( !event ) {
+    return;
+  }
+  // get proper events to match start event
+  var events = postStartEvents[ event.type ];
+  // bind events to node
+  events.forEach( function( eventName ) {
+    window.addEventListener( eventName, this );
+  }, this );
+  // save these arguments
+  this._boundPointerEvents = events;
+};
+
+proto._unbindPostStartEvents = function() {
+  // check for _boundEvents, in case dragEnd triggered twice (old IE8 bug)
+  if ( !this._boundPointerEvents ) {
+    return;
+  }
+  this._boundPointerEvents.forEach( function( eventName ) {
+    window.removeEventListener( eventName, this );
+  }, this );
+
+  delete this._boundPointerEvents;
+};
+
+// ----- move event ----- //
+
+proto.onmousemove = function( event ) {
+  this._pointerMove( event, event );
+};
+
+proto.onMSPointerMove =
+proto.onpointermove = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerMove( event, event );
+  }
+};
+
+proto.ontouchmove = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerMove( event, touch );
+  }
+};
+
+/**
+ * pointer move
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerMove = function( event, pointer ) {
+  this.pointerMove( event, pointer );
+};
+
+// public
+proto.pointerMove = function( event, pointer ) {
+  this.emitEvent( 'pointerMove', [ event, pointer ] );
+};
+
+// ----- end event ----- //
+
+
+proto.onmouseup = function( event ) {
+  this._pointerUp( event, event );
+};
+
+proto.onMSPointerUp =
+proto.onpointerup = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerUp( event, event );
+  }
+};
+
+proto.ontouchend = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerUp( event, touch );
+  }
+};
+
+/**
+ * pointer up
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerUp = function( event, pointer ) {
+  this._pointerDone();
+  this.pointerUp( event, pointer );
+};
+
+// public
+proto.pointerUp = function( event, pointer ) {
+  this.emitEvent( 'pointerUp', [ event, pointer ] );
+};
+
+// ----- pointer done ----- //
+
+// triggered on pointer up & pointer cancel
+proto._pointerDone = function() {
+  // reset properties
+  this.isPointerDown = false;
+  delete this.pointerIdentifier;
+  // remove events
+  this._unbindPostStartEvents();
+  this.pointerDone();
+};
+
+proto.pointerDone = noop;
+
+// ----- pointer cancel ----- //
+
+proto.onMSPointerCancel =
+proto.onpointercancel = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerCancel( event, event );
+  }
+};
+
+proto.ontouchcancel = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerCancel( event, touch );
+  }
+};
+
+/**
+ * pointer cancel
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerCancel = function( event, pointer ) {
+  this._pointerDone();
+  this.pointerCancel( event, pointer );
+};
+
+// public
+proto.pointerCancel = function( event, pointer ) {
+  this.emitEvent( 'pointerCancel', [ event, pointer ] );
+};
+
+// -----  ----- //
+
+// utility function for getting x/y coords from event
+Unipointer.getPointerPoint = function( pointer ) {
+  return {
+    x: pointer.pageX,
+    y: pointer.pageY
+  };
+};
+
+// -----  ----- //
+
+return Unipointer;
+
+}));
+  })();
+});
+
+require.register("flickity/node_modules/unidragger/unidragger.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "flickity/node_modules/unidragger");
+  (function() {
+    /*!
+ * Unidragger v2.1.0
+ * Draggable base class
+ * MIT license
+ */
+
+/*jshint browser: true, unused: true, undef: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false */ /*globals define, module, require */
+
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'unipointer/unipointer'
+    ], function( Unipointer ) {
+      return factory( window, Unipointer );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('unipointer')
+    );
+  } else {
+    // browser global
+    window.Unidragger = factory(
+      window,
+      window.Unipointer
+    );
+  }
+
+}( window, function factory( window, Unipointer ) {
+
+'use strict';
+
+// -----  ----- //
+
+function noop() {}
+
+// -------------------------- Unidragger -------------------------- //
+
+function Unidragger() {}
+
+// inherit Unipointer & EvEmitter
+var proto = Unidragger.prototype = Object.create( Unipointer.prototype );
+
+// ----- bind start ----- //
+
+proto.bindHandles = function() {
+  this._bindHandles( true );
+};
+
+proto.unbindHandles = function() {
+  this._bindHandles( false );
+};
+
+var navigator = window.navigator;
+/**
+ * works as unbinder, as you can .bindHandles( false ) to unbind
+ * @param {Boolean} isBind - will unbind if falsey
+ */
+proto._bindHandles = function( isBind ) {
+  // munge isBind, default to true
+  isBind = isBind === undefined ? true : !!isBind;
+  // extra bind logic
+  var binderExtra;
+  if ( navigator.pointerEnabled ) {
+    binderExtra = function( handle ) {
+      // disable scrolling on the element
+      handle.style.touchAction = isBind ? 'none' : '';
+    };
+  } else if ( navigator.msPointerEnabled ) {
+    binderExtra = function( handle ) {
+      // disable scrolling on the element
+      handle.style.msTouchAction = isBind ? 'none' : '';
+    };
+  } else {
+    binderExtra = noop;
+  }
+  // bind each handle
+  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
+  for ( var i=0; i < this.handles.length; i++ ) {
+    var handle = this.handles[i];
+    this._bindStartEvent( handle, isBind );
+    binderExtra( handle );
+    handle[ bindMethod ]( 'click', this );
+  }
+};
+
+// ----- start event ----- //
+
+/**
+ * pointer start
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerDown = function( event, pointer ) {
+  // dismiss range sliders
+  if ( event.target.nodeName == 'INPUT' && event.target.type == 'range' ) {
+    // reset pointerDown logic
+    this.isPointerDown = false;
+    delete this.pointerIdentifier;
+    return;
+  }
+
+  this._dragPointerDown( event, pointer );
+  // kludge to blur focused inputs in dragger
+  var focused = document.activeElement;
+  if ( focused && focused.blur ) {
+    focused.blur();
+  }
+  // bind move and end events
+  this._bindPostStartEvents( event );
+  this.emitEvent( 'pointerDown', [ event, pointer ] );
+};
+
+// base pointer down logic
+proto._dragPointerDown = function( event, pointer ) {
+  // track to see when dragging starts
+  this.pointerDownPoint = Unipointer.getPointerPoint( pointer );
+
+  var canPreventDefault = this.canPreventDefaultOnPointerDown( event, pointer );
+  if ( canPreventDefault ) {
+    event.preventDefault();
+  }
+};
+
+// overwriteable method so Flickity can prevent for scrolling
+proto.canPreventDefaultOnPointerDown = function( event ) {
+  // prevent default, unless touchstart or <select>
+  return event.target.nodeName != 'SELECT';
+};
+
+// ----- move event ----- //
+
+/**
+ * drag move
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerMove = function( event, pointer ) {
+  var moveVector = this._dragPointerMove( event, pointer );
+  this.emitEvent( 'pointerMove', [ event, pointer, moveVector ] );
+  this._dragMove( event, pointer, moveVector );
+};
+
+// base pointer move logic
+proto._dragPointerMove = function( event, pointer ) {
+  var movePoint = Unipointer.getPointerPoint( pointer );
+  var moveVector = {
+    x: movePoint.x - this.pointerDownPoint.x,
+    y: movePoint.y - this.pointerDownPoint.y
+  };
+  // start drag if pointer has moved far enough to start drag
+  if ( !this.isDragging && this.hasDragStarted( moveVector ) ) {
+    this._dragStart( event, pointer );
+  }
+  return moveVector;
+};
+
+// condition if pointer has moved far enough to start drag
+proto.hasDragStarted = function( moveVector ) {
+  return Math.abs( moveVector.x ) > 3 || Math.abs( moveVector.y ) > 3;
+};
+
+
+// ----- end event ----- //
+
+/**
+ * pointer up
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerUp = function( event, pointer ) {
+  this.emitEvent( 'pointerUp', [ event, pointer ] );
+  this._dragPointerUp( event, pointer );
+};
+
+proto._dragPointerUp = function( event, pointer ) {
+  if ( this.isDragging ) {
+    this._dragEnd( event, pointer );
+  } else {
+    // pointer didn't move enough for drag to start
+    this._staticClick( event, pointer );
+  }
+};
+
+// -------------------------- drag -------------------------- //
+
+// dragStart
+proto._dragStart = function( event, pointer ) {
+  this.isDragging = true;
+  this.dragStartPoint = Unipointer.getPointerPoint( pointer );
+  // prevent clicks
+  this.isPreventingClicks = true;
+
+  this.dragStart( event, pointer );
+};
+
+proto.dragStart = function( event, pointer ) {
+  this.emitEvent( 'dragStart', [ event, pointer ] );
+};
+
+// dragMove
+proto._dragMove = function( event, pointer, moveVector ) {
+  // do not drag if not dragging yet
+  if ( !this.isDragging ) {
+    return;
+  }
+
+  this.dragMove( event, pointer, moveVector );
+};
+
+proto.dragMove = function( event, pointer, moveVector ) {
+  event.preventDefault();
+  this.emitEvent( 'dragMove', [ event, pointer, moveVector ] );
+};
+
+// dragEnd
+proto._dragEnd = function( event, pointer ) {
+  // set flags
+  this.isDragging = false;
+  // re-enable clicking async
+  setTimeout( function() {
+    delete this.isPreventingClicks;
+  }.bind( this ) );
+
+  this.dragEnd( event, pointer );
+};
+
+proto.dragEnd = function( event, pointer ) {
+  this.emitEvent( 'dragEnd', [ event, pointer ] );
+};
+
+// ----- onclick ----- //
+
+// handle all clicks and prevent clicks when dragging
+proto.onclick = function( event ) {
+  if ( this.isPreventingClicks ) {
+    event.preventDefault();
+  }
+};
+
+// ----- staticClick ----- //
+
+// triggered after pointer down & up with no/tiny movement
+proto._staticClick = function( event, pointer ) {
+  // ignore emulated mouse up clicks
+  if ( this.isIgnoringMouseUp && event.type == 'mouseup' ) {
+    return;
+  }
+
+  // allow click in <input>s and <textarea>s
+  var nodeName = event.target.nodeName;
+  if ( nodeName == 'INPUT' || nodeName == 'TEXTAREA' ) {
+    event.target.focus();
+  }
+  this.staticClick( event, pointer );
+
+  // set flag for emulated clicks 300ms after touchend
+  if ( event.type != 'mouseup' ) {
+    this.isIgnoringMouseUp = true;
+    // reset flag after 300ms
+    setTimeout( function() {
+      delete this.isIgnoringMouseUp;
+    }.bind( this ), 400 );
+  }
+};
+
+proto.staticClick = function( event, pointer ) {
+  this.emitEvent( 'staticClick', [ event, pointer ] );
+};
+
+// ----- utils ----- //
+
+Unidragger.getPointerPoint = Unipointer.getPointerPoint;
+
+// -----  ----- //
+
+return Unidragger;
+
+}));
+  })();
+});
+
 require.register("for-each/index.js", function(exports, require, module) {
   require = __makeRelativeRequire(require, {}, "for-each");
   (function() {
@@ -15708,3396 +20006,6 @@ require.register("protip/src/PositionCalculator.js", function(exports, require, 
   })();
 });
 
-require.register("reveal/index.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "reveal");
-  (function() {
-    /*!
- * reveal.js
- * http://lab.hakim.se/reveal-js
- * MIT licensed
- *
- * Copyright (C) 2013 Hakim El Hattab, http://hakim.se
- */
-var Reveal = (function(){
-
-	'use strict';
-
-	var SLIDES_SELECTOR = '.reveal .slides section',
-		HORIZONTAL_SLIDES_SELECTOR = '.reveal .slides>section',
-		VERTICAL_SLIDES_SELECTOR = '.reveal .slides>section.present>section',
-		HOME_SLIDE_SELECTOR = '.reveal .slides>section:first-of-type',
-
-		// Configurations defaults, can be overridden at initialization time
-		config = {
-
-			// The "normal" size of the presentation, aspect ratio will be preserved
-			// when the presentation is scaled to fit different resolutions
-			width: 960,
-			height: 700,
-
-			// Factor of the display size that should remain empty around the content
-			margin: 0.1,
-
-			// Bounds for smallest/largest possible scale to apply to content
-			minScale: 0.2,
-			maxScale: 1.0,
-
-			// Display controls in the bottom right corner
-			controls: true,
-
-			// Display a presentation progress bar
-			progress: true,
-
-			// Display the page number of the current slide
-			slideNumber: false,
-
-			// Push each slide change to the browser history
-			history: false,
-
-			// Enable keyboard shortcuts for navigation
-			keyboard: true,
-
-			// Enable the slide overview mode
-			overview: true,
-
-			// Vertical centering of slides
-			center: true,
-
-			// Enables touch navigation on devices with touch input
-			touch: true,
-
-			// Loop the presentation
-			loop: false,
-
-			// Change the presentation direction to be RTL
-			rtl: false,
-
-			// Turns fragments on and off globally
-			fragments: true,
-
-			// Flags if the presentation is running in an embedded mode,
-			// i.e. contained within a limited portion of the screen
-			embedded: false,
-
-			// Number of milliseconds between automatically proceeding to the
-			// next slide, disabled when set to 0, this value can be overwritten
-			// by using a data-autoslide attribute on your slides
-			autoSlide: 0,
-
-			// Stop auto-sliding after user input
-			autoSlideStoppable: true,
-
-			// Enable slide navigation via mouse wheel
-			mouseWheel: false,
-
-			// Apply a 3D roll to links on hover
-			rollingLinks: false,
-
-			// Hides the address bar on mobile devices
-			hideAddressBar: true,
-
-			// Opens links in an iframe preview overlay
-			previewLinks: false,
-
-			// Focuses body when page changes visiblity to ensure keyboard shortcuts work
-			focusBodyOnPageVisiblityChange: true,
-
-			// Theme (see /css/theme)
-			theme: null,
-
-			// Transition style
-			transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
-
-			// Transition speed
-			transitionSpeed: 'default', // default/fast/slow
-
-			// Transition style for full page slide backgrounds
-			backgroundTransition: 'default', // default/linear/none
-
-			// Parallax background image
-			parallaxBackgroundImage: '', // CSS syntax, e.g. "a.jpg"
-
-			// Parallax background size
-			parallaxBackgroundSize: '', // CSS syntax, e.g. "3000px 2000px"
-
-			// Number of slides away from the current that are visible
-			viewDistance: 3,
-
-			// Script dependencies to load
-			dependencies: []
-
-		},
-
-		// Flags if reveal.js is loaded (has dispatched the 'ready' event)
-		loaded = false,
-
-		// The horizontal and vertical index of the currently active slide
-		indexh,
-		indexv,
-
-		// The previous and current slide HTML elements
-		previousSlide,
-		currentSlide,
-
-		previousBackground,
-
-		// Slides may hold a data-state attribute which we pick up and apply
-		// as a class to the body. This list contains the combined state of
-		// all current slides.
-		state = [],
-
-		// The current scale of the presentation (see width/height config)
-		scale = 1,
-
-		// Cached references to DOM elements
-		dom = {},
-
-		// Features supported by the browser, see #checkCapabilities()
-		features = {},
-
-		// Client is a mobile device, see #checkCapabilities()
-		isMobileDevice,
-
-		// Throttles mouse wheel navigation
-		lastMouseWheelStep = 0,
-
-		// Delays updates to the URL due to a Chrome thumbnailer bug
-		writeURLTimeout = 0,
-
-		// A delay used to activate the overview mode
-		activateOverviewTimeout = 0,
-
-		// A delay used to deactivate the overview mode
-		deactivateOverviewTimeout = 0,
-
-		// Flags if the interaction event listeners are bound
-		eventsAreBound = false,
-
-		// The current auto-slide duration
-		autoSlide = 0,
-
-		// Auto slide properties
-		autoSlidePlayer,
-		autoSlideTimeout = 0,
-		autoSlideStartTime = -1,
-		autoSlidePaused = false,
-
-		// Holds information about the currently ongoing touch input
-		touch = {
-			startX: 0,
-			startY: 0,
-			startSpan: 0,
-			startCount: 0,
-			captured: false,
-			threshold: 40
-		};
-
-	/**
-	 * Starts up the presentation if the client is capable.
-	 */
-	function initialize( options ) {
-
-		checkCapabilities();
-
-		if( !features.transforms2d && !features.transforms3d ) {
-			document.body.setAttribute( 'class', 'no-transforms' );
-
-			// If the browser doesn't support core features we won't be
-			// using JavaScript to control the presentation
-			return;
-		}
-
-		// Force a layout when the whole page, incl fonts, has loaded
-		window.addEventListener( 'load', layout, false );
-
-		var query = Reveal.getQueryHash();
-
-		// Do not accept new dependencies via query config to avoid
-		// the potential of malicious script injection
-		if( typeof query['dependencies'] !== 'undefined' ) delete query['dependencies'];
-
-		// Copy options over to our config object
-		extend( config, options );
-		extend( config, query );
-
-		// Hide the address bar in mobile browsers
-		hideAddressBar();
-
-		// Loads the dependencies and continues to #start() once done
-		load();
-
-	}
-
-	/**
-	 * Inspect the client to see what it's capable of, this
-	 * should only happens once per runtime.
-	 */
-	function checkCapabilities() {
-
-		features.transforms3d = 'WebkitPerspective' in document.body.style ||
-								'MozPerspective' in document.body.style ||
-								'msPerspective' in document.body.style ||
-								'OPerspective' in document.body.style ||
-								'perspective' in document.body.style;
-
-		features.transforms2d = 'WebkitTransform' in document.body.style ||
-								'MozTransform' in document.body.style ||
-								'msTransform' in document.body.style ||
-								'OTransform' in document.body.style ||
-								'transform' in document.body.style;
-
-		features.requestAnimationFrameMethod = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
-		features.requestAnimationFrame = typeof features.requestAnimationFrameMethod === 'function';
-
-		features.canvas = !!document.createElement( 'canvas' ).getContext;
-
-		isMobileDevice = navigator.userAgent.match( /(iphone|ipod|android)/gi );
-
-	}
-
-
-    /**
-     * Loads the dependencies of reveal.js. Dependencies are
-     * defined via the configuration option 'dependencies'
-     * and will be loaded prior to starting/binding reveal.js.
-     * Some dependencies may have an 'async' flag, if so they
-     * will load after reveal.js has been started up.
-     */
-	function load() {
-
-		var scripts = [],
-			scriptsAsync = [],
-			scriptsToPreload = 0;
-
-		// Called once synchronous scripts finish loading
-		function proceed() {
-			if( scriptsAsync.length ) {
-				// Load asynchronous scripts
-				head.js.apply( null, scriptsAsync );
-			}
-
-			start();
-		}
-
-		function loadScript( s ) {
-			head.ready( s.src.match( /([\w\d_\-]*)\.?js$|[^\\\/]*$/i )[0], function() {
-				// Extension may contain callback functions
-				if( typeof s.callback === 'function' ) {
-					s.callback.apply( this );
-				}
-
-				if( --scriptsToPreload === 0 ) {
-					proceed();
-				}
-			});
-		}
-
-		for( var i = 0, len = config.dependencies.length; i < len; i++ ) {
-			var s = config.dependencies[i];
-
-			// Load if there's no condition or the condition is truthy
-			if( !s.condition || s.condition() ) {
-				if( s.async ) {
-					scriptsAsync.push( s.src );
-				}
-				else {
-					scripts.push( s.src );
-				}
-
-				loadScript( s );
-			}
-		}
-
-		if( scripts.length ) {
-			scriptsToPreload = scripts.length;
-
-			// Load synchronous scripts
-			head.js.apply( null, scripts );
-		}
-		else {
-			proceed();
-		}
-
-	}
-
-	/**
-	 * Starts up reveal.js by binding input events and navigating
-	 * to the current URL deeplink if there is one.
-	 */
-	function start() {
-
-		// Make sure we've got all the DOM elements we need
-		setupDOM();
-
-		// Resets all vertical slides so that only the first is visible
-		resetVerticalSlides();
-
-		// Updates the presentation to match the current configuration values
-		configure();
-
-		// Read the initial hash
-		readURL();
-
-		// Update all backgrounds
-		updateBackground( true );
-
-		// Notify listeners that the presentation is ready but use a 1ms
-		// timeout to ensure it's not fired synchronously after #initialize()
-		setTimeout( function() {
-			// Enable transitions now that we're loaded
-			dom.slides.classList.remove( 'no-transition' );
-
-			loaded = true;
-
-			dispatchEvent( 'ready', {
-				'indexh': indexh,
-				'indexv': indexv,
-				'currentSlide': currentSlide
-			} );
-		}, 1 );
-
-	}
-
-	/**
-	 * Finds and stores references to DOM elements which are
-	 * required by the presentation. If a required element is
-	 * not found, it is created.
-	 */
-	function setupDOM() {
-
-		// Cache references to key DOM elements
-		dom.theme = document.querySelector( '#theme' );
-		dom.wrapper = document.querySelector( '.reveal' );
-		dom.slides = document.querySelector( '.reveal .slides' );
-
-		// Prevent transitions while we're loading
-		dom.slides.classList.add( 'no-transition' );
-
-		// Background element
-		dom.background = createSingletonNode( dom.wrapper, 'div', 'backgrounds', null );
-
-		// Progress bar
-		dom.progress = createSingletonNode( dom.wrapper, 'div', 'progress', '<span></span>' );
-		dom.progressbar = dom.progress.querySelector( 'span' );
-
-		// Arrow controls
-		createSingletonNode( dom.wrapper, 'aside', 'controls',
-			'<div class="navigate-left"></div>' +
-			'<div class="navigate-right"></div>' +
-			'<div class="navigate-up"></div>' +
-			'<div class="navigate-down"></div>' );
-
-		// Slide number
-		dom.slideNumber = createSingletonNode( dom.wrapper, 'div', 'slide-number', '' );
-
-		// State background element [DEPRECATED]
-		createSingletonNode( dom.wrapper, 'div', 'state-background', null );
-
-		// Overlay graphic which is displayed during the paused mode
-		createSingletonNode( dom.wrapper, 'div', 'pause-overlay', null );
-
-		// Cache references to elements
-		dom.controls = document.querySelector( '.reveal .controls' );
-
-		// There can be multiple instances of controls throughout the page
-		dom.controlsLeft = toArray( document.querySelectorAll( '.navigate-left' ) );
-		dom.controlsRight = toArray( document.querySelectorAll( '.navigate-right' ) );
-		dom.controlsUp = toArray( document.querySelectorAll( '.navigate-up' ) );
-		dom.controlsDown = toArray( document.querySelectorAll( '.navigate-down' ) );
-		dom.controlsPrev = toArray( document.querySelectorAll( '.navigate-prev' ) );
-		dom.controlsNext = toArray( document.querySelectorAll( '.navigate-next' ) );
-
-	}
-
-	/**
-	 * Creates an HTML element and returns a reference to it.
-	 * If the element already exists the existing instance will
-	 * be returned.
-	 */
-	function createSingletonNode( container, tagname, classname, innerHTML ) {
-
-		var node = container.querySelector( '.' + classname );
-		if( !node ) {
-			node = document.createElement( tagname );
-			node.classList.add( classname );
-			if( innerHTML !== null ) {
-				node.innerHTML = innerHTML;
-			}
-			container.appendChild( node );
-		}
-		return node;
-
-	}
-
-	/**
-	 * Creates the slide background elements and appends them
-	 * to the background container. One element is created per
-	 * slide no matter if the given slide has visible background.
-	 */
-	function createBackgrounds() {
-
-		if( isPrintingPDF() ) {
-			document.body.classList.add( 'print-pdf' );
-		}
-
-		// Clear prior backgrounds
-		dom.background.innerHTML = '';
-		dom.background.classList.add( 'no-transition' );
-
-		// Helper method for creating a background element for the
-		// given slide
-		function _createBackground( slide, container ) {
-
-			var data = {
-				background: slide.getAttribute( 'data-background' ),
-				backgroundSize: slide.getAttribute( 'data-background-size' ),
-				backgroundImage: slide.getAttribute( 'data-background-image' ),
-				backgroundColor: slide.getAttribute( 'data-background-color' ),
-				backgroundRepeat: slide.getAttribute( 'data-background-repeat' ),
-				backgroundPosition: slide.getAttribute( 'data-background-position' ),
-				backgroundTransition: slide.getAttribute( 'data-background-transition' )
-			};
-
-			var element = document.createElement( 'div' );
-			element.className = 'slide-background';
-
-			if( data.background ) {
-				// Auto-wrap image urls in url(...)
-				if( /^(http|file|\/\/)/gi.test( data.background ) || /\.(svg|png|jpg|jpeg|gif|bmp)$/gi.test( data.background ) ) {
-					element.style.backgroundImage = 'url('+ data.background +')';
-				}
-				else {
-					element.style.background = data.background;
-				}
-			}
-
-			if( data.background || data.backgroundColor || data.backgroundImage ) {
-				element.setAttribute( 'data-background-hash', data.background + data.backgroundSize + data.backgroundImage + data.backgroundColor + data.backgroundRepeat + data.backgroundPosition + data.backgroundTransition );
-			}
-
-			// Additional and optional background properties
-			if( data.backgroundSize ) element.style.backgroundSize = data.backgroundSize;
-			if( data.backgroundImage ) element.style.backgroundImage = 'url("' + data.backgroundImage + '")';
-			if( data.backgroundColor ) element.style.backgroundColor = data.backgroundColor;
-			if( data.backgroundRepeat ) element.style.backgroundRepeat = data.backgroundRepeat;
-			if( data.backgroundPosition ) element.style.backgroundPosition = data.backgroundPosition;
-			if( data.backgroundTransition ) element.setAttribute( 'data-background-transition', data.backgroundTransition );
-
-			container.appendChild( element );
-
-			return element;
-
-		}
-
-		// Iterate over all horizontal slides
-		toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) ).forEach( function( slideh ) {
-
-			var backgroundStack;
-
-			if( isPrintingPDF() ) {
-				backgroundStack = _createBackground( slideh, slideh );
-			}
-			else {
-				backgroundStack = _createBackground( slideh, dom.background );
-			}
-
-			// Iterate over all vertical slides
-			toArray( slideh.querySelectorAll( 'section' ) ).forEach( function( slidev ) {
-
-				if( isPrintingPDF() ) {
-					_createBackground( slidev, slidev );
-				}
-				else {
-					_createBackground( slidev, backgroundStack );
-				}
-
-			} );
-
-		} );
-
-		// Add parallax background if specified
-		if( config.parallaxBackgroundImage ) {
-
-			dom.background.style.backgroundImage = 'url("' + config.parallaxBackgroundImage + '")';
-			dom.background.style.backgroundSize = config.parallaxBackgroundSize;
-
-			// Make sure the below properties are set on the element - these properties are
-			// needed for proper transitions to be set on the element via CSS. To remove
-			// annoying background slide-in effect when the presentation starts, apply
-			// these properties after short time delay
-			setTimeout( function() {
-				dom.wrapper.classList.add( 'has-parallax-background' );
-			}, 1 );
-
-		}
-		else {
-
-			dom.background.style.backgroundImage = '';
-			dom.wrapper.classList.remove( 'has-parallax-background' );
-
-		}
-
-	}
-
-	/**
-	 * Applies the configuration settings from the config
-	 * object. May be called multiple times.
-	 */
-	function configure( options ) {
-
-		var numberOfSlides = document.querySelectorAll( SLIDES_SELECTOR ).length;
-
-		dom.wrapper.classList.remove( config.transition );
-
-		// New config options may be passed when this method
-		// is invoked through the API after initialization
-		if( typeof options === 'object' ) extend( config, options );
-
-		// Force linear transition based on browser capabilities
-		if( features.transforms3d === false ) config.transition = 'linear';
-
-		dom.wrapper.classList.add( config.transition );
-
-		dom.wrapper.setAttribute( 'data-transition-speed', config.transitionSpeed );
-		dom.wrapper.setAttribute( 'data-background-transition', config.backgroundTransition );
-
-		dom.controls.style.display = config.controls ? 'block' : 'none';
-		dom.progress.style.display = config.progress ? 'block' : 'none';
-
-		if( config.rtl ) {
-			dom.wrapper.classList.add( 'rtl' );
-		}
-		else {
-			dom.wrapper.classList.remove( 'rtl' );
-		}
-
-		if( config.center ) {
-			dom.wrapper.classList.add( 'center' );
-		}
-		else {
-			dom.wrapper.classList.remove( 'center' );
-		}
-
-		if( config.mouseWheel ) {
-			document.addEventListener( 'DOMMouseScroll', onDocumentMouseScroll, false ); // FF
-			document.addEventListener( 'mousewheel', onDocumentMouseScroll, false );
-		}
-		else {
-			document.removeEventListener( 'DOMMouseScroll', onDocumentMouseScroll, false ); // FF
-			document.removeEventListener( 'mousewheel', onDocumentMouseScroll, false );
-		}
-
-		// Rolling 3D links
-		if( config.rollingLinks ) {
-			enableRollingLinks();
-		}
-		else {
-			disableRollingLinks();
-		}
-
-		// Iframe link previews
-		if( config.previewLinks ) {
-			enablePreviewLinks();
-		}
-		else {
-			disablePreviewLinks();
-			enablePreviewLinks( '[data-preview-link]' );
-		}
-
-		// Auto-slide playback controls
-		if( numberOfSlides > 1 && config.autoSlide && config.autoSlideStoppable && features.canvas && features.requestAnimationFrame ) {
-			autoSlidePlayer = new Playback( dom.wrapper, function() {
-				return Math.min( Math.max( ( Date.now() - autoSlideStartTime ) / autoSlide, 0 ), 1 );
-			} );
-
-			autoSlidePlayer.on( 'click', onAutoSlidePlayerClick );
-			autoSlidePaused = false;
-		}
-		else if( autoSlidePlayer ) {
-			autoSlidePlayer.destroy();
-			autoSlidePlayer = null;
-		}
-
-		// Load the theme in the config, if it's not already loaded
-		if( config.theme && dom.theme ) {
-			var themeURL = dom.theme.getAttribute( 'href' );
-			var themeFinder = /[^\/]*?(?=\.css)/;
-			var themeName = themeURL.match(themeFinder)[0];
-
-			if(  config.theme !== themeName ) {
-				themeURL = themeURL.replace(themeFinder, config.theme);
-				dom.theme.setAttribute( 'href', themeURL );
-			}
-		}
-
-		sync();
-
-	}
-
-	/**
-	 * Binds all event listeners.
-	 */
-	function addEventListeners() {
-
-		eventsAreBound = true;
-
-		window.addEventListener( 'hashchange', onWindowHashChange, false );
-		window.addEventListener( 'resize', onWindowResize, false );
-
-		if( config.touch ) {
-			dom.wrapper.addEventListener( 'touchstart', onTouchStart, false );
-			dom.wrapper.addEventListener( 'touchmove', onTouchMove, false );
-			dom.wrapper.addEventListener( 'touchend', onTouchEnd, false );
-
-			// Support pointer-style touch interaction as well
-			if( window.navigator.msPointerEnabled ) {
-				dom.wrapper.addEventListener( 'MSPointerDown', onPointerDown, false );
-				dom.wrapper.addEventListener( 'MSPointerMove', onPointerMove, false );
-				dom.wrapper.addEventListener( 'MSPointerUp', onPointerUp, false );
-			}
-		}
-
-		if( config.keyboard ) {
-			document.addEventListener( 'keydown', onDocumentKeyDown, false );
-		}
-
-		if( config.progress && dom.progress ) {
-			dom.progress.addEventListener( 'click', onProgressClicked, false );
-		}
-
-		if( config.focusBodyOnPageVisiblityChange ) {
-			var visibilityChange;
-
-			if( 'hidden' in document ) {
-				visibilityChange = 'visibilitychange';
-			}
-			else if( 'msHidden' in document ) {
-				visibilityChange = 'msvisibilitychange';
-			}
-			else if( 'webkitHidden' in document ) {
-				visibilityChange = 'webkitvisibilitychange';
-			}
-
-			if( visibilityChange ) {
-				document.addEventListener( visibilityChange, onPageVisibilityChange, false );
-			}
-		}
-
-		[ 'touchstart', 'click' ].forEach( function( eventName ) {
-			dom.controlsLeft.forEach( function( el ) { el.addEventListener( eventName, onNavigateLeftClicked, false ); } );
-			dom.controlsRight.forEach( function( el ) { el.addEventListener( eventName, onNavigateRightClicked, false ); } );
-			dom.controlsUp.forEach( function( el ) { el.addEventListener( eventName, onNavigateUpClicked, false ); } );
-			dom.controlsDown.forEach( function( el ) { el.addEventListener( eventName, onNavigateDownClicked, false ); } );
-			dom.controlsPrev.forEach( function( el ) { el.addEventListener( eventName, onNavigatePrevClicked, false ); } );
-			dom.controlsNext.forEach( function( el ) { el.addEventListener( eventName, onNavigateNextClicked, false ); } );
-		} );
-
-	}
-
-	/**
-	 * Unbinds all event listeners.
-	 */
-	function removeEventListeners() {
-
-		eventsAreBound = false;
-
-		document.removeEventListener( 'keydown', onDocumentKeyDown, false );
-		window.removeEventListener( 'hashchange', onWindowHashChange, false );
-		window.removeEventListener( 'resize', onWindowResize, false );
-
-		dom.wrapper.removeEventListener( 'touchstart', onTouchStart, false );
-		dom.wrapper.removeEventListener( 'touchmove', onTouchMove, false );
-		dom.wrapper.removeEventListener( 'touchend', onTouchEnd, false );
-
-		if( window.navigator.msPointerEnabled ) {
-			dom.wrapper.removeEventListener( 'MSPointerDown', onPointerDown, false );
-			dom.wrapper.removeEventListener( 'MSPointerMove', onPointerMove, false );
-			dom.wrapper.removeEventListener( 'MSPointerUp', onPointerUp, false );
-		}
-
-		if ( config.progress && dom.progress ) {
-			dom.progress.removeEventListener( 'click', onProgressClicked, false );
-		}
-
-		[ 'touchstart', 'click' ].forEach( function( eventName ) {
-			dom.controlsLeft.forEach( function( el ) { el.removeEventListener( eventName, onNavigateLeftClicked, false ); } );
-			dom.controlsRight.forEach( function( el ) { el.removeEventListener( eventName, onNavigateRightClicked, false ); } );
-			dom.controlsUp.forEach( function( el ) { el.removeEventListener( eventName, onNavigateUpClicked, false ); } );
-			dom.controlsDown.forEach( function( el ) { el.removeEventListener( eventName, onNavigateDownClicked, false ); } );
-			dom.controlsPrev.forEach( function( el ) { el.removeEventListener( eventName, onNavigatePrevClicked, false ); } );
-			dom.controlsNext.forEach( function( el ) { el.removeEventListener( eventName, onNavigateNextClicked, false ); } );
-		} );
-
-	}
-
-	/**
-	 * Extend object a with the properties of object b.
-	 * If there's a conflict, object b takes precedence.
-	 */
-	function extend( a, b ) {
-
-		for( var i in b ) {
-			a[ i ] = b[ i ];
-		}
-
-	}
-
-	/**
-	 * Converts the target object to an array.
-	 */
-	function toArray( o ) {
-
-		return Array.prototype.slice.call( o );
-
-	}
-
-	/**
-	 * Measures the distance in pixels between point a
-	 * and point b.
-	 *
-	 * @param {Object} a point with x/y properties
-	 * @param {Object} b point with x/y properties
-	 */
-	function distanceBetween( a, b ) {
-
-		var dx = a.x - b.x,
-			dy = a.y - b.y;
-
-		return Math.sqrt( dx*dx + dy*dy );
-
-	}
-
-	/**
-	 * Applies a CSS transform to the target element.
-	 */
-	function transformElement( element, transform ) {
-
-		element.style.WebkitTransform = transform;
-		element.style.MozTransform = transform;
-		element.style.msTransform = transform;
-		element.style.OTransform = transform;
-		element.style.transform = transform;
-
-	}
-
-	/**
-	 * Retrieves the height of the given element by looking
-	 * at the position and height of its immediate children.
-	 */
-	function getAbsoluteHeight( element ) {
-
-		var height = 0;
-
-		if( element ) {
-			var absoluteChildren = 0;
-
-			toArray( element.childNodes ).forEach( function( child ) {
-
-				if( typeof child.offsetTop === 'number' && child.style ) {
-					// Count # of abs children
-					if( child.style.position === 'absolute' ) {
-						absoluteChildren += 1;
-					}
-
-					height = Math.max( height, child.offsetTop + child.offsetHeight );
-				}
-
-			} );
-
-			// If there are no absolute children, use offsetHeight
-			if( absoluteChildren === 0 ) {
-				height = element.offsetHeight;
-			}
-
-		}
-
-		return height;
-
-	}
-
-	/**
-	 * Returns the remaining height within the parent of the
-	 * target element after subtracting the height of all
-	 * siblings.
-	 *
-	 * remaining height = [parent height] - [ siblings height]
-	 */
-	function getRemainingHeight( element, height ) {
-
-		height = height || 0;
-
-		if( element ) {
-			var parent = element.parentNode;
-			var siblings = parent.childNodes;
-
-			// Subtract the height of each sibling
-			toArray( siblings ).forEach( function( sibling ) {
-
-				if( typeof sibling.offsetHeight === 'number' && sibling !== element ) {
-
-					var styles = window.getComputedStyle( sibling ),
-						marginTop = parseInt( styles.marginTop, 10 ),
-						marginBottom = parseInt( styles.marginBottom, 10 );
-
-					height -= sibling.offsetHeight + marginTop + marginBottom;
-
-				}
-
-			} );
-
-			var elementStyles = window.getComputedStyle( element );
-
-			// Subtract the margins of the target element
-			height -= parseInt( elementStyles.marginTop, 10 ) +
-						parseInt( elementStyles.marginBottom, 10 );
-
-		}
-
-		return height;
-
-	}
-
-	/**
-	 * Checks if this instance is being used to print a PDF.
-	 */
-	function isPrintingPDF() {
-
-		return ( /print-pdf/gi ).test( window.location.search );
-
-	}
-
-	/**
-	 * Hides the address bar if we're on a mobile device.
-	 */
-	function hideAddressBar() {
-
-		if( config.hideAddressBar && isMobileDevice ) {
-			// Events that should trigger the address bar to hide
-			window.addEventListener( 'load', removeAddressBar, false );
-			window.addEventListener( 'orientationchange', removeAddressBar, false );
-		}
-
-	}
-
-	/**
-	 * Causes the address bar to hide on mobile devices,
-	 * more vertical space ftw.
-	 */
-	function removeAddressBar() {
-
-		setTimeout( function() {
-			window.scrollTo( 0, 1 );
-		}, 10 );
-
-	}
-
-	/**
-	 * Dispatches an event of the specified type from the
-	 * reveal DOM element.
-	 */
-	function dispatchEvent( type, properties ) {
-
-		var event = document.createEvent( "HTMLEvents", 1, 2 );
-		event.initEvent( type, true, true );
-		extend( event, properties );
-		dom.wrapper.dispatchEvent( event );
-
-	}
-
-	/**
-	 * Wrap all links in 3D goodness.
-	 */
-	function enableRollingLinks() {
-
-		if( features.transforms3d && !( 'msPerspective' in document.body.style ) ) {
-			var anchors = document.querySelectorAll( SLIDES_SELECTOR + ' a:not(.image)' );
-
-			for( var i = 0, len = anchors.length; i < len; i++ ) {
-				var anchor = anchors[i];
-
-				if( anchor.textContent && !anchor.querySelector( '*' ) && ( !anchor.className || !anchor.classList.contains( anchor, 'roll' ) ) ) {
-					var span = document.createElement('span');
-					span.setAttribute('data-title', anchor.text);
-					span.innerHTML = anchor.innerHTML;
-
-					anchor.classList.add( 'roll' );
-					anchor.innerHTML = '';
-					anchor.appendChild(span);
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * Unwrap all 3D links.
-	 */
-	function disableRollingLinks() {
-
-		var anchors = document.querySelectorAll( SLIDES_SELECTOR + ' a.roll' );
-
-		for( var i = 0, len = anchors.length; i < len; i++ ) {
-			var anchor = anchors[i];
-			var span = anchor.querySelector( 'span' );
-
-			if( span ) {
-				anchor.classList.remove( 'roll' );
-				anchor.innerHTML = span.innerHTML;
-			}
-		}
-
-	}
-
-	/**
-	 * Bind preview frame links.
-	 */
-	function enablePreviewLinks( selector ) {
-
-		var anchors = toArray( document.querySelectorAll( selector ? selector : 'a' ) );
-
-		anchors.forEach( function( element ) {
-			if( /^(http|www)/gi.test( element.getAttribute( 'href' ) ) ) {
-				element.addEventListener( 'click', onPreviewLinkClicked, false );
-			}
-		} );
-
-	}
-
-	/**
-	 * Unbind preview frame links.
-	 */
-	function disablePreviewLinks() {
-
-		var anchors = toArray( document.querySelectorAll( 'a' ) );
-
-		anchors.forEach( function( element ) {
-			if( /^(http|www)/gi.test( element.getAttribute( 'href' ) ) ) {
-				element.removeEventListener( 'click', onPreviewLinkClicked, false );
-			}
-		} );
-
-	}
-
-	/**
-	 * Opens a preview window for the target URL.
-	 */
-	function openPreview( url ) {
-
-		closePreview();
-
-		dom.preview = document.createElement( 'div' );
-		dom.preview.classList.add( 'preview-link-overlay' );
-		dom.wrapper.appendChild( dom.preview );
-
-		dom.preview.innerHTML = [
-			'<header>',
-				'<a class="close" href="#"><span class="icon"></span></a>',
-				'<a class="external" href="'+ url +'" target="_blank"><span class="icon"></span></a>',
-			'</header>',
-			'<div class="spinner"></div>',
-			'<div class="viewport">',
-				'<iframe src="'+ url +'"></iframe>',
-			'</div>'
-		].join('');
-
-		dom.preview.querySelector( 'iframe' ).addEventListener( 'load', function( event ) {
-			dom.preview.classList.add( 'loaded' );
-		}, false );
-
-		dom.preview.querySelector( '.close' ).addEventListener( 'click', function( event ) {
-			closePreview();
-			event.preventDefault();
-		}, false );
-
-		dom.preview.querySelector( '.external' ).addEventListener( 'click', function( event ) {
-			closePreview();
-		}, false );
-
-		setTimeout( function() {
-			dom.preview.classList.add( 'visible' );
-		}, 1 );
-
-	}
-
-	/**
-	 * Closes the iframe preview window.
-	 */
-	function closePreview() {
-
-		if( dom.preview ) {
-			dom.preview.setAttribute( 'src', '' );
-			dom.preview.parentNode.removeChild( dom.preview );
-			dom.preview = null;
-		}
-
-	}
-
-	/**
-	 * Applies JavaScript-controlled layout rules to the
-	 * presentation.
-	 */
-	function layout() {
-
-		if( dom.wrapper && !isPrintingPDF() ) {
-
-			// Available space to scale within
-			var availableWidth = dom.wrapper.offsetWidth,
-				availableHeight = dom.wrapper.offsetHeight;
-
-			// Reduce available space by margin
-			availableWidth -= ( availableHeight * config.margin );
-			availableHeight -= ( availableHeight * config.margin );
-
-			// Dimensions of the content
-			var slideWidth = config.width,
-				slideHeight = config.height,
-				slidePadding = 20; // TODO Dig this out of DOM
-
-			// Layout the contents of the slides
-			layoutSlideContents( config.width, config.height, slidePadding );
-
-			// Slide width may be a percentage of available width
-			if( typeof slideWidth === 'string' && /%$/.test( slideWidth ) ) {
-				slideWidth = parseInt( slideWidth, 10 ) / 100 * availableWidth;
-			}
-
-			// Slide height may be a percentage of available height
-			if( typeof slideHeight === 'string' && /%$/.test( slideHeight ) ) {
-				slideHeight = parseInt( slideHeight, 10 ) / 100 * availableHeight;
-			}
-
-			dom.slides.style.width = slideWidth + 'px';
-			dom.slides.style.height = slideHeight + 'px';
-
-			// Determine scale of content to fit within available space
-			scale = Math.min( availableWidth / slideWidth, availableHeight / slideHeight );
-
-			// Respect max/min scale settings
-			scale = Math.max( scale, config.minScale );
-			scale = Math.min( scale, config.maxScale );
-
-			// Prefer applying scale via zoom since Chrome blurs scaled content
-			// with nested transforms
-			if( typeof dom.slides.style.zoom !== 'undefined' && !navigator.userAgent.match( /(iphone|ipod|ipad|android)/gi ) ) {
-				dom.slides.style.zoom = scale;
-			}
-			// Apply scale transform as a fallback
-			else {
-				transformElement( dom.slides, 'translate(-50%, -50%) scale('+ scale +') translate(50%, 50%)' );
-			}
-
-			// Select all slides, vertical and horizontal
-			var slides = toArray( document.querySelectorAll( SLIDES_SELECTOR ) );
-
-			for( var i = 0, len = slides.length; i < len; i++ ) {
-				var slide = slides[ i ];
-
-				// Don't bother updating invisible slides
-				if( slide.style.display === 'none' ) {
-					continue;
-				}
-
-				if( config.center || slide.classList.contains( 'center' ) ) {
-					// Vertical stacks are not centred since their section
-					// children will be
-					if( slide.classList.contains( 'stack' ) ) {
-						slide.style.top = 0;
-					}
-					else {
-						slide.style.top = Math.max( - ( getAbsoluteHeight( slide ) / 2 ) - slidePadding, -slideHeight / 2 ) + 'px';
-					}
-				}
-				else {
-					slide.style.top = '';
-				}
-
-			}
-
-			updateProgress();
-			updateParallax();
-
-		}
-
-	}
-
-	/**
-	 * Applies layout logic to the contents of all slides in
-	 * the presentation.
-	 */
-	function layoutSlideContents( width, height, padding ) {
-
-		// Handle sizing of elements with the 'stretch' class
-		toArray( dom.slides.querySelectorAll( 'section > .stretch' ) ).forEach( function( element ) {
-
-			// Determine how much vertical space we can use
-			var remainingHeight = getRemainingHeight( element, ( height - ( padding * 2 ) ) );
-
-			// Consider the aspect ratio of media elements
-			if( /(img|video)/gi.test( element.nodeName ) ) {
-				var nw = element.naturalWidth || element.videoWidth,
-					nh = element.naturalHeight || element.videoHeight;
-
-				var es = Math.min( width / nw, remainingHeight / nh );
-
-				element.style.width = ( nw * es ) + 'px';
-				element.style.height = ( nh * es ) + 'px';
-
-			}
-			else {
-				element.style.width = width + 'px';
-				element.style.height = remainingHeight + 'px';
-			}
-
-		} );
-
-	}
-
-	/**
-	 * Stores the vertical index of a stack so that the same
-	 * vertical slide can be selected when navigating to and
-	 * from the stack.
-	 *
-	 * @param {HTMLElement} stack The vertical stack element
-	 * @param {int} v Index to memorize
-	 */
-	function setPreviousVerticalIndex( stack, v ) {
-
-		if( typeof stack === 'object' && typeof stack.setAttribute === 'function' ) {
-			stack.setAttribute( 'data-previous-indexv', v || 0 );
-		}
-
-	}
-
-	/**
-	 * Retrieves the vertical index which was stored using
-	 * #setPreviousVerticalIndex() or 0 if no previous index
-	 * exists.
-	 *
-	 * @param {HTMLElement} stack The vertical stack element
-	 */
-	function getPreviousVerticalIndex( stack ) {
-
-		if( typeof stack === 'object' && typeof stack.setAttribute === 'function' && stack.classList.contains( 'stack' ) ) {
-			// Prefer manually defined start-indexv
-			var attributeName = stack.hasAttribute( 'data-start-indexv' ) ? 'data-start-indexv' : 'data-previous-indexv';
-
-			return parseInt( stack.getAttribute( attributeName ) || 0, 10 );
-		}
-
-		return 0;
-
-	}
-
-	/**
-	 * Displays the overview of slides (quick nav) by
-	 * scaling down and arranging all slide elements.
-	 *
-	 * Experimental feature, might be dropped if perf
-	 * can't be improved.
-	 */
-	function activateOverview() {
-
-		// Only proceed if enabled in config
-		if( config.overview ) {
-
-			// Don't auto-slide while in overview mode
-			cancelAutoSlide();
-
-			var wasActive = dom.wrapper.classList.contains( 'overview' );
-
-			// Vary the depth of the overview based on screen size
-			var depth = window.innerWidth < 400 ? 1000 : 2500;
-
-			dom.wrapper.classList.add( 'overview' );
-			dom.wrapper.classList.remove( 'overview-deactivating' );
-
-			clearTimeout( activateOverviewTimeout );
-			clearTimeout( deactivateOverviewTimeout );
-
-			// Not the pretties solution, but need to let the overview
-			// class apply first so that slides are measured accurately
-			// before we can position them
-			activateOverviewTimeout = setTimeout( function() {
-
-				var horizontalSlides = document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR );
-
-				for( var i = 0, len1 = horizontalSlides.length; i < len1; i++ ) {
-					var hslide = horizontalSlides[i],
-						hoffset = config.rtl ? -105 : 105;
-
-					hslide.setAttribute( 'data-index-h', i );
-
-					// Apply CSS transform
-					transformElement( hslide, 'translateZ(-'+ depth +'px) translate(' + ( ( i - indexh ) * hoffset ) + '%, 0%)' );
-
-					if( hslide.classList.contains( 'stack' ) ) {
-
-						var verticalSlides = hslide.querySelectorAll( 'section' );
-
-						for( var j = 0, len2 = verticalSlides.length; j < len2; j++ ) {
-							var verticalIndex = i === indexh ? indexv : getPreviousVerticalIndex( hslide );
-
-							var vslide = verticalSlides[j];
-
-							vslide.setAttribute( 'data-index-h', i );
-							vslide.setAttribute( 'data-index-v', j );
-
-							// Apply CSS transform
-							transformElement( vslide, 'translate(0%, ' + ( ( j - verticalIndex ) * 105 ) + '%)' );
-
-							// Navigate to this slide on click
-							vslide.addEventListener( 'click', onOverviewSlideClicked, true );
-						}
-
-					}
-					else {
-
-						// Navigate to this slide on click
-						hslide.addEventListener( 'click', onOverviewSlideClicked, true );
-
-					}
-				}
-
-				updateSlidesVisibility();
-
-				layout();
-
-				if( !wasActive ) {
-					// Notify observers of the overview showing
-					dispatchEvent( 'overviewshown', {
-						'indexh': indexh,
-						'indexv': indexv,
-						'currentSlide': currentSlide
-					} );
-				}
-
-			}, 10 );
-
-		}
-
-	}
-
-	/**
-	 * Exits the slide overview and enters the currently
-	 * active slide.
-	 */
-	function deactivateOverview() {
-
-		// Only proceed if enabled in config
-		if( config.overview ) {
-
-			clearTimeout( activateOverviewTimeout );
-			clearTimeout( deactivateOverviewTimeout );
-
-			dom.wrapper.classList.remove( 'overview' );
-
-			// Temporarily add a class so that transitions can do different things
-			// depending on whether they are exiting/entering overview, or just
-			// moving from slide to slide
-			dom.wrapper.classList.add( 'overview-deactivating' );
-
-			deactivateOverviewTimeout = setTimeout( function () {
-				dom.wrapper.classList.remove( 'overview-deactivating' );
-			}, 1 );
-
-			// Select all slides
-			toArray( document.querySelectorAll( SLIDES_SELECTOR ) ).forEach( function( slide ) {
-				// Resets all transforms to use the external styles
-				transformElement( slide, '' );
-
-				slide.removeEventListener( 'click', onOverviewSlideClicked, true );
-			} );
-
-			slide( indexh, indexv );
-
-			cueAutoSlide();
-
-			// Notify observers of the overview hiding
-			dispatchEvent( 'overviewhidden', {
-				'indexh': indexh,
-				'indexv': indexv,
-				'currentSlide': currentSlide
-			} );
-
-		}
-	}
-
-	/**
-	 * Toggles the slide overview mode on and off.
-	 *
-	 * @param {Boolean} override Optional flag which overrides the
-	 * toggle logic and forcibly sets the desired state. True means
-	 * overview is open, false means it's closed.
-	 */
-	function toggleOverview( override ) {
-
-		if( typeof override === 'boolean' ) {
-			override ? activateOverview() : deactivateOverview();
-		}
-		else {
-			isOverview() ? deactivateOverview() : activateOverview();
-		}
-
-	}
-
-	/**
-	 * Checks if the overview is currently active.
-	 *
-	 * @return {Boolean} true if the overview is active,
-	 * false otherwise
-	 */
-	function isOverview() {
-
-		return dom.wrapper.classList.contains( 'overview' );
-
-	}
-
-	/**
-	 * Checks if the current or specified slide is vertical
-	 * (nested within another slide).
-	 *
-	 * @param {HTMLElement} slide [optional] The slide to check
-	 * orientation of
-	 */
-	function isVerticalSlide( slide ) {
-
-		// Prefer slide argument, otherwise use current slide
-		slide = slide ? slide : currentSlide;
-
-		return slide && slide.parentNode && !!slide.parentNode.nodeName.match( /section/i );
-
-	}
-
-	/**
-	 * Handling the fullscreen functionality via the fullscreen API
-	 *
-	 * @see http://fullscreen.spec.whatwg.org/
-	 * @see https://developer.mozilla.org/en-US/docs/DOM/Using_fullscreen_mode
-	 */
-	function enterFullscreen() {
-
-		var element = document.body;
-
-		// Check which implementation is available
-		var requestMethod = element.requestFullScreen ||
-							element.webkitRequestFullscreen ||
-							element.webkitRequestFullScreen ||
-							element.mozRequestFullScreen ||
-							element.msRequestFullScreen;
-
-		if( requestMethod ) {
-			requestMethod.apply( element );
-		}
-
-	}
-
-	/**
-	 * Enters the paused mode which fades everything on screen to
-	 * black.
-	 */
-	function pause() {
-
-		var wasPaused = dom.wrapper.classList.contains( 'paused' );
-
-		cancelAutoSlide();
-		dom.wrapper.classList.add( 'paused' );
-
-		if( wasPaused === false ) {
-			dispatchEvent( 'paused' );
-		}
-
-	}
-
-	/**
-	 * Exits from the paused mode.
-	 */
-	function resume() {
-
-		var wasPaused = dom.wrapper.classList.contains( 'paused' );
-		dom.wrapper.classList.remove( 'paused' );
-
-		cueAutoSlide();
-
-		if( wasPaused ) {
-			dispatchEvent( 'resumed' );
-		}
-
-	}
-
-	/**
-	 * Toggles the paused mode on and off.
-	 */
-	function togglePause() {
-
-		if( isPaused() ) {
-			resume();
-		}
-		else {
-			pause();
-		}
-
-	}
-
-	/**
-	 * Checks if we are currently in the paused mode.
-	 */
-	function isPaused() {
-
-		return dom.wrapper.classList.contains( 'paused' );
-
-	}
-
-	/**
-	 * Steps from the current point in the presentation to the
-	 * slide which matches the specified horizontal and vertical
-	 * indices.
-	 *
-	 * @param {int} h Horizontal index of the target slide
-	 * @param {int} v Vertical index of the target slide
-	 * @param {int} f Optional index of a fragment within the
-	 * target slide to activate
-	 * @param {int} o Optional origin for use in multimaster environments
-	 */
-	function slide( h, v, f, o ) {
-
-		// Remember where we were at before
-		previousSlide = currentSlide;
-
-		// Query all horizontal slides in the deck
-		var horizontalSlides = document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR );
-
-		// If no vertical index is specified and the upcoming slide is a
-		// stack, resume at its previous vertical index
-		if( v === undefined ) {
-			v = getPreviousVerticalIndex( horizontalSlides[ h ] );
-		}
-
-		// If we were on a vertical stack, remember what vertical index
-		// it was on so we can resume at the same position when returning
-		if( previousSlide && previousSlide.parentNode && previousSlide.parentNode.classList.contains( 'stack' ) ) {
-			setPreviousVerticalIndex( previousSlide.parentNode, indexv );
-		}
-
-		// Remember the state before this slide
-		var stateBefore = state.concat();
-
-		// Reset the state array
-		state.length = 0;
-
-		var indexhBefore = indexh || 0,
-			indexvBefore = indexv || 0;
-
-		// Activate and transition to the new slide
-		indexh = updateSlides( HORIZONTAL_SLIDES_SELECTOR, h === undefined ? indexh : h );
-		indexv = updateSlides( VERTICAL_SLIDES_SELECTOR, v === undefined ? indexv : v );
-
-		// Update the visibility of slides now that the indices have changed
-		updateSlidesVisibility();
-
-		layout();
-
-		// Apply the new state
-		stateLoop: for( var i = 0, len = state.length; i < len; i++ ) {
-			// Check if this state existed on the previous slide. If it
-			// did, we will avoid adding it repeatedly
-			for( var j = 0; j < stateBefore.length; j++ ) {
-				if( stateBefore[j] === state[i] ) {
-					stateBefore.splice( j, 1 );
-					continue stateLoop;
-				}
-			}
-
-			document.documentElement.classList.add( state[i] );
-
-			// Dispatch custom event matching the state's name
-			dispatchEvent( state[i] );
-		}
-
-		// Clean up the remains of the previous state
-		while( stateBefore.length ) {
-			document.documentElement.classList.remove( stateBefore.pop() );
-		}
-
-		// If the overview is active, re-activate it to update positions
-		if( isOverview() ) {
-			activateOverview();
-		}
-
-		// Find the current horizontal slide and any possible vertical slides
-		// within it
-		var currentHorizontalSlide = horizontalSlides[ indexh ],
-			currentVerticalSlides = currentHorizontalSlide.querySelectorAll( 'section' );
-
-		// Store references to the previous and current slides
-		currentSlide = currentVerticalSlides[ indexv ] || currentHorizontalSlide;
-
-		// Show fragment, if specified
-		if( typeof f !== 'undefined' ) {
-			navigateFragment( f );
-		}
-
-		// Dispatch an event if the slide changed
-		var slideChanged = ( indexh !== indexhBefore || indexv !== indexvBefore );
-		if( slideChanged ) {
-			dispatchEvent( 'slidechanged', {
-				'indexh': indexh,
-				'indexv': indexv,
-				'previousSlide': previousSlide,
-				'currentSlide': currentSlide,
-				'origin': o
-			} );
-		}
-		else {
-			// Ensure that the previous slide is never the same as the current
-			previousSlide = null;
-		}
-
-		// Solves an edge case where the previous slide maintains the
-		// 'present' class when navigating between adjacent vertical
-		// stacks
-		if( previousSlide ) {
-			previousSlide.classList.remove( 'present' );
-
-			// Reset all slides upon navigate to home
-			// Issue: #285
-			if ( document.querySelector( HOME_SLIDE_SELECTOR ).classList.contains( 'present' ) ) {
-				// Launch async task
-				setTimeout( function () {
-					var slides = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR + '.stack') ), i;
-					for( i in slides ) {
-						if( slides[i] ) {
-							// Reset stack
-							setPreviousVerticalIndex( slides[i], 0 );
-						}
-					}
-				}, 0 );
-			}
-		}
-
-		// Handle embedded content
-		if( slideChanged ) {
-			stopEmbeddedContent( previousSlide );
-			startEmbeddedContent( currentSlide );
-		}
-
-		updateControls();
-		updateProgress();
-		updateBackground();
-		updateParallax();
-		updateSlideNumber();
-
-		// Update the URL hash
-		writeURL();
-
-		cueAutoSlide();
-
-	}
-
-	/**
-	 * Syncs the presentation with the current DOM. Useful
-	 * when new slides or control elements are added or when
-	 * the configuration has changed.
-	 */
-	function sync() {
-
-		// Subscribe to input
-		removeEventListeners();
-		addEventListeners();
-
-		// Force a layout to make sure the current config is accounted for
-		layout();
-
-		// Reflect the current autoSlide value
-		autoSlide = config.autoSlide;
-
-		// Start auto-sliding if it's enabled
-		cueAutoSlide();
-
-		// Re-create the slide backgrounds
-		createBackgrounds();
-
-		sortAllFragments();
-
-		updateControls();
-		updateProgress();
-		updateBackground( true );
-		updateSlideNumber();
-
-	}
-
-	/**
-	 * Resets all vertical slides so that only the first
-	 * is visible.
-	 */
-	function resetVerticalSlides() {
-
-		var horizontalSlides = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) );
-		horizontalSlides.forEach( function( horizontalSlide ) {
-
-			var verticalSlides = toArray( horizontalSlide.querySelectorAll( 'section' ) );
-			verticalSlides.forEach( function( verticalSlide, y ) {
-
-				if( y > 0 ) {
-					verticalSlide.classList.remove( 'present' );
-					verticalSlide.classList.remove( 'past' );
-					verticalSlide.classList.add( 'future' );
-				}
-
-			} );
-
-		} );
-
-	}
-
-	/**
-	 * Sorts and formats all of fragments in the
-	 * presentation.
-	 */
-	function sortAllFragments() {
-
-		var horizontalSlides = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) );
-		horizontalSlides.forEach( function( horizontalSlide ) {
-
-			var verticalSlides = toArray( horizontalSlide.querySelectorAll( 'section' ) );
-			verticalSlides.forEach( function( verticalSlide, y ) {
-
-				sortFragments( verticalSlide.querySelectorAll( '.fragment' ) );
-
-			} );
-
-			if( verticalSlides.length === 0 ) sortFragments( horizontalSlide.querySelectorAll( '.fragment' ) );
-
-		} );
-
-	}
-
-	/**
-	 * Updates one dimension of slides by showing the slide
-	 * with the specified index.
-	 *
-	 * @param {String} selector A CSS selector that will fetch
-	 * the group of slides we are working with
-	 * @param {Number} index The index of the slide that should be
-	 * shown
-	 *
-	 * @return {Number} The index of the slide that is now shown,
-	 * might differ from the passed in index if it was out of
-	 * bounds.
-	 */
-	function updateSlides( selector, index ) {
-
-		// Select all slides and convert the NodeList result to
-		// an array
-		var slides = toArray( document.querySelectorAll( selector ) ),
-			slidesLength = slides.length;
-
-		if( slidesLength ) {
-
-			// Should the index loop?
-			if( config.loop ) {
-				index %= slidesLength;
-
-				if( index < 0 ) {
-					index = slidesLength + index;
-				}
-			}
-
-			// Enforce max and minimum index bounds
-			index = Math.max( Math.min( index, slidesLength - 1 ), 0 );
-
-			for( var i = 0; i < slidesLength; i++ ) {
-				var element = slides[i];
-
-				var reverse = config.rtl && !isVerticalSlide( element );
-
-				element.classList.remove( 'past' );
-				element.classList.remove( 'present' );
-				element.classList.remove( 'future' );
-
-				// http://www.w3.org/html/wg/drafts/html/master/editing.html#the-hidden-attribute
-				element.setAttribute( 'hidden', '' );
-
-				if( i < index ) {
-					// Any element previous to index is given the 'past' class
-					element.classList.add( reverse ? 'future' : 'past' );
-
-					var pastFragments = toArray( element.querySelectorAll( '.fragment' ) );
-
-					// Show all fragments on prior slides
-					while( pastFragments.length ) {
-						var pastFragment = pastFragments.pop();
-						pastFragment.classList.add( 'visible' );
-						pastFragment.classList.remove( 'current-fragment' );
-					}
-				}
-				else if( i > index ) {
-					// Any element subsequent to index is given the 'future' class
-					element.classList.add( reverse ? 'past' : 'future' );
-
-					var futureFragments = toArray( element.querySelectorAll( '.fragment.visible' ) );
-
-					// No fragments in future slides should be visible ahead of time
-					while( futureFragments.length ) {
-						var futureFragment = futureFragments.pop();
-						futureFragment.classList.remove( 'visible' );
-						futureFragment.classList.remove( 'current-fragment' );
-					}
-				}
-
-				// If this element contains vertical slides
-				if( element.querySelector( 'section' ) ) {
-					element.classList.add( 'stack' );
-				}
-			}
-
-			// Mark the current slide as present
-			slides[index].classList.add( 'present' );
-			slides[index].removeAttribute( 'hidden' );
-
-			// If this slide has a state associated with it, add it
-			// onto the current state of the deck
-			var slideState = slides[index].getAttribute( 'data-state' );
-			if( slideState ) {
-				state = state.concat( slideState.split( ' ' ) );
-			}
-
-		}
-		else {
-			// Since there are no slides we can't be anywhere beyond the
-			// zeroth index
-			index = 0;
-		}
-
-		return index;
-
-	}
-
-	/**
-	 * Optimization method; hide all slides that are far away
-	 * from the present slide.
-	 */
-	function updateSlidesVisibility() {
-
-		// Select all slides and convert the NodeList result to
-		// an array
-		var horizontalSlides = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) ),
-			horizontalSlidesLength = horizontalSlides.length,
-			distanceX,
-			distanceY;
-
-		if( horizontalSlidesLength ) {
-
-			// The number of steps away from the present slide that will
-			// be visible
-			var viewDistance = isOverview() ? 10 : config.viewDistance;
-
-			// Limit view distance on weaker devices
-			if( isMobileDevice ) {
-				viewDistance = isOverview() ? 6 : 1;
-			}
-
-			for( var x = 0; x < horizontalSlidesLength; x++ ) {
-				var horizontalSlide = horizontalSlides[x];
-
-				var verticalSlides = toArray( horizontalSlide.querySelectorAll( 'section' ) ),
-					verticalSlidesLength = verticalSlides.length;
-
-				// Loops so that it measures 1 between the first and last slides
-				distanceX = Math.abs( ( indexh - x ) % ( horizontalSlidesLength - viewDistance ) ) || 0;
-
-				// Show the horizontal slide if it's within the view distance
-				horizontalSlide.style.display = distanceX > viewDistance ? 'none' : 'block';
-
-				if( verticalSlidesLength ) {
-
-					var oy = getPreviousVerticalIndex( horizontalSlide );
-
-					for( var y = 0; y < verticalSlidesLength; y++ ) {
-						var verticalSlide = verticalSlides[y];
-
-						distanceY = x === indexh ? Math.abs( indexv - y ) : Math.abs( y - oy );
-
-						verticalSlide.style.display = ( distanceX + distanceY ) > viewDistance ? 'none' : 'block';
-					}
-
-				}
-			}
-
-		}
-
-	}
-
-	/**
-	 * Updates the progress bar to reflect the current slide.
-	 */
-	function updateProgress() {
-
-		// Update progress if enabled
-		if( config.progress && dom.progress ) {
-
-			var horizontalSlides = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) );
-
-			// The number of past and total slides
-			var totalCount = document.querySelectorAll( SLIDES_SELECTOR + ':not(.stack)' ).length;
-			var pastCount = 0;
-
-			// Step through all slides and count the past ones
-			mainLoop: for( var i = 0; i < horizontalSlides.length; i++ ) {
-
-				var horizontalSlide = horizontalSlides[i];
-				var verticalSlides = toArray( horizontalSlide.querySelectorAll( 'section' ) );
-
-				for( var j = 0; j < verticalSlides.length; j++ ) {
-
-					// Stop as soon as we arrive at the present
-					if( verticalSlides[j].classList.contains( 'present' ) ) {
-						break mainLoop;
-					}
-
-					pastCount++;
-
-				}
-
-				// Stop as soon as we arrive at the present
-				if( horizontalSlide.classList.contains( 'present' ) ) {
-					break;
-				}
-
-				// Don't count the wrapping section for vertical slides
-				if( horizontalSlide.classList.contains( 'stack' ) === false ) {
-					pastCount++;
-				}
-
-			}
-
-			dom.progressbar.style.width = ( pastCount / ( totalCount - 1 ) ) * window.innerWidth + 'px';
-
-		}
-
-	}
-
-	/**
-	 * Updates the slide number div to reflect the current slide.
-	 */
-	function updateSlideNumber() {
-
-		// Update slide number if enabled
-		if( config.slideNumber && dom.slideNumber) {
-
-			// Display the number of the page using 'indexh - indexv' format
-			var indexString = indexh;
-			if( indexv > 0 ) {
-				indexString += ' - ' + indexv;
-			}
-
-			dom.slideNumber.innerHTML = indexString;
-		}
-
-	}
-
-	/**
-	 * Updates the state of all control/navigation arrows.
-	 */
-	function updateControls() {
-
-		var routes = availableRoutes();
-		var fragments = availableFragments();
-
-		// Remove the 'enabled' class from all directions
-		dom.controlsLeft.concat( dom.controlsRight )
-						.concat( dom.controlsUp )
-						.concat( dom.controlsDown )
-						.concat( dom.controlsPrev )
-						.concat( dom.controlsNext ).forEach( function( node ) {
-			node.classList.remove( 'enabled' );
-			node.classList.remove( 'fragmented' );
-		} );
-
-		// Add the 'enabled' class to the available routes
-		if( routes.left ) dom.controlsLeft.forEach( function( el ) { el.classList.add( 'enabled' );	} );
-		if( routes.right ) dom.controlsRight.forEach( function( el ) { el.classList.add( 'enabled' ); } );
-		if( routes.up ) dom.controlsUp.forEach( function( el ) { el.classList.add( 'enabled' );	} );
-		if( routes.down ) dom.controlsDown.forEach( function( el ) { el.classList.add( 'enabled' ); } );
-
-		// Prev/next buttons
-		if( routes.left || routes.up ) dom.controlsPrev.forEach( function( el ) { el.classList.add( 'enabled' ); } );
-		if( routes.right || routes.down ) dom.controlsNext.forEach( function( el ) { el.classList.add( 'enabled' ); } );
-
-		// Highlight fragment directions
-		if( currentSlide ) {
-
-			// Always apply fragment decorator to prev/next buttons
-			if( fragments.prev ) dom.controlsPrev.forEach( function( el ) { el.classList.add( 'fragmented', 'enabled' ); } );
-			if( fragments.next ) dom.controlsNext.forEach( function( el ) { el.classList.add( 'fragmented', 'enabled' ); } );
-
-			// Apply fragment decorators to directional buttons based on
-			// what slide axis they are in
-			if( isVerticalSlide( currentSlide ) ) {
-				if( fragments.prev ) dom.controlsUp.forEach( function( el ) { el.classList.add( 'fragmented', 'enabled' ); } );
-				if( fragments.next ) dom.controlsDown.forEach( function( el ) { el.classList.add( 'fragmented', 'enabled' ); } );
-			}
-			else {
-				if( fragments.prev ) dom.controlsLeft.forEach( function( el ) { el.classList.add( 'fragmented', 'enabled' ); } );
-				if( fragments.next ) dom.controlsRight.forEach( function( el ) { el.classList.add( 'fragmented', 'enabled' ); } );
-			}
-
-		}
-
-	}
-
-	/**
-	 * Updates the background elements to reflect the current
-	 * slide.
-	 *
-	 * @param {Boolean} includeAll If true, the backgrounds of
-	 * all vertical slides (not just the present) will be updated.
-	 */
-	function updateBackground( includeAll ) {
-
-		var currentBackground = null;
-
-		// Reverse past/future classes when in RTL mode
-		var horizontalPast = config.rtl ? 'future' : 'past',
-			horizontalFuture = config.rtl ? 'past' : 'future';
-
-		// Update the classes of all backgrounds to match the
-		// states of their slides (past/present/future)
-		toArray( dom.background.childNodes ).forEach( function( backgroundh, h ) {
-
-			if( h < indexh ) {
-				backgroundh.className = 'slide-background ' + horizontalPast;
-			}
-			else if ( h > indexh ) {
-				backgroundh.className = 'slide-background ' + horizontalFuture;
-			}
-			else {
-				backgroundh.className = 'slide-background present';
-
-				// Store a reference to the current background element
-				currentBackground = backgroundh;
-			}
-
-			if( includeAll || h === indexh ) {
-				toArray( backgroundh.childNodes ).forEach( function( backgroundv, v ) {
-
-					if( v < indexv ) {
-						backgroundv.className = 'slide-background past';
-					}
-					else if ( v > indexv ) {
-						backgroundv.className = 'slide-background future';
-					}
-					else {
-						backgroundv.className = 'slide-background present';
-
-						// Only if this is the present horizontal and vertical slide
-						if( h === indexh ) currentBackground = backgroundv;
-					}
-
-				} );
-			}
-
-		} );
-
-		// Don't transition between identical backgrounds. This
-		// prevents unwanted flicker.
-		if( currentBackground ) {
-			var previousBackgroundHash = previousBackground ? previousBackground.getAttribute( 'data-background-hash' ) : null;
-			var currentBackgroundHash = currentBackground.getAttribute( 'data-background-hash' );
-			if( currentBackgroundHash && currentBackgroundHash === previousBackgroundHash && currentBackground !== previousBackground ) {
-				dom.background.classList.add( 'no-transition' );
-			}
-
-			previousBackground = currentBackground;
-		}
-
-		// Allow the first background to apply without transition
-		setTimeout( function() {
-			dom.background.classList.remove( 'no-transition' );
-		}, 1 );
-
-	}
-
-	/**
-	 * Updates the position of the parallax background based
-	 * on the current slide index.
-	 */
-	function updateParallax() {
-
-		if( config.parallaxBackgroundImage ) {
-
-			var horizontalSlides = document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ),
-				verticalSlides = document.querySelectorAll( VERTICAL_SLIDES_SELECTOR );
-
-			var backgroundSize = dom.background.style.backgroundSize.split( ' ' ),
-				backgroundWidth, backgroundHeight;
-
-			if( backgroundSize.length === 1 ) {
-				backgroundWidth = backgroundHeight = parseInt( backgroundSize[0], 10 );
-			}
-			else {
-				backgroundWidth = parseInt( backgroundSize[0], 10 );
-				backgroundHeight = parseInt( backgroundSize[1], 10 );
-			}
-
-			var slideWidth = dom.background.offsetWidth;
-			var horizontalSlideCount = horizontalSlides.length;
-			var horizontalOffset = -( backgroundWidth - slideWidth ) / ( horizontalSlideCount-1 ) * indexh;
-
-			var slideHeight = dom.background.offsetHeight;
-			var verticalSlideCount = verticalSlides.length;
-			var verticalOffset = verticalSlideCount > 0 ? -( backgroundHeight - slideHeight ) / ( verticalSlideCount-1 ) * indexv : 0;
-
-			dom.background.style.backgroundPosition = horizontalOffset + 'px ' + verticalOffset + 'px';
-
-		}
-
-	}
-
-	/**
-	 * Determine what available routes there are for navigation.
-	 *
-	 * @return {Object} containing four booleans: left/right/up/down
-	 */
-	function availableRoutes() {
-
-		var horizontalSlides = document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ),
-			verticalSlides = document.querySelectorAll( VERTICAL_SLIDES_SELECTOR );
-
-		var routes = {
-			left: indexh > 0 || config.loop,
-			right: indexh < horizontalSlides.length - 1 || config.loop,
-			up: indexv > 0,
-			down: indexv < verticalSlides.length - 1
-		};
-
-		// reverse horizontal controls for rtl
-		if( config.rtl ) {
-			var left = routes.left;
-			routes.left = routes.right;
-			routes.right = left;
-		}
-
-		return routes;
-
-	}
-
-	/**
-	 * Returns an object describing the available fragment
-	 * directions.
-	 *
-	 * @return {Object} two boolean properties: prev/next
-	 */
-	function availableFragments() {
-
-		if( currentSlide && config.fragments ) {
-			var fragments = currentSlide.querySelectorAll( '.fragment' );
-			var hiddenFragments = currentSlide.querySelectorAll( '.fragment:not(.visible)' );
-
-			return {
-				prev: fragments.length - hiddenFragments.length > 0,
-				next: !!hiddenFragments.length
-			};
-		}
-		else {
-			return { prev: false, next: false };
-		}
-
-	}
-
-	/**
-	 * Start playback of any embedded content inside of
-	 * the targeted slide.
-	 */
-	function startEmbeddedContent( slide ) {
-
-		if( slide && !isSpeakerNotes() ) {
-			// HTML5 media elements
-			toArray( slide.querySelectorAll( 'video, audio' ) ).forEach( function( el ) {
-				if( el.hasAttribute( 'data-autoplay' ) ) {
-					el.play();
-				}
-			} );
-
-			// iframe embeds
-			toArray( slide.querySelectorAll( 'iframe' ) ).forEach( function( el ) {
-				el.contentWindow.postMessage( 'slide:start', '*' );
-			});
-
-			// YouTube embeds
-			toArray( slide.querySelectorAll( 'iframe[src*="youtube.com/embed/"]' ) ).forEach( function( el ) {
-				if( el.hasAttribute( 'data-autoplay' ) ) {
-					el.contentWindow.postMessage( '{"event":"command","func":"playVideo","args":""}', '*' );
-				}
-			});
-		}
-
-	}
-
-	/**
-	 * Stop playback of any embedded content inside of
-	 * the targeted slide.
-	 */
-	function stopEmbeddedContent( slide ) {
-
-		if( slide ) {
-			// HTML5 media elements
-			toArray( slide.querySelectorAll( 'video, audio' ) ).forEach( function( el ) {
-				if( !el.hasAttribute( 'data-ignore' ) ) {
-					el.pause();
-				}
-			} );
-
-			// iframe embeds
-			toArray( slide.querySelectorAll( 'iframe' ) ).forEach( function( el ) {
-				el.contentWindow.postMessage( 'slide:stop', '*' );
-			});
-
-			// YouTube embeds
-			toArray( slide.querySelectorAll( 'iframe[src*="youtube.com/embed/"]' ) ).forEach( function( el ) {
-				if( !el.hasAttribute( 'data-ignore' ) && typeof el.contentWindow.postMessage === 'function' ) {
-					el.contentWindow.postMessage( '{"event":"command","func":"pauseVideo","args":""}', '*' );
-				}
-			});
-		}
-
-	}
-
-	/**
-	 * Checks if this presentation is running inside of the
-	 * speaker notes window.
-	 */
-	function isSpeakerNotes() {
-
-		return !!window.location.search.match( /receiver/gi );
-
-	}
-
-	/**
-	 * Reads the current URL (hash) and navigates accordingly.
-	 */
-	function readURL() {
-
-		var hash = window.location.hash;
-
-		// Attempt to parse the hash as either an index or name
-		var bits = hash.slice( 2 ).split( '/' ),
-			name = hash.replace( /#|\//gi, '' );
-
-		// If the first bit is invalid and there is a name we can
-		// assume that this is a named link
-		if( isNaN( parseInt( bits[0], 10 ) ) && name.length ) {
-			// Find the slide with the specified name
-			var element = document.querySelector( '#' + name );
-
-			if( element ) {
-				// Find the position of the named slide and navigate to it
-				var indices = Reveal.getIndices( element );
-				slide( indices.h, indices.v );
-			}
-			// If the slide doesn't exist, navigate to the current slide
-			else {
-				slide( indexh || 0, indexv || 0 );
-			}
-		}
-		else {
-			// Read the index components of the hash
-			var h = parseInt( bits[0], 10 ) || 0,
-				v = parseInt( bits[1], 10 ) || 0;
-
-			if( h !== indexh || v !== indexv ) {
-				slide( h, v );
-			}
-		}
-
-	}
-
-	/**
-	 * Updates the page URL (hash) to reflect the current
-	 * state.
-	 *
-	 * @param {Number} delay The time in ms to wait before
-	 * writing the hash
-	 */
-	function writeURL( delay ) {
-
-		if( config.history ) {
-
-			// Make sure there's never more than one timeout running
-			clearTimeout( writeURLTimeout );
-
-			// If a delay is specified, timeout this call
-			if( typeof delay === 'number' ) {
-				writeURLTimeout = setTimeout( writeURL, delay );
-			}
-			else {
-				var url = '/';
-
-				// If the current slide has an ID, use that as a named link
-				if( currentSlide && typeof currentSlide.getAttribute( 'id' ) === 'string' ) {
-					url = '/' + currentSlide.getAttribute( 'id' );
-				}
-				// Otherwise use the /h/v index
-				else {
-					if( indexh > 0 || indexv > 0 ) url += indexh;
-					if( indexv > 0 ) url += '/' + indexv;
-				}
-
-				window.location.hash = url;
-			}
-		}
-
-	}
-
-	/**
-	 * Retrieves the h/v location of the current, or specified,
-	 * slide.
-	 *
-	 * @param {HTMLElement} slide If specified, the returned
-	 * index will be for this slide rather than the currently
-	 * active one
-	 *
-	 * @return {Object} { h: <int>, v: <int>, f: <int> }
-	 */
-	function getIndices( slide ) {
-
-		// By default, return the current indices
-		var h = indexh,
-			v = indexv,
-			f;
-
-		// If a slide is specified, return the indices of that slide
-		if( slide ) {
-			var isVertical = isVerticalSlide( slide );
-			var slideh = isVertical ? slide.parentNode : slide;
-
-			// Select all horizontal slides
-			var horizontalSlides = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) );
-
-			// Now that we know which the horizontal slide is, get its index
-			h = Math.max( horizontalSlides.indexOf( slideh ), 0 );
-
-			// If this is a vertical slide, grab the vertical index
-			if( isVertical ) {
-				v = Math.max( toArray( slide.parentNode.querySelectorAll( 'section' ) ).indexOf( slide ), 0 );
-			}
-		}
-
-		if( !slide && currentSlide ) {
-			var hasFragments = currentSlide.querySelectorAll( '.fragment' ).length > 0;
-			if( hasFragments ) {
-				var visibleFragments = currentSlide.querySelectorAll( '.fragment.visible' );
-				f = visibleFragments.length - 1;
-			}
-		}
-
-		return { h: h, v: v, f: f };
-
-	}
-
-	/**
-	 * Return a sorted fragments list, ordered by an increasing
-	 * "data-fragment-index" attribute.
-	 *
-	 * Fragments will be revealed in the order that they are returned by
-	 * this function, so you can use the index attributes to control the
-	 * order of fragment appearance.
-	 *
-	 * To maintain a sensible default fragment order, fragments are presumed
-	 * to be passed in document order. This function adds a "fragment-index"
-	 * attribute to each node if such an attribute is not already present,
-	 * and sets that attribute to an integer value which is the position of
-	 * the fragment within the fragments list.
-	 */
-	function sortFragments( fragments ) {
-
-		fragments = toArray( fragments );
-
-		var ordered = [],
-			unordered = [],
-			sorted = [];
-
-		// Group ordered and unordered elements
-		fragments.forEach( function( fragment, i ) {
-			if( fragment.hasAttribute( 'data-fragment-index' ) ) {
-				var index = parseInt( fragment.getAttribute( 'data-fragment-index' ), 10 );
-
-				if( !ordered[index] ) {
-					ordered[index] = [];
-				}
-
-				ordered[index].push( fragment );
-			}
-			else {
-				unordered.push( [ fragment ] );
-			}
-		} );
-
-		// Append fragments without explicit indices in their
-		// DOM order
-		ordered = ordered.concat( unordered );
-
-		// Manually count the index up per group to ensure there
-		// are no gaps
-		var index = 0;
-
-		// Push all fragments in their sorted order to an array,
-		// this flattens the groups
-		ordered.forEach( function( group ) {
-			group.forEach( function( fragment ) {
-				sorted.push( fragment );
-				fragment.setAttribute( 'data-fragment-index', index );
-			} );
-
-			index ++;
-		} );
-
-		return sorted;
-
-	}
-
-	/**
-	 * Navigate to the specified slide fragment.
-	 *
-	 * @param {Number} index The index of the fragment that
-	 * should be shown, -1 means all are invisible
-	 * @param {Number} offset Integer offset to apply to the
-	 * fragment index
-	 *
-	 * @return {Boolean} true if a change was made in any
-	 * fragments visibility as part of this call
-	 */
-	function navigateFragment( index, offset ) {
-
-		if( currentSlide && config.fragments ) {
-
-			var fragments = sortFragments( currentSlide.querySelectorAll( '.fragment' ) );
-			if( fragments.length ) {
-
-				// If no index is specified, find the current
-				if( typeof index !== 'number' ) {
-					var lastVisibleFragment = sortFragments( currentSlide.querySelectorAll( '.fragment.visible' ) ).pop();
-
-					if( lastVisibleFragment ) {
-						index = parseInt( lastVisibleFragment.getAttribute( 'data-fragment-index' ) || 0, 10 );
-					}
-					else {
-						index = -1;
-					}
-				}
-
-				// If an offset is specified, apply it to the index
-				if( typeof offset === 'number' ) {
-					index += offset;
-				}
-
-				var fragmentsShown = [],
-					fragmentsHidden = [];
-
-				toArray( fragments ).forEach( function( element, i ) {
-
-					if( element.hasAttribute( 'data-fragment-index' ) ) {
-						i = parseInt( element.getAttribute( 'data-fragment-index' ), 10 );
-					}
-
-					// Visible fragments
-					if( i <= index ) {
-						if( !element.classList.contains( 'visible' ) ) fragmentsShown.push( element );
-						element.classList.add( 'visible' );
-						element.classList.remove( 'current-fragment' );
-
-						if( i === index ) {
-							element.classList.add( 'current-fragment' );
-						}
-					}
-					// Hidden fragments
-					else {
-						if( element.classList.contains( 'visible' ) ) fragmentsHidden.push( element );
-						element.classList.remove( 'visible' );
-						element.classList.remove( 'current-fragment' );
-					}
-
-
-				} );
-
-				if( fragmentsHidden.length ) {
-					dispatchEvent( 'fragmenthidden', { fragment: fragmentsHidden[0], fragments: fragmentsHidden } );
-				}
-
-				if( fragmentsShown.length ) {
-					dispatchEvent( 'fragmentshown', { fragment: fragmentsShown[0], fragments: fragmentsShown } );
-				}
-
-				updateControls();
-
-				return !!( fragmentsShown.length || fragmentsHidden.length );
-
-			}
-
-		}
-
-		return false;
-
-	}
-
-	/**
-	 * Navigate to the next slide fragment.
-	 *
-	 * @return {Boolean} true if there was a next fragment,
-	 * false otherwise
-	 */
-	function nextFragment() {
-
-		return navigateFragment( null, 1 );
-
-	}
-
-	/**
-	 * Navigate to the previous slide fragment.
-	 *
-	 * @return {Boolean} true if there was a previous fragment,
-	 * false otherwise
-	 */
-	function previousFragment() {
-
-		return navigateFragment( null, -1 );
-
-	}
-
-	/**
-	 * Cues a new automated slide if enabled in the config.
-	 */
-	function cueAutoSlide() {
-
-		cancelAutoSlide();
-
-		if( currentSlide ) {
-
-			var parentAutoSlide = currentSlide.parentNode ? currentSlide.parentNode.getAttribute( 'data-autoslide' ) : null;
-			var slideAutoSlide = currentSlide.getAttribute( 'data-autoslide' );
-
-			// Pick value in the following priority order:
-			// 1. Current slide's data-autoslide
-			// 2. Parent slide's data-autoslide
-			// 3. Global autoSlide setting
-			if( slideAutoSlide ) {
-				autoSlide = parseInt( slideAutoSlide, 10 );
-			}
-			else if( parentAutoSlide ) {
-				autoSlide = parseInt( parentAutoSlide, 10 );
-			}
-			else {
-				autoSlide = config.autoSlide;
-			}
-
-			// If there are media elements with data-autoplay,
-			// automatically set the autoSlide duration to the
-			// length of that media
-			toArray( currentSlide.querySelectorAll( 'video, audio' ) ).forEach( function( el ) {
-				if( el.hasAttribute( 'data-autoplay' ) ) {
-					if( autoSlide && el.duration * 1000 > autoSlide ) {
-						autoSlide = ( el.duration * 1000 ) + 1000;
-					}
-				}
-			} );
-
-			// Cue the next auto-slide if:
-			// - There is an autoSlide value
-			// - Auto-sliding isn't paused by the user
-			// - The presentation isn't paused
-			// - The overview isn't active
-			// - The presentation isn't over
-			if( autoSlide && !autoSlidePaused && !isPaused() && !isOverview() && ( !Reveal.isLastSlide() || config.loop === true ) ) {
-				autoSlideTimeout = setTimeout( navigateNext, autoSlide );
-				autoSlideStartTime = Date.now();
-			}
-
-			if( autoSlidePlayer ) {
-				autoSlidePlayer.setPlaying( autoSlideTimeout !== -1 );
-			}
-
-		}
-
-	}
-
-	/**
-	 * Cancels any ongoing request to auto-slide.
-	 */
-	function cancelAutoSlide() {
-
-		clearTimeout( autoSlideTimeout );
-		autoSlideTimeout = -1;
-
-	}
-
-	function pauseAutoSlide() {
-
-		autoSlidePaused = true;
-		clearTimeout( autoSlideTimeout );
-
-		if( autoSlidePlayer ) {
-			autoSlidePlayer.setPlaying( false );
-		}
-
-	}
-
-	function resumeAutoSlide() {
-
-		autoSlidePaused = false;
-		cueAutoSlide();
-
-	}
-
-	function navigateLeft() {
-
-		// Reverse for RTL
-		if( config.rtl ) {
-			if( ( isOverview() || nextFragment() === false ) && availableRoutes().left ) {
-				slide( indexh + 1 );
-			}
-		}
-		// Normal navigation
-		else if( ( isOverview() || previousFragment() === false ) && availableRoutes().left ) {
-			slide( indexh - 1 );
-		}
-
-	}
-
-	function navigateRight() {
-
-		// Reverse for RTL
-		if( config.rtl ) {
-			if( ( isOverview() || previousFragment() === false ) && availableRoutes().right ) {
-				slide( indexh - 1 );
-			}
-		}
-		// Normal navigation
-		else if( ( isOverview() || nextFragment() === false ) && availableRoutes().right ) {
-			slide( indexh + 1 );
-		}
-
-	}
-
-	function navigateUp() {
-
-		// Prioritize hiding fragments
-		if( ( isOverview() || previousFragment() === false ) && availableRoutes().up ) {
-			slide( indexh, indexv - 1 );
-		}
-
-	}
-
-	function navigateDown() {
-
-		// Prioritize revealing fragments
-		if( ( isOverview() || nextFragment() === false ) && availableRoutes().down ) {
-			slide( indexh, indexv + 1 );
-		}
-
-	}
-
-	/**
-	 * Navigates backwards, prioritized in the following order:
-	 * 1) Previous fragment
-	 * 2) Previous vertical slide
-	 * 3) Previous horizontal slide
-	 */
-	function navigatePrev() {
-
-		// Prioritize revealing fragments
-		if( previousFragment() === false ) {
-			if( availableRoutes().up ) {
-				navigateUp();
-			}
-			else {
-				// Fetch the previous horizontal slide, if there is one
-				var previousSlide = document.querySelector( HORIZONTAL_SLIDES_SELECTOR + '.past:nth-child(' + indexh + ')' );
-
-				if( previousSlide ) {
-					var v = ( previousSlide.querySelectorAll( 'section' ).length - 1 ) || undefined;
-					var h = indexh - 1;
-					slide( h, v );
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * Same as #navigatePrev() but navigates forwards.
-	 */
-	function navigateNext() {
-
-		// Prioritize revealing fragments
-		if( nextFragment() === false ) {
-			availableRoutes().down ? navigateDown() : navigateRight();
-		}
-
-		// If auto-sliding is enabled we need to cue up
-		// another timeout
-		cueAutoSlide();
-
-	}
-
-
-	// --------------------------------------------------------------------//
-	// ----------------------------- EVENTS -------------------------------//
-	// --------------------------------------------------------------------//
-
-	/**
-	 * Called by all event handlers that are based on user
-	 * input.
-	 */
-	function onUserInput( event ) {
-
-		if( config.autoSlideStoppable ) {
-			pauseAutoSlide();
-		}
-
-	}
-
-	/**
-	 * Handler for the document level 'keydown' event.
-	 */
-	function onDocumentKeyDown( event ) {
-
-		onUserInput( event );
-
-		// Check if there's a focused element that could be using
-		// the keyboard
-		var activeElement = document.activeElement;
-		var hasFocus = !!( document.activeElement && ( document.activeElement.type || document.activeElement.href || document.activeElement.contentEditable !== 'inherit' ) );
-
-		// Disregard the event if there's a focused element or a
-		// keyboard modifier key is present
-		if( hasFocus || (event.shiftKey && event.keyCode !== 32) || event.altKey || event.ctrlKey || event.metaKey ) return;
-
-		// While paused only allow "unpausing" keyboard events (b and .)
-		if( isPaused() && [66,190,191].indexOf( event.keyCode ) === -1 ) {
-			return false;
-		}
-
-		var triggered = false;
-
-		// 1. User defined key bindings
-		if( typeof config.keyboard === 'object' ) {
-
-			for( var key in config.keyboard ) {
-
-				// Check if this binding matches the pressed key
-				if( parseInt( key, 10 ) === event.keyCode ) {
-
-					var value = config.keyboard[ key ];
-
-					// Callback function
-					if( typeof value === 'function' ) {
-						value.apply( null, [ event ] );
-					}
-					// String shortcuts to reveal.js API
-					else if( typeof value === 'string' && typeof Reveal[ value ] === 'function' ) {
-						Reveal[ value ].call();
-					}
-
-					triggered = true;
-
-				}
-
-			}
-
-		}
-
-		// 2. System defined key bindings
-		if( triggered === false ) {
-
-			// Assume true and try to prove false
-			triggered = true;
-
-			switch( event.keyCode ) {
-				// p, page up
-				case 80: case 33: navigatePrev(); break;
-				// n, page down
-				case 78: case 34: navigateNext(); break;
-				// h, left
-				case 72: case 37: navigateLeft(); break;
-				// l, right
-				case 76: case 39: navigateRight(); break;
-				// k, up
-				case 75: case 38: navigateUp(); break;
-				// j, down
-				case 74: case 40: navigateDown(); break;
-				// home
-				case 36: slide( 0 ); break;
-				// end
-				case 35: slide( Number.MAX_VALUE ); break;
-				// space
-				case 32: isOverview() ? deactivateOverview() : event.shiftKey ? navigatePrev() : navigateNext(); break;
-				// return
-				case 13: isOverview() ? deactivateOverview() : triggered = false; break;
-				// b, period, Logitech presenter tools "black screen" button
-				case 66: case 190: case 191: togglePause(); break;
-				// f
-				case 70: enterFullscreen(); break;
-				default:
-					triggered = false;
-			}
-
-		}
-
-		// If the input resulted in a triggered action we should prevent
-		// the browsers default behavior
-		if( triggered ) {
-			event.preventDefault();
-		}
-		// ESC or O key
-		else if ( ( event.keyCode === 27 || event.keyCode === 79 ) && features.transforms3d ) {
-			if( dom.preview ) {
-				closePreview();
-			}
-			else {
-				toggleOverview();
-			}
-
-			event.preventDefault();
-		}
-
-		// If auto-sliding is enabled we need to cue up
-		// another timeout
-		cueAutoSlide();
-
-	}
-
-	/**
-	 * Handler for the 'touchstart' event, enables support for
-	 * swipe and pinch gestures.
-	 */
-	function onTouchStart( event ) {
-
-		touch.startX = event.touches[0].clientX;
-		touch.startY = event.touches[0].clientY;
-		touch.startCount = event.touches.length;
-
-		// If there's two touches we need to memorize the distance
-		// between those two points to detect pinching
-		if( event.touches.length === 2 && config.overview ) {
-			touch.startSpan = distanceBetween( {
-				x: event.touches[1].clientX,
-				y: event.touches[1].clientY
-			}, {
-				x: touch.startX,
-				y: touch.startY
-			} );
-		}
-
-	}
-
-	/**
-	 * Handler for the 'touchmove' event.
-	 */
-	function onTouchMove( event ) {
-
-		// Each touch should only trigger one action
-		if( !touch.captured ) {
-			onUserInput( event );
-
-			var currentX = event.touches[0].clientX;
-			var currentY = event.touches[0].clientY;
-
-			// If the touch started with two points and still has
-			// two active touches; test for the pinch gesture
-			if( event.touches.length === 2 && touch.startCount === 2 && config.overview ) {
-
-				// The current distance in pixels between the two touch points
-				var currentSpan = distanceBetween( {
-					x: event.touches[1].clientX,
-					y: event.touches[1].clientY
-				}, {
-					x: touch.startX,
-					y: touch.startY
-				} );
-
-				// If the span is larger than the desire amount we've got
-				// ourselves a pinch
-				if( Math.abs( touch.startSpan - currentSpan ) > touch.threshold ) {
-					touch.captured = true;
-
-					if( currentSpan < touch.startSpan ) {
-						activateOverview();
-					}
-					else {
-						deactivateOverview();
-					}
-				}
-
-				event.preventDefault();
-
-			}
-			// There was only one touch point, look for a swipe
-			else if( event.touches.length === 1 && touch.startCount !== 2 ) {
-
-				var deltaX = currentX - touch.startX,
-					deltaY = currentY - touch.startY;
-
-				if( deltaX > touch.threshold && Math.abs( deltaX ) > Math.abs( deltaY ) ) {
-					touch.captured = true;
-					navigateLeft();
-				}
-				else if( deltaX < -touch.threshold && Math.abs( deltaX ) > Math.abs( deltaY ) ) {
-					touch.captured = true;
-					navigateRight();
-				}
-				else if( deltaY > touch.threshold ) {
-					touch.captured = true;
-					navigateUp();
-				}
-				else if( deltaY < -touch.threshold ) {
-					touch.captured = true;
-					navigateDown();
-				}
-
-				// If we're embedded, only block touch events if they have
-				// triggered an action
-				if( config.embedded ) {
-					if( touch.captured || isVerticalSlide( currentSlide ) ) {
-						event.preventDefault();
-					}
-				}
-				// Not embedded? Block them all to avoid needless tossing
-				// around of the viewport in iOS
-				else {
-					event.preventDefault();
-				}
-
-			}
-		}
-		// There's a bug with swiping on some Android devices unless
-		// the default action is always prevented
-		else if( navigator.userAgent.match( /android/gi ) ) {
-			event.preventDefault();
-		}
-
-	}
-
-	/**
-	 * Handler for the 'touchend' event.
-	 */
-	function onTouchEnd( event ) {
-
-		touch.captured = false;
-
-	}
-
-	/**
-	 * Convert pointer down to touch start.
-	 */
-	function onPointerDown( event ) {
-
-		if( event.pointerType === event.MSPOINTER_TYPE_TOUCH ) {
-			event.touches = [{ clientX: event.clientX, clientY: event.clientY }];
-			onTouchStart( event );
-		}
-
-	}
-
-	/**
-	 * Convert pointer move to touch move.
-	 */
-	function onPointerMove( event ) {
-
-		if( event.pointerType === event.MSPOINTER_TYPE_TOUCH ) {
-			event.touches = [{ clientX: event.clientX, clientY: event.clientY }];
-			onTouchMove( event );
-		}
-
-	}
-
-	/**
-	 * Convert pointer up to touch end.
-	 */
-	function onPointerUp( event ) {
-
-		if( event.pointerType === event.MSPOINTER_TYPE_TOUCH ) {
-			event.touches = [{ clientX: event.clientX, clientY: event.clientY }];
-			onTouchEnd( event );
-		}
-
-	}
-
-	/**
-	 * Handles mouse wheel scrolling, throttled to avoid skipping
-	 * multiple slides.
-	 */
-	function onDocumentMouseScroll( event ) {
-
-		if( Date.now() - lastMouseWheelStep > 600 ) {
-
-			lastMouseWheelStep = Date.now();
-
-			var delta = event.detail || -event.wheelDelta;
-			if( delta > 0 ) {
-				navigateNext();
-			}
-			else {
-				navigatePrev();
-			}
-
-		}
-
-	}
-
-	/**
-	 * Clicking on the progress bar results in a navigation to the
-	 * closest approximate horizontal slide using this equation:
-	 *
-	 * ( clickX / presentationWidth ) * numberOfSlides
-	 */
-	function onProgressClicked( event ) {
-
-		onUserInput( event );
-
-		event.preventDefault();
-
-		var slidesTotal = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) ).length;
-		var slideIndex = Math.floor( ( event.clientX / dom.wrapper.offsetWidth ) * slidesTotal );
-
-		slide( slideIndex );
-
-	}
-
-	/**
-	 * Event handler for navigation control buttons.
-	 */
-	function onNavigateLeftClicked( event ) { event.preventDefault(); onUserInput(); navigateLeft(); }
-	function onNavigateRightClicked( event ) { event.preventDefault(); onUserInput(); navigateRight(); }
-	function onNavigateUpClicked( event ) { event.preventDefault(); onUserInput(); navigateUp(); }
-	function onNavigateDownClicked( event ) { event.preventDefault(); onUserInput(); navigateDown(); }
-	function onNavigatePrevClicked( event ) { event.preventDefault(); onUserInput(); navigatePrev(); }
-	function onNavigateNextClicked( event ) { event.preventDefault(); onUserInput(); navigateNext(); }
-
-	/**
-	 * Handler for the window level 'hashchange' event.
-	 */
-	function onWindowHashChange( event ) {
-
-		readURL();
-
-	}
-
-	/**
-	 * Handler for the window level 'resize' event.
-	 */
-	function onWindowResize( event ) {
-
-		layout();
-
-	}
-
-	/**
-	 * Handle for the window level 'visibilitychange' event.
-	 */
-	function onPageVisibilityChange( event ) {
-
-		var isHidden =  document.webkitHidden ||
-						document.msHidden ||
-						document.hidden;
-
-		// If, after clicking a link or similar and we're coming back,
-		// focus the document.body to ensure we can use keyboard shortcuts
-		if( isHidden === false && document.activeElement !== document.body ) {
-			document.activeElement.blur();
-			document.body.focus();
-		}
-
-	}
-
-	/**
-	 * Invoked when a slide is and we're in the overview.
-	 */
-	function onOverviewSlideClicked( event ) {
-
-		// TODO There's a bug here where the event listeners are not
-		// removed after deactivating the overview.
-		if( eventsAreBound && isOverview() ) {
-			event.preventDefault();
-
-			var element = event.target;
-
-			while( element && !element.nodeName.match( /section/gi ) ) {
-				element = element.parentNode;
-			}
-
-			if( element && !element.classList.contains( 'disabled' ) ) {
-
-				deactivateOverview();
-
-				if( element.nodeName.match( /section/gi ) ) {
-					var h = parseInt( element.getAttribute( 'data-index-h' ), 10 ),
-						v = parseInt( element.getAttribute( 'data-index-v' ), 10 );
-
-					slide( h, v );
-				}
-
-			}
-		}
-
-	}
-
-	/**
-	 * Handles clicks on links that are set to preview in the
-	 * iframe overlay.
-	 */
-	function onPreviewLinkClicked( event ) {
-
-		var url = event.target.getAttribute( 'href' );
-		if( url ) {
-			openPreview( url );
-			event.preventDefault();
-		}
-
-	}
-
-	/**
-	 * Handles click on the auto-sliding controls element.
-	 */
-	function onAutoSlidePlayerClick( event ) {
-
-		// Replay
-		if( Reveal.isLastSlide() && config.loop === false ) {
-			slide( 0, 0 );
-			resumeAutoSlide();
-		}
-		// Resume
-		else if( autoSlidePaused ) {
-			resumeAutoSlide();
-		}
-		// Pause
-		else {
-			pauseAutoSlide();
-		}
-
-	}
-
-
-	// --------------------------------------------------------------------//
-	// ------------------------ PLAYBACK COMPONENT ------------------------//
-	// --------------------------------------------------------------------//
-
-
-	/**
-	 * Constructor for the playback component, which displays
-	 * play/pause/progress controls.
-	 *
-	 * @param {HTMLElement} container The component will append
-	 * itself to this
-	 * @param {Function} progressCheck A method which will be
-	 * called frequently to get the current progress on a range
-	 * of 0-1
-	 */
-	function Playback( container, progressCheck ) {
-
-		// Cosmetics
-		this.diameter = 50;
-		this.thickness = 3;
-
-		// Flags if we are currently playing
-		this.playing = false;
-
-		// Current progress on a 0-1 range
-		this.progress = 0;
-
-		// Used to loop the animation smoothly
-		this.progressOffset = 1;
-
-		this.container = container;
-		this.progressCheck = progressCheck;
-
-		this.canvas = document.createElement( 'canvas' );
-		this.canvas.className = 'playback';
-		this.canvas.width = this.diameter;
-		this.canvas.height = this.diameter;
-		this.context = this.canvas.getContext( '2d' );
-
-		this.container.appendChild( this.canvas );
-
-		this.render();
-
-	}
-
-	Playback.prototype.setPlaying = function( value ) {
-
-		var wasPlaying = this.playing;
-
-		this.playing = value;
-
-		// Start repainting if we weren't already
-		if( !wasPlaying && this.playing ) {
-			this.animate();
-		}
-		else {
-			this.render();
-		}
-
-	};
-
-	Playback.prototype.animate = function() {
-
-		var progressBefore = this.progress;
-
-		this.progress = this.progressCheck();
-
-		// When we loop, offset the progress so that it eases
-		// smoothly rather than immediately resetting
-		if( progressBefore > 0.8 && this.progress < 0.2 ) {
-			this.progressOffset = this.progress;
-		}
-
-		this.render();
-
-		if( this.playing ) {
-			features.requestAnimationFrameMethod.call( window, this.animate.bind( this ) );
-		}
-
-	};
-
-	/**
-	 * Renders the current progress and playback state.
-	 */
-	Playback.prototype.render = function() {
-
-		var progress = this.playing ? this.progress : 0,
-			radius = ( this.diameter / 2 ) - this.thickness,
-			x = this.diameter / 2,
-			y = this.diameter / 2,
-			iconSize = 14;
-
-		// Ease towards 1
-		this.progressOffset += ( 1 - this.progressOffset ) * 0.1;
-
-		var endAngle = ( - Math.PI / 2 ) + ( progress * ( Math.PI * 2 ) );
-		var startAngle = ( - Math.PI / 2 ) + ( this.progressOffset * ( Math.PI * 2 ) );
-
-		this.context.save();
-		this.context.clearRect( 0, 0, this.diameter, this.diameter );
-
-		// Solid background color
-		this.context.beginPath();
-		this.context.arc( x, y, radius + 2, 0, Math.PI * 2, false );
-		this.context.fillStyle = 'rgba( 0, 0, 0, 0.4 )';
-		this.context.fill();
-
-		// Draw progress track
-		this.context.beginPath();
-		this.context.arc( x, y, radius, 0, Math.PI * 2, false );
-		this.context.lineWidth = this.thickness;
-		this.context.strokeStyle = '#666';
-		this.context.stroke();
-
-		if( this.playing ) {
-			// Draw progress on top of track
-			this.context.beginPath();
-			this.context.arc( x, y, radius, startAngle, endAngle, false );
-			this.context.lineWidth = this.thickness;
-			this.context.strokeStyle = '#fff';
-			this.context.stroke();
-		}
-
-		this.context.translate( x - ( iconSize / 2 ), y - ( iconSize / 2 ) );
-
-		// Draw play/pause icons
-		if( this.playing ) {
-			this.context.fillStyle = '#fff';
-			this.context.fillRect( 0, 0, iconSize / 2 - 2, iconSize );
-			this.context.fillRect( iconSize / 2 + 2, 0, iconSize / 2 - 2, iconSize );
-		}
-		else {
-			this.context.beginPath();
-			this.context.translate( 2, 0 );
-			this.context.moveTo( 0, 0 );
-			this.context.lineTo( iconSize - 2, iconSize / 2 );
-			this.context.lineTo( 0, iconSize );
-			this.context.fillStyle = '#fff';
-			this.context.fill();
-		}
-
-		this.context.restore();
-
-	};
-
-	Playback.prototype.on = function( type, listener ) {
-		this.canvas.addEventListener( type, listener, false );
-	};
-
-	Playback.prototype.off = function( type, listener ) {
-		this.canvas.removeEventListener( type, listener, false );
-	};
-
-	Playback.prototype.destroy = function() {
-
-		this.playing = false;
-
-		if( this.canvas.parentNode ) {
-			this.container.removeChild( this.canvas );
-		}
-
-	};
-
-
-	// --------------------------------------------------------------------//
-	// ------------------------------- API --------------------------------//
-	// --------------------------------------------------------------------//
-
-
-	return {
-		initialize: initialize,
-		configure: configure,
-		sync: sync,
-
-		// Navigation methods
-		slide: slide,
-		left: navigateLeft,
-		right: navigateRight,
-		up: navigateUp,
-		down: navigateDown,
-		prev: navigatePrev,
-		next: navigateNext,
-
-		// Fragment methods
-		navigateFragment: navigateFragment,
-		prevFragment: previousFragment,
-		nextFragment: nextFragment,
-
-		// Deprecated aliases
-		navigateTo: slide,
-		navigateLeft: navigateLeft,
-		navigateRight: navigateRight,
-		navigateUp: navigateUp,
-		navigateDown: navigateDown,
-		navigatePrev: navigatePrev,
-		navigateNext: navigateNext,
-
-		// Forces an update in slide layout
-		layout: layout,
-
-		// Returns an object with the available routes as booleans (left/right/top/bottom)
-		availableRoutes: availableRoutes,
-
-		// Returns an object with the available fragments as booleans (prev/next)
-		availableFragments: availableFragments,
-
-		// Toggles the overview mode on/off
-		toggleOverview: toggleOverview,
-
-		// Toggles the "black screen" mode on/off
-		togglePause: togglePause,
-
-		// State checks
-		isOverview: isOverview,
-		isPaused: isPaused,
-
-		// Adds or removes all internal event listeners (such as keyboard)
-		addEventListeners: addEventListeners,
-		removeEventListeners: removeEventListeners,
-
-		// Returns the indices of the current, or specified, slide
-		getIndices: getIndices,
-
-		// Returns the slide at the specified index, y is optional
-		getSlide: function( x, y ) {
-			var horizontalSlide = document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR )[ x ];
-			var verticalSlides = horizontalSlide && horizontalSlide.querySelectorAll( 'section' );
-
-			if( typeof y !== 'undefined' ) {
-				return verticalSlides ? verticalSlides[ y ] : undefined;
-			}
-
-			return horizontalSlide;
-		},
-
-		// Returns the previous slide element, may be null
-		getPreviousSlide: function() {
-			return previousSlide;
-		},
-
-		// Returns the current slide element
-		getCurrentSlide: function() {
-			return currentSlide;
-		},
-
-		// Returns the current scale of the presentation content
-		getScale: function() {
-			return scale;
-		},
-
-		// Returns the current configuration object
-		getConfig: function() {
-			return config;
-		},
-
-		// Helper method, retrieves query string as a key/value hash
-		getQueryHash: function() {
-			var query = {};
-
-			location.search.replace( /[A-Z0-9]+?=([\w\.%-]*)/gi, function(a) {
-				query[ a.split( '=' ).shift() ] = a.split( '=' ).pop();
-			} );
-
-			// Basic deserialization
-			for( var i in query ) {
-				var value = query[ i ];
-
-				query[ i ] = unescape( value );
-
-				if( value === 'null' ) query[ i ] = null;
-				else if( value === 'true' ) query[ i ] = true;
-				else if( value === 'false' ) query[ i ] = false;
-				else if( value.match( /^\d+$/ ) ) query[ i ] = parseFloat( value );
-			}
-
-			return query;
-		},
-
-		// Returns true if we're currently on the first slide
-		isFirstSlide: function() {
-			return document.querySelector( SLIDES_SELECTOR + '.past' ) == null ? true : false;
-		},
-
-		// Returns true if we're currently on the last slide
-		isLastSlide: function() {
-			if( currentSlide ) {
-				// Does this slide has next a sibling?
-				if( currentSlide.nextElementSibling ) return false;
-
-				// If it's vertical, does its parent have a next sibling?
-				if( isVerticalSlide( currentSlide ) && currentSlide.parentNode.nextElementSibling ) return false;
-
-				return true;
-			}
-
-			return false;
-		},
-
-		// Checks if reveal.js has been loaded and is ready for use
-		isReady: function() {
-			return loaded;
-		},
-
-		// Forward event binding to the reveal DOM element
-		addEventListener: function( type, listener, useCapture ) {
-			if( 'addEventListener' in window ) {
-				( dom.wrapper || document.querySelector( '.reveal' ) ).addEventListener( type, listener, useCapture );
-			}
-		},
-		removeEventListener: function( type, listener, useCapture ) {
-			if( 'addEventListener' in window ) {
-				( dom.wrapper || document.querySelector( '.reveal' ) ).removeEventListener( type, listener, useCapture );
-			}
-		}
-	};
-
-})();
-
-module.exports = Reveal;
-  })();
-});
-
 require.register("string.prototype.trim/implementation.js", function(exports, require, module) {
   require = __makeRelativeRequire(require, {}, "string.prototype.trim");
   (function() {
@@ -20795,6 +21703,15 @@ module.exports = warning;
   })();
 });
 require.alias("backbone/backbone.js", "backbone");
+require.alias("flickity/js/index.js", "flickity");
+require.alias("flickity/node_modules/desandro-matches-selector/matches-selector.js", "flickity/node_modules/desandro-matches-selector");
+require.alias("flickity/node_modules/ev-emitter/ev-emitter.js", "flickity/node_modules/ev-emitter");
+require.alias("flickity/node_modules/fizzy-ui-utils/utils.js", "flickity/node_modules/fizzy-ui-utils");
+require.alias("flickity/node_modules/get-size/get-size.js", "flickity/node_modules/get-size");
+require.alias("flickity/node_modules/tap-listener/tap-listener.js", "flickity/node_modules/tap-listener");
+require.alias("flickity/node_modules/tap-listener/node_modules/unipointer/unipointer.js", "flickity/node_modules/tap-listener/node_modules/unipointer");
+require.alias("flickity/node_modules/unidragger/unidragger.js", "flickity/node_modules/unidragger");
+require.alias("flickity/node_modules/unidragger/node_modules/unipointer/unipointer.js", "flickity/node_modules/unidragger/node_modules/unipointer");
 require.alias("has/src/index.js", "has");
 require.alias("jquery/dist/jquery.js", "jquery");
 require.alias("process/browser.js", "process");

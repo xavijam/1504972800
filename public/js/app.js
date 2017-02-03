@@ -153,12 +153,11 @@ require.register("initialize.js", function(exports, require, module) {
 
 var $ = require('jquery');
 var Backbone = require('backbone');
+var Flickity = require('flickity');
 global.jQuery = $;
 require('protip');
 var DefaultSlideView = require('js/default-slide-view');
 var TransportSlideView = require('js/transport-slide-view');
-var NavigationView = require('js/navigation-view');
-var Reveal = require('reveal');
 require('js/handlebars-helpers');
 
 document.addEventListener('DOMContentLoaded', init);
@@ -167,10 +166,10 @@ function init() {
   $.protip();
 
   // Render templates
-  var $slides = $('#slides');
+  var $carousel = $('.js-carousel');
 
   // Home
-  $slides.append(new DefaultSlideView({
+  $carousel.append(new DefaultSlideView({
     template: require('templates/home.hbs'),
     index: 0,
     background: '#97BDBB',
@@ -178,7 +177,7 @@ function init() {
   }).render().el);
 
   // Transport going
-  $slides.append(new TransportSlideView({
+  $carousel.append(new TransportSlideView({
     template: require('templates/transport-going.hbs'),
     index: 1,
     background: '#E2AB49',
@@ -187,7 +186,7 @@ function init() {
   }).render().el);
 
   // Church
-  $slides.append(new DefaultSlideView({
+  $carousel.append(new DefaultSlideView({
     template: require('templates/church.hbs'),
     index: 2,
     background: '#6C818E',
@@ -195,47 +194,34 @@ function init() {
   }).render().el);
 
   // Banquet
-  $slides.append(new DefaultSlideView({
+  $carousel.append(new DefaultSlideView({
     template: require('templates/banquet.hbs'),
     index: 3,
     background: '#FA8072',
     translateKey: 'banquet'
   }).render().el);
 
-  Reveal.initialize({
-    controls: false,
-    progress: false,
-    slideNumber: false,
-    history: true,
-    keyboard: true,
-    overview: false,
-    center: false,
-    touch: true,
-    loop: true,
-    rtl: false,
-    shuffle: false,
-    fragments: true,
-    embedded: false,
-    help: false,
-    showNotes: false,
-    autoSlide: 0,
-    minScale: 1,
-    maxScale: 1,
-    mouseWheel: false,
-    hideAddressBar: false,
-    previewLinks: false,
-    transition: 'linear'
+  // Transport return
+  $carousel.append(new TransportSlideView({
+    template: require('templates/transport-return.hbs'),
+    index: 4,
+    background: '#9B9B9B',
+    translateKey: 'transport-return',
+    routeOptions: require('js/transport-return-routes')
+  }).render().el);
+
+  var flky = new Flickity('.carousel', {
+    cellAlign: 'center',
+    percentPosition: false,
+    dragThreshold: 10,
+    initialIndex: 0,
+    prevNextButtons: false,
+    pageDots: true,
+    setGallerySize: false,
+    contain: true
   });
 
-  var slides = [];
-  $('.reveal section').each(function (i, el) {
-    slides.push($(el).data('title'));
-  });
-
-  var navigation = new NavigationView({
-    slides: slides
-  });
-  $('.js-navigation').append(navigation.render().el);
+  console.log(flky);
 }
 
 });
@@ -246,13 +232,12 @@ function init() {
 // Default and no more js view
 var Backbone = require('backbone');
 var $ = require('jquery');
-var Reveal = require('reveal');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
 
 module.exports = Backbone.View.extend({
 
-  tagName: 'section',
-  className: 'slide Slide',
+  tagName: 'div',
+  className: 'carousel-cell Slide',
 
   initialize: function initialize(opts) {
     this.options = opts;
@@ -270,16 +255,18 @@ module.exports = Backbone.View.extend({
       'data-title': Handlebars.helpers.t(this.options.translateKey + '.title')
     });
 
+    this.$el.css('background-color', this.options.background);
+
     this._initViews();
 
     return this;
   },
 
   _initBinds: function _initBinds() {
-    Reveal.addEventListener('ready', function (event) {
-      this._checkCurrentSlide(event);
-      Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
-    }.bind(this));
+    // Reveal.addEventListener('ready', function (event) {
+    //   this._checkCurrentSlide(event);
+    //   Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
+    // }.bind(this));
   },
 
   _openTip: function _openTip() {
@@ -354,67 +341,6 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
     default:
       return options.inverse(this);
   }
-});
-
-});
-
-require.register("js/navigation-view.js", function(exports, require, module) {
-'use strict';
-
-var Backbone = require('backbone');
-var $ = require('jquery');
-var template = require('../templates/navigation.hbs');
-var Reveal = require('reveal');
-
-module.exports = Backbone.View.extend({
-
-  tagName: 'ul',
-  className: 'Navigation-list',
-
-  events: {
-    'click .js-slideButton': '_onButtonClick',
-    'mouseover .js-slideButton': '_onMouseOver',
-    'mouseout .js-slideButton': '_onMouseOut'
-  },
-
-  initialize: function initialize(opts) {
-    this.options = opts;
-    this._initBinds();
-  },
-
-  render: function render() {
-    var selectedSlide = Reveal.getIndices().h;
-    this.$el.html(template({
-      slides: this.options.slides,
-      selectedSlide: Reveal.getIndices().h
-    }));
-
-    this.$el.toggleClass('is-dark', selectedSlide === 6);
-
-    return this;
-  },
-
-  _initBinds: function _initBinds() {
-    Reveal.addEventListener('slidechanged', this.render.bind(this));
-  },
-
-  _onMouseOut: function _onMouseOut(ev) {
-    var $el = $(ev.target);
-    $el.protipHide();
-  },
-
-  _onMouseOver: function _onMouseOver(ev) {
-    var $el = $(ev.target);
-    $el.protipShow();
-  },
-
-  _onButtonClick: function _onButtonClick(ev) {
-    var $el = $(ev.target);
-    var slideNumber = $el.data('slide');
-    $el.protipHide();
-    Reveal.slide(slideNumber);
-  }
-
 });
 
 });
@@ -566,6 +492,59 @@ module.exports = [{
 
 });
 
+require.register("js/transport-return-routes.js", function(exports, require, module) {
+'use strict';
+
+module.exports = [{
+  route: 'A',
+  time: '-',
+  place: 'Los Arcos de Fuentepizarro',
+  city: '',
+  link: '',
+  slideURL: ''
+}, {
+  route: 'A',
+  time: '+30 min',
+  place: 'Hotel las Rozas',
+  city: 'Las Rozas',
+  link: '',
+  slideURL: ''
+}, {
+  route: 'A',
+  time: '+20 min',
+  place: 'Principe Pío',
+  city: 'Madrid',
+  link: ''
+}, {
+  route: 'A',
+  time: '+20 min',
+  place: 'Av. de los Poblados',
+  city: 'Madrid',
+  link: ''
+}, {
+  route: 'B',
+  time: '-',
+  place: 'Los Arcos de Fuentepizarro',
+  city: '',
+  link: '',
+  slideURL: ''
+}, {
+  route: 'B',
+  time: '+15 min',
+  place: 'El Escorial',
+  city: '',
+  link: ''
+}, {
+  route: 'B',
+  time: '+30 min',
+  place: 'Galapagar',
+  city: '',
+  link: '',
+  slideURL: ''
+}];
+
+});
+
 require.register("js/transport-slide-view.js", function(exports, require, module) {
 'use strict';
 
@@ -617,7 +596,7 @@ module.exports = {
     "key": "transport-return",
     "title": "Transport",
     "sub-title": "Return",
-    "desc": ""
+    "desc": "The party will finish between 5am and 6am. There will be buses at 1am, 3am and at the end of the party. As in the start, you will have two bus routes whom they will cover several places, look for your closer point:"
   },
   "accomodation": {
     "key": "accomodation",
@@ -667,7 +646,7 @@ module.exports = {
     "key": "transporte-vuelta",
     "title": "Transporte",
     "sub-title": "vuelta",
-    "desc": ""
+    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00, a las 3:00 y al final de la fiesta.  Como en la ida, dispondréis de 2 rutas que pasan por varios sitios, busca tu punto de llegada más cercano:"
   },
   "accomodation": {
     "key": "hoteles",
@@ -820,50 +799,57 @@ if (typeof define === 'function' && define.amd) {
 }
 });
 
-;require.register("templates/navigation.hbs", function(exports, require, module) {
-var __templateData = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
-
-  return "  <li class=\"Navigation-item\">\n    <button data-slide=\""
-    + alias3(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
-    + "\" data-pt-size=\"small\" data-pt-scheme=\"black\" data-pt-skin=\"square\" data-pt-offset-top=\"-5\" data-pt-gravity=\"false\" data-pt-position=\"top\" data-pt-title=\""
-    + alias3(alias4(depth0, depth0))
-    + "\" class=\"\n      protip\n      Navigation-button\n"
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(data && data.index),"==",(depths[1] != null ? depths[1].selectedSlide : depths[1]),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "      js-slideButton\n    \">"
-    + alias3(alias4(depth0, depth0))
-    + "</button>\n  </li>\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "        is-selected\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1;
-
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.slides : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"useData":true,"useDepths":true});
-if (typeof define === 'function' && define.amd) {
-  define([], function() {
-    return __templateData;
-  });
-} else if (typeof module === 'object' && module && module.exports) {
-  module.exports = __templateData;
-} else {
-  __templateData;
-}
-});
-
 ;require.register("templates/route-options.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.route : depth0),"==",(depths[1] != null ? depths[1].selectedRoute : depths[1]),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "      <li class=\"RouteList-item\">\n        "
-    + alias4(((helper = (helper = helpers.place || (depth0 != null ? depth0.place : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"place","hash":{},"data":data}) : helper)))
-    + "\n        "
+  return "      <li class=\"RouteList-item "
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.selected : depth0),"==",true,{"name":"ifCond","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\">\n        <span class=\"RouteList-itemTime\">"
     + alias4(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"time","hash":{},"data":data}) : helper)))
-    + "\n      </li>\n";
+    + "</span>\n\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n          class=\"RouteList-itemPoint\">\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n        "
+    + alias4(((helper = (helper = helpers.place || (depth0 != null ? depth0.place : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"place","hash":{},"data":data}) : helper)))
+    + "\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "      </li>\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return " is-selected ";
+},"5":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "          <a href=\""
+    + container.escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"link","hash":{},"data":data}) : helper)))
+    + "\" target=\"_blank\"\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "          <span\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "          </a>\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "          </span>\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "          <a href=\""
+    + container.escapeExpression(((helper = (helper = helpers.slideURL || (depth0 != null ? depth0.slideURL : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"slideURL","hash":{},"data":data}) : helper)))
+    + "\" target=\"_blank\" class=\"RouteList-itemName Text Text-item Color Color--link\">\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return "          <p class=\"RouteList-itemName Text Text-item\">\n";
+},"17":function(container,depth0,helpers,partials,data) {
+    return "          </p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -884,7 +870,7 @@ if (typeof define === 'function' && define.amd) {
 
 ;require.register("templates/selection-route-point.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<select class=\"js-pointSelect\"></select>\n<ul class=\"RouteList js-routeList\"></ul>";
+    return "<select class=\"RouteForm-select js-pointSelect\"></select>\n<ul class=\"RouteList js-routeList\"></ul>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
@@ -901,7 +887,7 @@ if (typeof define === 'function' && define.amd) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "<div class=\"Slide-content\">\n  <i class=\"Color fa fa-bus fa-lg\"></i>\n  <h2 class=\"Color Text-title u-tSpace--xl\">\n    "
+  return "<div class=\"Slide-content\">\n  <i class=\"Slide-icon Color fa fa-bus fa-lg\"></i>\n  <h2 class=\"Color Text-title\">\n    "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.title",{"name":"t","hash":{},"data":data}))
     + "\n    <super class=\"Text-subTitle\">\n      ("
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.sub-title",{"name":"t","hash":{},"data":data}))
@@ -928,15 +914,13 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.key",{"name":"t","hash":{},"data":data}))
     + "\" data-title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.title",{"name":"t","hash":{},"data":data}))
-    + "\" data-background=\"#9B9B9B\">\n  <div class=\"Slide-content\">\n    <i class=\"Color fa fa-bus fa-lg\"></i>\n    <h2 class=\"Color Text-title u-tSpace--xl\">\n      "
+    + "\" data-background=\"#9B9B9B\">\n  <div class=\"Slide-content\">\n    <i class=\"Slide-icon Color fa fa-bus fa-lg\"></i>\n    <h2 class=\"Color Text-title\">\n      "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.title",{"name":"t","hash":{},"data":data}))
     + "\n      <super class=\"Text-subTitle\">\n        ("
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.sub-title",{"name":"t","hash":{},"data":data}))
     + ")\n      </super>\n    </h2>\n    <p class=\"Slide-contentParagraph Text Color Text-paragraph u-tSpace--xl\">"
     + ((stack1 = (helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.desc",{"name":"t","hash":{},"data":data})) != null ? stack1 : "")
-    + "</p>\n    <form>\n      <input type=\"text\" value=\"\" placeholder=\""
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-return.choose",{"name":"t","hash":{},"data":data}))
-    + "\" />\n    </form>\n  </div>\n</section>";
+    + "</p>\n  </div>\n</section>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
