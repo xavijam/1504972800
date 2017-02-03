@@ -69,14 +69,13 @@ body {
     background: url(data:image/png;base64,{192_dpi_encoded_image}); } }
 
 
-@charset "UTF-8";
 .ItemsForm {
   margin-top: 30px;
   text-align: center; }
 
 .List {
   display: flex;
-  margin-top: 30px; }
+  margin-top: 20px; }
 
 .List--horizontal {
   flex-direction: row;
@@ -97,14 +96,19 @@ body {
   text-align: center; }
 
 .HotelList-item > *:after {
-  content: '·';
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
   margin: 0 10px;
-  font-size: 20px;
-  font-weight: bold;
+  width: 4px;
+  height: 4px;
+  border-radius: 4px;
+  background: white;
   text-decoration: normal; }
 
 .HotelList-item > *:last-child:after {
-  content: ''; }
+  content: '';
+  display: none; }
 
 .RouteList-item {
   position: relative;
