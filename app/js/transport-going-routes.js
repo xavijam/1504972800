@@ -1,61 +1,61 @@
 module.exports = [
   {
-    route: 'A',
-    time: '16:30',
-    place: 'Av. de los Poblados',
-    city: 'Madrid',
+    category: 'A',
+    data: '16:30',
+    name: 'Av. de los Poblados',
+    desc: 'Madrid',
     link: ''
   },
   {
-    route: 'A',
-    time: '17:00',
-    place: 'Principe Pío',
-    city: 'Madrid',
+    category: 'A',
+    data: '17:00',
+    name: 'Principe Pío',
+    desc: 'Madrid',
     link: ''
   },
   {
-    route: 'A',
-    time: '17:35',
-    place: 'Hotel las Rozas',
-    city: 'Las Rozas',
+    category: 'A',
+    data: '17:35',
+    name: 'Hotel las Rozas',
+    desc: 'Las Rozas',
     link: '',
     slideURL: '' 
   },
   {
-    route: 'A',
-    time: '17:50',
-    place: 'Parroquia Santísimo Corpus Christi',
-    city: 'Las Rozas',
+    category: 'A',
+    data: '17:50',
+    name: 'Parroquia Santísimo Corpus Christi',
+    desc: 'Las Rozas',
     link: '',
     slideURL: '' 
   },
   {
-    route: 'B',
-    time: '16:30',
-    place: 'Los Arcos de Fuentepizarro',
-    city: 'El Escorial',
+    category: 'B',
+    data: '16:30',
+    name: 'Los Arcos de Fuentepizarro',
+    desc: 'El Escorial',
     link: '' 
   },
   {
-    route: 'B',
-    time: '16:45',
-    place: 'El Escorial',
-    city: '',
+    category: 'B',
+    data: '16:45',
+    name: 'El Escorial',
+    desc: '',
     link: ''
   },
   {
-    route: 'B',
-    time: '17:25',
-    place: 'Galapagar',
-    city: '',
+    category: 'B',
+    data: '17:25',
+    name: 'Galapagar',
+    desc: '',
     link: '',
     slideURL: '' 
   },
   {
-    route: 'B',
-    time: '17:50',
-    place: 'Parroquia Santísimo Corpus Christi',
-    city: 'Las Rozas',
+    category: 'B',
+    data: '17:50',
+    name: 'Parroquia Santísimo Corpus Christi',
+    desc: 'Las Rozas',
     link: '',
     slideURL: '' 
   }

@@ -1,4 +1,7 @@
+@import 'media-queries';
+
 // Navigation styles, taken from flickity
+
 .flickity-page-dots {
   position: fixed;
   bottom: 10px;
@@ -40,4 +43,22 @@
   &:hover {
     cursor: normal;
   }
+}
+
+@mixin mobile-content() {
+  .flickity-page-dots {
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(black, 0.1);
+  }
+}
+
+@include screen(0, 450px) {
+  @include mobile-content();
+}
+@include screen-height(320px, 480px) {
+  @include mobile-content();
 }

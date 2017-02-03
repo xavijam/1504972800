@@ -1,54 +1,54 @@
 module.exports = [
   {
-    route: 'A',
-    time: '-',
-    place: 'Los Arcos de Fuentepizarro',
-    city: '',
+    category: 'A',
+    data: '-',
+    name: 'Los Arcos de Fuentepizarro',
+    desc: '',
     link: '',
     slideURL: '' 
   },
   {
-    route: 'A',
-    time: '+30 min',
-    place: 'Hotel las Rozas',
-    city: 'Las Rozas',
+    category: 'A',
+    data: '+30 min',
+    name: 'Hotel las Rozas',
+    desc: 'Las Rozas',
     link: '',
     slideURL: '' 
   },
   {
-    route: 'A',
-    time: '+20 min',
-    place: 'Principe Pío',
-    city: 'Madrid',
+    category: 'A',
+    data: '+20 min',
+    name: 'Principe Pío',
+    desc: 'Madrid',
     link: ''
   },
   {
-    route: 'A',
-    time: '+20 min',
-    place: 'Av. de los Poblados',
-    city: 'Madrid',
+    category: 'A',
+    data: '+20 min',
+    name: 'Av. de los Poblados',
+    desc: 'Madrid',
     link: ''
   },
   {
-    route: 'B',
-    time: '-',
-    place: 'Los Arcos de Fuentepizarro',
-    city: '',
+    category: 'B',
+    data: '-',
+    name: 'Los Arcos de Fuentepizarro',
+    desc: '',
     link: '',
     slideURL: '' 
   },
   {
-    route: 'B',
-    time: '+15 min',
-    place: 'El Escorial',
-    city: '',
+    category: 'B',
+    data: '+15 min',
+    name: 'El Escorial',
+    desc: '',
     link: ''
   },
   {
-    route: 'B',
-    time: '+30 min',
-    place: 'Galapagar',
-    city: '',
+    category: 'B',
+    data: '+30 min',
+    name: 'Galapagar',
+    desc: '',
     link: '',
     slideURL: '' 
   }

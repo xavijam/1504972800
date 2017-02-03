@@ -4,7 +4,7 @@ var Flickity = require('flickity');
 global.jQuery = $;
 require('protip');
 var DefaultSlideView = require('js/default-slide-view');
-var TransportSlideView = require('js/transport-slide-view');
+var SelectionSlideView = require('js/selection-slide-view');
 require('js/handlebars-helpers');
 
 
@@ -28,12 +28,12 @@ function init () {
 
   // Transport going
   $carousel.append(
-    new TransportSlideView({
+    new SelectionSlideView({
       template: require('templates/transport-going.hbs'),
       index: 1,
       background: '#E2AB49',
       translateKey: 'transport-going',
-      routeOptions: require('js/transport-going-routes')
+      selectionItems: require('js/transport-going-routes')
     }).render().el
   );
 
@@ -61,12 +61,25 @@ function init () {
 
   // Transport return
   $carousel.append(
-    new TransportSlideView({
+    new SelectionSlideView({
       template: require('templates/transport-return.hbs'),
       index: 4,
       background: '#9B9B9B',
       translateKey: 'transport-return',
-      routeOptions: require('js/transport-return-routes')
+      selectionItems: require('js/transport-return-routes')
+    })
+    .render().el
+  );
+
+  // Accomodation
+  $carousel.append(
+    new SelectionSlideView({
+      template: require('templates/accomodation.hbs'),
+      // selectionItemTemplate: require(),
+      index: 5,
+      background: '#4A4A4A',
+      translateKey: 'accomodation',
+      selectionItems: require('js/accomodation-options')
     })
     .render().el
   );
@@ -79,7 +92,8 @@ function init () {
     prevNextButtons: false,
     pageDots: true,
     setGallerySize: false,
-    contain: true
+    contain: true,
+    wrapAround: true
   });
 
   console.log(flky);
