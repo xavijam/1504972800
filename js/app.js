@@ -153,92 +153,146 @@ require.register("initialize.js", function(exports, require, module) {
 
 var $ = require('jquery');
 var Backbone = require('backbone');
+window.jQuery = $;
 var Flickity = require('flickity');
-global.jQuery = $;
-require('protip');
 var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
 require('js/handlebars-helpers');
+var isMobile = require('ismobilejs');
+var DEFAULT_TITLE = 'Javi ❥ Lau';
 
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  $.protip();
+  var initialization = true;
 
-  // Render templates
-  var $carousel = $('.js-carousel');
+  var Carousel = new Flickity('.js-carousel', {
+    cellAlign: 'center',
+    percentPosition: false,
+    dragThreshold: 10,
+    prevNextButtons: !isMobile.any,
+    pageDots: true,
+    setGallerySize: false,
+    contain: true,
+    wrapAround: true,
+    select: function select() {
+      console.log("paco2");
+    }
+  });
+
+  // Add slides
+  var items = new Backbone.Collection();
 
   // Home
-  $carousel.append(new DefaultSlideView({
+  Carousel.append(new DefaultSlideView({
+    Carousel: Carousel,
     template: require('templates/home.hbs'),
     index: 0,
     background: '#97BDBB',
     translateKey: 'home'
   }).render().el);
+  items.add({
+    key: Handlebars.helpers.t('home.key')
+  });
 
   // Transport going
-  $carousel.append(new SelectionSlideView({
+  Carousel.append(new SelectionSlideView({
+    Carousel: Carousel,
     template: require('templates/transport-going.hbs'),
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
-    index: 1,
+    index: 0,
     background: '#E2AB49',
     translateKey: 'transport-going',
     selectionItems: require('js/transport-going-routes')
   }).render().el);
+  items.add({
+    key: Handlebars.helpers.t('transport-going.key')
+  });
 
   // Church
-  $carousel.append(new DefaultSlideView({
+  Carousel.append(new DefaultSlideView({
+    Carousel: Carousel,
     template: require('templates/church.hbs'),
-    index: 2,
+    index: 1,
     background: '#6C818E',
     translateKey: 'church'
   }).render().el);
+  items.add({
+    key: Handlebars.helpers.t('church.key')
+  });
 
   // Banquet
-  $carousel.append(new DefaultSlideView({
+  Carousel.append(new DefaultSlideView({
+    Carousel: Carousel,
     template: require('templates/banquet.hbs'),
-    index: 3,
+    index: 2,
     background: '#FA8072',
     translateKey: 'banquet'
   }).render().el);
+  items.add({
+    key: Handlebars.helpers.t('banquet.key')
+  });
 
   // Transport return
-  $carousel.append(new SelectionSlideView({
+  Carousel.append(new SelectionSlideView({
+    Carousel: Carousel,
     template: require('templates/transport-return.hbs'),
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
-    index: 4,
+    index: 3,
     background: '#9B9B9B',
     translateKey: 'transport-return',
     selectionItems: require('js/transport-return-routes')
   }).render().el);
+  items.add({
+    key: Handlebars.helpers.t('transport-return.key')
+  });
 
   // Accomodation
-  $carousel.append(new SelectionSlideView({
+  Carousel.append(new SelectionSlideView({
+    Carousel: Carousel,
     template: require('templates/accomodation.hbs'),
     selectionItemTemplate: require('./templates/accomodation-options.hbs'),
     selectionItemListClassname: 'List--vertical',
-    index: 5,
+    index: 4,
     background: '#4A4A4A',
     translateKey: 'accomodation',
     selectionItems: require('js/accomodation-options')
   }).render().el);
-
-  var Carousel = new Flickity('.carousel', {
-    cellAlign: 'center',
-    percentPosition: false,
-    dragThreshold: 10,
-    initialIndex: 0,
-    prevNextButtons: true,
-    pageDots: true,
-    setGallerySize: false,
-    contain: true,
-    wrapAround: true
+  items.add({
+    key: Handlebars.helpers.t('accomodation.key')
   });
 
-  Carousel.on('', function () {
-    console.log('moved?');
+  // Initiate the router
+  var AppRouter = Backbone.Router.extend({
+    routes: {
+      "*actions": "defaultRoute"
+    }
+  });
+  var router = new AppRouter();
+
+  router.on('route:defaultRoute', function (action) {
+    var item = items.findWhere({ key: action });
+    var itemIndex = items.indexOf(item);
+
+    if (itemIndex >= 0) {
+      if (Carousel) {
+        Carousel.select(itemIndex, false, initialization);
+      }
+    }
+
+    initialization = false;
+  });
+
+  Backbone.history.start();
+
+  Carousel.$element.on('select.flickity', function () {
+    var currentElement = Carousel.selectedCell.element;
+    var key = $(currentElement).data('key');
+    router.navigate('#/' + key, { trigger: false });
+
+    document.title = DEFAULT_TITLE + ' · ' + $(currentElement).data('title');
   });
 }
 
@@ -284,7 +338,6 @@ require.register("js/default-slide-view.js", function(exports, require, module) 
 // Default and no more js view
 var Backbone = require('backbone');
 var $ = require('jquery');
-var DEFAULT_TITLE = 'Javi ❥ Lau';
 
 module.exports = Backbone.View.extend({
 
@@ -293,6 +346,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function initialize(opts) {
     this.options = opts;
+    this.Carousel = opts.Carousel;
     this._initBinds();
   },
 
@@ -304,7 +358,9 @@ module.exports = Backbone.View.extend({
     this.$el.attr({
       'id': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-background': this.options.background,
-      'data-title': Handlebars.helpers.t(this.options.translateKey + '.title')
+      'data-title': Handlebars.helpers.t(this.options.translateKey + '.title'),
+      'data-key': this.options.translateKey,
+      'data-index': this.options.index
     });
 
     this.$el.css('background-color', this.options.background);
@@ -315,26 +371,17 @@ module.exports = Backbone.View.extend({
   },
 
   _initBinds: function _initBinds() {
-    // Reveal.addEventListener('ready', function (event) {
-    //   this._checkCurrentSlide(event);
-    //   Reveal.addEventListener('slidechanged', this._checkCurrentSlide.bind(this));
-    // }.bind(this));
+    this.Carousel.$element.on('select.flickity', this._checkCurrentSlide.bind(this));
   },
 
-  _openTip: function _openTip() {
-    this.$('.js-comments').protipShow();
-  },
+  _startAnimation: function _startAnimation() {},
 
-  _hideTip: function _hideTip() {
-    this.$('.js-comments').protipHide();
-  },
+  _checkCurrentSlide: function _checkCurrentSlide() {
+    var currentElement = this.Carousel.selectedCell.element;
+    var elementIndex = $(currentElement).data('index');
 
-  _checkCurrentSlide: function _checkCurrentSlide(event) {
-    if (event.indexh === this.options.index) {
-      setTimeout(this._openTip.bind(this), 2000);
-      document.title = DEFAULT_TITLE + ' · ' + $(event.currentSlide).data('title');
-    } else {
-      this._hideTip();
+    if (elementIndex === this.options.index) {
+      setTimeout(this._startAnimation.bind(this), 2000);
     }
   },
 
