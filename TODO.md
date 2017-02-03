@@ -10,7 +10,7 @@ Pending things
 - [x] Add bodajaviylau.es to updown.io.
 - [x] Style horizontal arrows.
 - [x] Chosen for custom selects? :S
-- [ ] Finish accomodation slide!.
+- [x] Finish accomodation slide!.
 - [ ] Different animations for each slide.
 - [ ] Notes in each slide (links, notes, etc...).
 
