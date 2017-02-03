@@ -497,6 +497,7 @@ var template = require('../templates/selection-form.hbs');
 var FormOptionsCollection = require('./form-options-collection');
 var _ = require('underscore');
 var $ = require('jquery');
+require('select2');
 
 module.exports = Backbone.View.extend({
 
@@ -528,7 +529,8 @@ module.exports = Backbone.View.extend({
       this.$('.js-list').addClass(this.selectionItemListClassname);
     }
 
-    $select[0].selectedIndex = -1;
+    $select.select2();
+
     return this;
   },
 
@@ -537,7 +539,6 @@ module.exports = Backbone.View.extend({
   },
 
   _renderItems: function _renderItems() {
-    console.log(this.itemTemplate);
     this.$('.js-list').html(this.itemTemplate({
       selectedCategory: this.collection.getSelectedCategory(),
       items: this.collection.toJSON()
@@ -585,12 +586,6 @@ require.register("js/transport-going-routes.js", function(exports, require, modu
 
 module.exports = [{
   category: 'A',
-  data: '16:30',
-  name: 'Av. de los Poblados',
-  desc: 'Madrid',
-  link: ''
-}, {
-  category: 'A',
   data: '17:00',
   name: 'Principe Pío',
   desc: 'Madrid',
@@ -609,12 +604,6 @@ module.exports = [{
   desc: 'Las Rozas',
   link: '',
   slideURL: ''
-}, {
-  category: 'B',
-  data: '16:30',
-  name: 'Los Arcos de Fuentepizarro',
-  desc: 'El Escorial',
-  link: ''
 }, {
   category: 'B',
   data: '16:45',
