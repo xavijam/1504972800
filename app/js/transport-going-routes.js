@@ -1,13 +1,6 @@
 module.exports = [
   {
     category: 'A',
-    data: '16:30',
-    name: 'Av. de los Poblados',
-    desc: 'Madrid',
-    link: ''
-  },
-  {
-    category: 'A',
     data: '17:00',
     name: 'Principe Pío',
     desc: 'Madrid',
@@ -28,13 +21,6 @@ module.exports = [
     desc: 'Las Rozas',
     link: '',
     slideURL: '' 
-  },
-  {
-    category: 'B',
-    data: '16:30',
-    name: 'Los Arcos de Fuentepizarro',
-    desc: 'El Escorial',
-    link: '' 
   },
   {
     category: 'B',

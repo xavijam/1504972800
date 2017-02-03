@@ -7,6 +7,7 @@ var template = require('../templates/selection-form.hbs');
 var FormOptionsCollection = require('./form-options-collection');
 var _ = require('underscore');
 var $ = require('jquery');
+require('select2');
 
 module.exports = Backbone.View.extend({
 
@@ -40,7 +41,9 @@ module.exports = Backbone.View.extend({
       this.$('.js-list').addClass(this.selectionItemListClassname);
     }
 
-    $select[0].selectedIndex = -1;
+    $select.select2();
+
+
     return this;
   },
 
@@ -49,7 +52,6 @@ module.exports = Backbone.View.extend({
   },
 
   _renderItems: function () {
-    console.log(this.itemTemplate);
     this.$('.js-list').html(
       this.itemTemplate({
         selectedCategory: this.collection.getSelectedCategory(),

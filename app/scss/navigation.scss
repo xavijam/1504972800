@@ -2,20 +2,6 @@
 
 // Navigation styles, taken from flickity
 
-.flickity-prev-next-button {
-  position: fixed;
-  bottom: 50%;
-  transform: translateY(-50%);
-  background: red;
-  border: none;
-  z-index: 10;
-}
-.flickity-prev-next-button.previous {
-  left: 20px;
-}
-.flickity-prev-next-button.next {
-  right: 20px;
-}
 .flickity-page-dots {
   position: fixed;
   display: flex;
@@ -26,13 +12,13 @@
 }
 .dot {
   position: relative;
-  width: 9px;
-  height: 9px;
+  width: 11px;
+  height: 11px;
   margin: 0 3px;
   padding: 0;
-  border: 1px solid rgba(#FFF, 0.60);
+  border: none;
   border-radius: 8px;
-  background: none;
+  background: rgba(#000, 0.1);
   text-indent: -9999px;
   outline: none;
   &:hover {
@@ -42,8 +28,8 @@
   }
 }
 .dot.is-selected {
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   margin-top: -2px;
   background: white;
   border-color: white;
