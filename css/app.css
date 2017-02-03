@@ -69,66 +69,7 @@ body {
     background: url(data:image/png;base64,{192_dpi_encoded_image}); } }
 
 
-.flickity-page-dots {
-  position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10; }
-
-.flickity-page-dots {
-  position: fixed;
-  display: flex;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10; }
-
-.dot {
-  position: relative;
-  width: 9px;
-  height: 9px;
-  margin: 0 3px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: 8px;
-  background: none;
-  text-indent: -9999px;
-  outline: none; }
-  .dot:hover {
-    background: white;
-    border-color: white;
-    cursor: pointer; }
-
-.dot.is-selected {
-  width: 13px;
-  height: 13px;
-  margin-top: -2px;
-  background: white;
-  border-color: white; }
-  .dot.is-selected:hover {
-    cursor: normal; }
-
-@media only screen and (min-width: 0) and (max-width: 450px) {
-  .flickity-page-dots {
-    align-items: center;
-    justify-content: center;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0;
-    background: rgba(0, 0, 0, 0.1); } }
-
-@media only screen and (min-height: 320px) and (max-height: 480px) {
-  .flickity-page-dots {
-    align-items: center;
-    justify-content: center;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0;
-    background: rgba(0, 0, 0, 0.1); } }
-
-
-.RouteForm-select {
+.ItemsForm-select {
   width: auto;
   padding: 5px 0;
   line-height: 20px;
@@ -140,16 +81,24 @@ body {
   outline: none;
   text-overflow: ellipsis; }
 
-.RouteList-select:focus {
+.ItemsForm-select:focus {
   border-style: solid; }
 
-.RouteList {
-  display: flex;
+.List {
+  display: flex; }
+
+.List--horizontal {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  max-width: 620px;
-  margin-top: 20px; }
+  max-width: 620px; }
+
+.List--vertical {
+  flex-direction: column; }
+
+.HotelList-item {
+  display: flex;
+  flex-direction: row; }
 
 .RouteList-item {
   position: relative;
@@ -255,6 +204,72 @@ body {
     font-size: 11px; }
   .RouteList-item.is-selected .RouteList-itemName {
     font-size: 12px; } }
+
+
+.flickity-prev-next-button {
+  position: fixed;
+  bottom: 50%;
+  transform: translateY(-50%);
+  background: red;
+  border: none;
+  z-index: 10; }
+
+.flickity-prev-next-button.previous {
+  left: 20px; }
+
+.flickity-prev-next-button.next {
+  right: 20px; }
+
+.flickity-page-dots {
+  position: fixed;
+  display: flex;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; }
+
+.dot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  margin: 0 3px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  background: none;
+  text-indent: -9999px;
+  outline: none; }
+  .dot:hover {
+    background: white;
+    border-color: white;
+    cursor: pointer; }
+
+.dot.is-selected {
+  width: 13px;
+  height: 13px;
+  margin-top: -2px;
+  background: white;
+  border-color: white; }
+  .dot.is-selected:hover {
+    cursor: normal; }
+
+@media only screen and (min-width: 0) and (max-width: 450px) {
+  .flickity-page-dots {
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(0, 0, 0, 0.1); } }
+
+@media only screen and (min-height: 320px) and (max-height: 480px) {
+  .flickity-page-dots {
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(0, 0, 0, 0.1); } }
 
 
 .flickity-viewport,

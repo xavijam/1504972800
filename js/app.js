@@ -179,6 +179,8 @@ function init() {
   // Transport going
   $carousel.append(new SelectionSlideView({
     template: require('templates/transport-going.hbs'),
+    selectionItemTemplate: require('./templates/route-options.hbs'),
+    selectionItemListClassname: 'List--horizontal',
     index: 1,
     background: '#E2AB49',
     translateKey: 'transport-going',
@@ -204,6 +206,8 @@ function init() {
   // Transport return
   $carousel.append(new SelectionSlideView({
     template: require('templates/transport-return.hbs'),
+    selectionItemTemplate: require('./templates/route-options.hbs'),
+    selectionItemListClassname: 'List--horizontal',
     index: 4,
     background: '#9B9B9B',
     translateKey: 'transport-return',
@@ -213,26 +217,29 @@ function init() {
   // Accomodation
   $carousel.append(new SelectionSlideView({
     template: require('templates/accomodation.hbs'),
-    // selectionItemTemplate: require(),
+    selectionItemTemplate: require('./templates/accomodation-options.hbs'),
+    selectionItemListClassname: 'List--vertical',
     index: 5,
     background: '#4A4A4A',
     translateKey: 'accomodation',
     selectionItems: require('js/accomodation-options')
   }).render().el);
 
-  var flky = new Flickity('.carousel', {
+  var Carousel = new Flickity('.carousel', {
     cellAlign: 'center',
     percentPosition: false,
     dragThreshold: 10,
     initialIndex: 0,
-    prevNextButtons: false,
+    prevNextButtons: true,
     pageDots: true,
     setGallerySize: false,
     contain: true,
     wrapAround: true
   });
 
-  console.log(flky);
+  Carousel.on('', function () {
+    console.log('moved?');
+  });
 }
 
 });
@@ -422,6 +429,13 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
   }
 });
 
+Handlebars.registerHelper('times', function (n, block) {
+  var accum = '';
+  for (var i = 0; i < n; ++i) {
+    accum += block.fn(i);
+  }return accum;
+});
+
 });
 
 require.register("js/selection-form-view.js", function(exports, require, module) {
@@ -449,6 +463,7 @@ module.exports = Backbone.View.extend({
   initialize: function initialize(options) {
     this.collection = new FormOptionsCollection(options.selectionItems);
     this.itemTemplate = options.selectionItemTemplate;
+    this.selectionItemListClassname = options.selectionItemListClassname;
     this._initBinds();
   },
 
@@ -461,6 +476,10 @@ module.exports = Backbone.View.extend({
       var $option = $('<option>').val(item.get('name')).text(item.get('name') + desc);
       $select.append($option);
     });
+
+    if (this.selectionItemListClassname) {
+      this.$('.js-list').addClass(this.selectionItemListClassname);
+    }
 
     $select[0].selectedIndex = -1;
     return this;
@@ -496,14 +515,14 @@ require.register("js/selection-slide-view.js", function(exports, require, module
 
 var DefaultSlideView = require('./default-slide-view');
 var SelectionFormView = require('./selection-form-view');
-var DEFAULT_ITEM_TEMPLATE = require('../templates/route-options.hbs');
 
 module.exports = DefaultSlideView.extend({
 
   _initViews: function _initViews() {
     if (this.options.selectionItems) {
       var view = new SelectionFormView({
-        selectionItemTemplate: this.options.selectionItemTemplate || DEFAULT_ITEM_TEMPLATE,
+        selectionItemTemplate: this.options.selectionItemTemplate,
+        selectionItemListClassname: this.options.selectionItemListClassname,
         selectionItems: this.options.selectionItems
       });
       this.$('.Slide-content').append(view.render().el);
@@ -661,7 +680,7 @@ module.exports = {
   "accomodation": {
     "key": "accomodation",
     "title": "Accomodation",
-    "desc": ""
+    "desc": "If you want to sleep something after the party, we recomend you some places in Escorial and in Las Rozas, our buses will stop super close to them. Are you interested in?:"
   },
   "honeymoon": {
     "key": "honeymoon",
@@ -712,7 +731,7 @@ module.exports = {
     "key": "hoteles",
     "title": "Hoteles",
     "sub-title": "vuelta",
-    "desc": ""
+    "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:"
   },
   "honeymoon": {
     "key": "viaje",
@@ -727,11 +746,54 @@ module.exports = {
 };
 });
 
-require.register("templates/accomodation.hbs", function(exports, require, module) {
+require.register("templates/accomodation-options.hbs", function(exports, require, module) {
+var __templateData = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1;
+
+  return ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.category : depth0),"==",(depths[1] != null ? depths[1].selectedCategory : depths[1]),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "    <li class=\"HotelList-item\">\n      <p class=\"Color Text Text--paragraph\">\n"
+    + ((stack1 = (helpers.times || (depth0 && depth0.times) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.stars : stack1),{"name":"times","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "      </p>\n      <a class=\"Color Color--link\" href=\""
+    + alias4(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"link","hash":{},"data":data}) : helper)))
+    + "\">"
+    + alias4(((helper = (helper = helpers.desc || (depth0 != null ? depth0.desc : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"desc","hash":{},"data":data}) : helper)))
+    + "</a>\n      <p class=\"Color Text Text--paragraph\">~"
+    + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.price : stack1), depth0))
+    + "€</p>\n    </li>\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "          <i class=\"fa fa-star-o\"></i>\n";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1;
+
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.items : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"useData":true,"useDepths":true});
+if (typeof define === 'function' && define.amd) {
+  define([], function() {
+    return __templateData;
+  });
+} else if (typeof module === 'object' && module && module.exports) {
+  module.exports = __templateData;
+} else {
+  __templateData;
+}
+});
+
+;require.register("templates/accomodation.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<section class=\"slide\" id=\""
-    + container.escapeExpression((helpers.t || (depth0 && depth0.t) || helpers.helperMissing).call(depth0 != null ? depth0 : {},"accomodation.key",{"name":"t","hash":{},"data":data}))
-    + "\" data-background=\"#4A4A4A\">\n  <div class=\"content\">\n    <div class=\"content-item\">Slide 6</div>\n    <div class=\"content-item\">paco</div>\n  </div>\n</section>";
+    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
+
+  return "<section class=\"slide Slide\" id=\""
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"accomodation.key",{"name":"t","hash":{},"data":data}))
+    + "\" data-title=\""
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"accomodation.title",{"name":"t","hash":{},"data":data}))
+    + "\">\n  <div class=\"Slide-content\">\n    <img style=\"width:50px; background-size: 50px 50px;\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABkCAMAAAA8GKeqAAAB+1BMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////QkokAAAAAqHRSTlMAAQIEBQYHCAkKCwwNDg8QERIUFRYXGBkaHB4fICEiIyUmJygpKzI2OzxAQUVGR0pMTU5PUFFSU1RWV1hZXV9gYWJjaGptb3Bxc3R1eHp7fH1/gYSFhoeIiYqLjI2RkpSXmJmcnZ6foKGio6SlpqepqqyxsrO0tre5uru8vb6/wMHCxMXGx8jJys3Oz9DR09TV1tfY2d3e3+Hi5OXp6uvt7vDz9Pj7/P5XQxXPAAADcUlEQVR42u3V+VMScRjH8aUUvMrogPDothQzQ0sgK9FKo7RTTLovRTOPyJCgskO6CyuJkkoqoOfPbMFncZ91Wlhn/aHaz0/Ma77zHmdn3S/z51WUzaMNG+dRaQWzgBWEfCoB5bx4mSsglS9UsIB4CySMAtoF0CAgYwJapLfzgwB3VISWPgaYWEpIdQcgmC853gwAcSOhemC3m5AxzlKzlG55vf2yNwrsIqMXDtXqWDKYWi95viTpq+dSm8nAkq720IXRSJKi3sv2+vIs47eAzMHSVUpXWeqkdCvL+OZJ4M2/hqXSp3x6VsrSGj+fgpuyfi5vIL2x4hTpHs/RE12Kisfm6E05k/VKngPOvQxp1X2OHqxGWubm6HkJI2H7YXa/KtO0E3A701T5C2k/I2VnAGdL0xGOjqTJxlGXpPgo4M6lycVRb5rOc3RbSlv9HmDqQHsEwMORKgAQbmsLAwRUnHkAIu0HpgDeqSXEV0Q/HGTPa09MBznK+RS2FzJMoT38KYezt9MntOxfcnBqpli8p9myw7LHits30GqyWK3muuPXG5H2uo7WmZN0tG8vUuO1Y0mymFpv7LPi9lh2bNEI/2+6gzGQabFg92b+F/D0d5B130/nc239PZB99/SzbW0AFmEBbbKtGoBF2YAqdXct0nax7+/EYsUncphtCfz9+ZTZJMPMpz5jMLGNacefr8sYmVb2GpPtzBCkFq9mZFt1fLY5xOA7HsqTL54XwnedeYRPZYl88SX4XB79O3Ht+nX86bnrmfD6Vch6BGRthvjJnz94++nGyhXKV5DdlE9miDuA7C5WXJRdyHcpOzLEO4HMi5Veyr3IXsqdSlyJ/x1xJ5CNY+Um5ZvI45SdGeJbbU282WqwUkW5CrmG8lZBXPmeK/GFxwtWki3H80WUi5CXUy7IEO/4RjaClYuULyKPUO6Qds35sNJHuQ/Zp1xzSlyJC+NngewhVgYpDyI/pHw2Q7zyMFkDd59RrkFuoFypfM+VuGzx3EIyDZ5XU1YjayjnZojbP4Z4++jCipOyE9lF2Z4h3gVkfqz0U+5H9lPuUr6KSlyJz7vmROLSr7ntjk7+msTjTeSwY7vEr6J4XDglrsT/4/grRnQ9NN4jfvqVID5pWCu2YRofFj1smBTEE1GxzcRoPDYjejxB4nJPiStxyfHfujeZavlkLuEAAAAASUVORK5CYII=\n\" />\n    <h2 class=\"Color Text-title\">"
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"accomodation.title",{"name":"t","hash":{},"data":data}))
+    + "</h2>\n    <p class=\"Slide-contentParagraph Text Color Text-paragraph u-tSpace--xl\">"
+    + ((stack1 = (helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"accomodation.desc",{"name":"t","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n  </div>\n</section>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
@@ -898,55 +960,53 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
 },"2":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "      <li class=\"RouteList-item "
+  return "    <li class=\"RouteList-item "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.selected : depth0),"==",true,{"name":"ifCond","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\">\n        <span class=\"RouteList-itemTime\">"
+    + "\">\n      <span class=\"RouteList-itemTime\">"
     + alias4(((helper = (helper = helpers.data || (depth0 != null ? depth0.data : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"data","hash":{},"data":data}) : helper)))
     + "</span>\n\n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "          class=\"RouteList-itemPoint\">\n"
+    + "        class=\"RouteList-itemPoint\">\n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.link : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        "
+    + "      "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + "\n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"!=","",{"name":"ifCond","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.slideURL : depth0),"==","",{"name":"ifCond","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "      </li>\n";
+    + "    </li>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return " is-selected ";
 },"5":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "          <a href=\""
+  return "        <a href=\""
     + container.escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"link","hash":{},"data":data}) : helper)))
     + "\" target=\"_blank\"\n";
 },"7":function(container,depth0,helpers,partials,data) {
-    return "          <span\n";
+    return "        <span\n";
 },"9":function(container,depth0,helpers,partials,data) {
-    return "          </a>\n";
+    return "        </a>\n";
 },"11":function(container,depth0,helpers,partials,data) {
-    return "          </span>\n";
+    return "        </span>\n";
 },"13":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "          <a href=\""
+  return "        <a href=\""
     + container.escapeExpression(((helper = (helper = helpers.slideURL || (depth0 != null ? depth0.slideURL : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"slideURL","hash":{},"data":data}) : helper)))
     + "\" target=\"_blank\" class=\"RouteList-itemName Text Text-item Color Color--link\">\n";
 },"15":function(container,depth0,helpers,partials,data) {
-    return "          <p class=\"RouteList-itemName Text Text-item\">\n";
+    return "        <p class=\"RouteList-itemName Text Text-item\">\n";
 },"17":function(container,depth0,helpers,partials,data) {
-    return "          </p>\n";
+    return "        </p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return "<ul class=\"RouteList\">\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.items : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</ul>";
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.items : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"useData":true,"useDepths":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
@@ -961,7 +1021,7 @@ if (typeof define === 'function' && define.amd) {
 
 ;require.register("templates/selection-form.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<select class=\"RouteForm-select js-select\"></select>\n<ul class=\"RouteList js-list\"></ul>";
+    return "<select class=\"ItemsForm-select js-select\"></select>\n<ul class=\"List js-list\"></ul>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
