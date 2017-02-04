@@ -16,7 +16,7 @@ module.exports = [
       stars: 3
     },
     name: 'El Escorial',
-    desc: 'Los Lanceros',
+    desc: 'Hotel Los Lanceros',
     link: 'http://www.loslanceros.com/'
   },
   {

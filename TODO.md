@@ -11,13 +11,14 @@ Pending things
 - [x] Style horizontal arrows.
 - [x] Chosen for custom selects? :S
 - [x] Finish accomodation slide!.
+- [x] Check problem with scroll within slide
+
+- [ ] Add honeymoon slide!.
+- [ ] Create contact slide.
+
 - [ ] Different animations for each slide.
 - [ ] Notes in each slide (links, notes, etc...).
-
 - [ ] Dots tooltip.
 - [ ] Check deploy script, with --production flag.
 - [ ] Deploy web.
 - [ ] Local Storage.
-
-- [ ] Add honeymoon slide!.
-- [ ] Create contact slide.
