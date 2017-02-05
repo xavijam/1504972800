@@ -1,8 +1,69 @@
+.TravelList {
+  width: 100%;
+  margin: 40px auto; }
+
+.TravelList .l-box {
+  margin: 20px; }
+
+.TravelList-item {
+  position: relative;
+  min-width: 320px;
+  background: white;
+  box-shadow: 0 0 25px 1px rgba(0, 0, 0, 0.1); }
+
+.TravelList-itemImage {
+  width: 100%;
+  height: 187px;
+  background: #D8D8D8;
+  overflow: hidden; }
+
+.TravelList-itemInfo {
+  display: block;
+  padding: 20px;
+  text-align: left; }
+
+.TravelList-itemFooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #EEEEEE;
+  text-align: left; }
+
+.TravelList-itemFooter > * {
+  padding: 15px 20px; }
+
+.TravelList-itemCost {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10; }
+
+.TravelList-itemLink {
+  flex: 1;
+  border-left: 1px solid #EEEEEE; }
+
+.TravelList-itemWikipedia {
+  flex: 1;
+  border-left: 1px solid #EEEEEE; }
+
+.TravelList-itemType {
+  flex: 10; }
+
+.TravelList-sponsorList {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+
 .Color {
   color: white; }
 
-.Color-main {
+.Color--main {
   color: #97BDBB; }
+
+.Color--dark {
+  color: #4A4A4A; }
 
 
 html,
@@ -58,6 +119,48 @@ body {
 
 .u-tSpace--xl {
   margin-top: 14px; }
+
+.u-tSpace--xxl {
+  margin-top: 28px; }
+
+.u-tSpace--xxxl {
+  margin-top: 42px; }
+
+.u-rSpace {
+  margin-right: 2px; }
+
+.u-rSpace-m {
+  margin-right: 6px; }
+
+.u-rSpace-l {
+  margin-right: 10px; }
+
+.u-rSpace--xl {
+  margin-right: 14px; }
+
+.u-rSpace--xxl {
+  margin-right: 28px; }
+
+.u-rSpace--xxxl {
+  margin-right: 42px; }
+
+.u-lSpace {
+  margin-left: 2px; }
+
+.u-lSpace-m {
+  margin-left: 6px; }
+
+.u-lSpace-l {
+  margin-left: 10px; }
+
+.u-lSpace--xl {
+  margin-left: 14px; }
+
+.u-lSpace--xxl {
+  margin-left: 28px; }
+
+.u-lSpace--xxxl {
+  margin-left: 42px; }
 
 
 @media only screen {
@@ -245,7 +348,8 @@ body {
   height: 15px;
   margin-top: -2px;
   background: white;
-  border-color: white; }
+  border-color: white;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5); }
   .dot.is-selected:hover {
     cursor: normal; }
 
@@ -320,6 +424,9 @@ body {
   .Slide-contentParagraph {
     max-width: 85%; } }
 
+
+.Text {
+  letter-spacing: 0; }
 
 .Text-title {
   position: relative;

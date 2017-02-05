@@ -1,5 +1,6 @@
 {
   "date": "9th September 2017",
+  "powered-by": "Powered by:",
   "home": {
     "key": "wedding",
     "title": "Wedding",
@@ -40,7 +41,12 @@
   "honeymoon": {
     "key": "honeymoon",
     "title": "Honeymoon",
-    "desc": ""
+    "desc": "This plane bound for New Zealand!, and we would like visit several places. Below you will find a big list of several activities we would like to live in this country, It will be the first time we will visit it (and we feel it will be the last one, it is Spain's antipodes!). </br></br> If you are interested in help us with any of them, just add your email after the list and we will answer you with the instructions, easy peasy.",
+    "items": [
+      {
+        "img": "http://farm6.static.flickr.com/5026/5629801428_1a7d254810_b.jpg"
+      }
+    ]
   },
   "contact": {
     "key": "contact",

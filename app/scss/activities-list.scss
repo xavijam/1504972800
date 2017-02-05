@@ -1,0 +1,70 @@
+@import 'media-queries';
+
+// Styles for honeymoon activities list
+
+.TravelList {
+  width: 100%;
+  margin: 40px auto;
+}
+.TravelList .l-box {
+  margin: 20px;
+}
+.TravelList-item {
+  position: relative;
+  min-width: 320px;
+  background: white;
+  box-shadow: 0 0 25px 1px rgba(black, 0.1);
+}
+.TravelList-itemImage {
+  width: 100%;
+  height: 187px;
+  background: #D8D8D8;
+  overflow: hidden;
+}
+.TravelList-itemInfo {
+  display: block;
+  padding: 20px;
+  text-align: left;
+}
+.TravelList-itemFooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #EEEEEE;
+  text-align: left;
+}
+.TravelList-itemFooter > * {
+  padding: 15px 20px;
+}
+.TravelList-itemTitle {
+
+}
+.TravelList-itemCost {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}
+.TravelList-itemDesc {
+  
+}
+.TravelList-itemLink {
+  flex: 1;
+  border-left: 1px solid #EEEEEE;
+}
+.TravelList-itemWikipedia {
+  flex: 1;
+  border-left: 1px solid #EEEEEE;
+}
+.TravelList-itemType {
+  flex: 10;
+}
+.TravelList-sponsor {
+
+}
+.TravelList-sponsorList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -4,6 +4,7 @@ window.jQuery = $;
 var Flickity = require('flickity');
 var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
+var BackgroundMapSlideView = require('js/background-map-slide-view');
 require('js/handlebars-helpers');
 var isMobile = require('ismobilejs');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
@@ -128,6 +129,21 @@ function init () {
   );
   items.add({
     key: Handlebars.helpers.t('accomodation.key')
+  });
+
+  // Honeymoon
+  Carousel.append(
+    new BackgroundMapSlideView({
+      Carousel: Carousel,
+      template: require('templates/honeymoon.hbs'),
+      index: 5,
+      background: '#FFF',
+      translateKey: 'honeymoon'
+    })
+    .render().el
+  );
+  items.add({
+    key: Handlebars.helpers.t('honeymoon.key')
   });
 
   // Initiate the router
