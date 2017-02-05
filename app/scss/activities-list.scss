@@ -97,6 +97,10 @@
   overflow: hidden;
   z-index: -1;
 }
+.leaflet-marker-pane,
+.leaflet-shadow-pane {
+  display: none!important;
+}
 
 @include screen(600px, 1000px) {
   .TravelList-map {

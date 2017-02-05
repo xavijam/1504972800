@@ -4,6 +4,7 @@
 
 var DefaultSlideView = require('./default-slide-view');
 var TravelItems = require('./travel-items.js');
+var _ = require('underscore');
 var L = require('leaflet');
 var $ = require('jquery');
 
@@ -46,7 +47,7 @@ module.exports = DefaultSlideView.extend({
       scrollWheelZoom: false,
       touchZoom: false,
       keyboard: false
-    }).setView([-41.419045, 173.254395], 6);
+    }).setView([-40.823163, 171.595703], 6);
 
     var polygonStyle = {
       "color": "#E6E6E6",
@@ -54,7 +55,7 @@ module.exports = DefaultSlideView.extend({
       "opacity": 0.65
     };
 
-    var geojsonMarkerOptions = {
+    var markerStyle = {
       radius: 4,
       fillColor: "#DF685C",
       color: "#FFFFFF",
@@ -63,18 +64,53 @@ module.exports = DefaultSlideView.extend({
       fillOpacity: 1
     };
 
-    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM xavijam.oceania_adm0 where iso_alpha3='NZL'", function(data) {
+    var lineStyle = {
+      color: "#314c96",
+      weight: 2,
+      opacity: 0.3,
+    };
+
+    var loadPoints = function () {
+      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM pois_nueva_zelanda", function(data) {
+        L.geoJson(data, {
+          pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, markerStyle);
+          },
+          onEachFeature: function () {}
+        }).addTo(map);
+      });
+    };
+
+    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM xavijam.oceania_adm0 where iso_alpha3='NZL'", function(data) {
       L.geoJson(data, {
         style: polygonStyle
       }).addTo(map);
-    });
 
-    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom, cartodb_id FROM pois_nueva_zelanda", function(data) {
-      L.geoJson(data, {
-         pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng, geojsonMarkerOptions);
-        }
-      }).addTo(map);
+      var onLineLoaded = _.after(3, loadPoints);
+
+      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_taupo_a_blue_pools_walk", function(data) {
+        L.geoJson(data, {
+          style: lineStyle
+        }).addTo(map);
+
+        onLineLoaded();
+      });
+
+      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_sky_tower_a_taupo", function(data) {
+        L.geoJson(data, {
+          style: lineStyle
+        }).addTo(map);
+
+        onLineLoaded();
+      });
+
+       $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_blue_pools_walk_a_kaikoura", function(data) {
+        L.geoJson(data, {
+          style: lineStyle
+        }).addTo(map);
+
+        onLineLoaded();
+      });
     });
   }
 

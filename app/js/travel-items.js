@@ -23,7 +23,7 @@ module.exports = [
     desc: 'honeymoon.items.franz-josef.desc',
     cost: '~305',
     wikipediaURL: 'honeymoon.items.franz-josef.wikipedia',
-    imageURL: 'https://exp.cdn-hotels.com/hotels/1000000/90000/83700/83615/83615_72_z.jpg',
+    imageURL: 'http://exp.cdn-hotels.com/hotels/1000000/90000/83700/83615/83615_72_z.jpg',
     itemURL: 'honeymoon.items.franz-josef.url'
   },
   {
@@ -32,7 +32,7 @@ module.exports = [
     desc: 'honeymoon.items.ferry.desc',
     cost: '~170',
     wikipediaURL: 'honeymoon.items.ferry.wikipedia',
-    imageURL: 'https://s-media-cache-ak0.pinimg.com/736x/c0/c2/cb/c0c2cb31e09703f4bc749d2f59f9fb8a.jpg',
+    imageURL: 'http://s-media-cache-ak0.pinimg.com/736x/c0/c2/cb/c0c2cb31e09703f4bc749d2f59f9fb8a.jpg',
     itemURL: 'honeymoon.items.ferry.url'
   },
   {
@@ -68,7 +68,7 @@ module.exports = [
     desc: 'honeymoon.items.maori.desc',
     cost: '~162',
     wikipediaURL: 'honeymoon.items.maori.wikipedia',
-    imageURL: 'https://cache-graphicslib.viator.com/graphicslib/thumbs674x446/2295/SITours/rotorua-maori-hangi-dinner-and-performance-in-rotorua-359846.jpg',
+    imageURL: 'http://cache-graphicslib.viator.com/graphicslib/thumbs674x446/2295/SITours/rotorua-maori-hangi-dinner-and-performance-in-rotorua-359846.jpg',
     itemURL: 'honeymoon.items.maori.url'
   },
   {
