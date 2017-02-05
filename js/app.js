@@ -157,6 +157,7 @@ window.jQuery = $;
 var Flickity = require('flickity');
 var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
+var BackgroundMapSlideView = require('js/background-map-slide-view');
 require('js/handlebars-helpers');
 var isMobile = require('ismobilejs');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
@@ -267,6 +268,18 @@ function init() {
     key: Handlebars.helpers.t('accomodation.key')
   });
 
+  // Honeymoon
+  Carousel.append(new BackgroundMapSlideView({
+    Carousel: Carousel,
+    template: require('templates/honeymoon.hbs'),
+    index: 5,
+    background: '#FFF',
+    translateKey: 'honeymoon'
+  }).render().el);
+  items.add({
+    key: Handlebars.helpers.t('honeymoon.key')
+  });
+
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
     routes: {
@@ -332,6 +345,46 @@ module.exports = [{
   desc: 'Camping Resort el Escorial',
   link: 'http://www.campingelescorial.com/'
 }];
+
+});
+
+require.register("js/background-map-slide-view.js", function(exports, require, module) {
+'use strict';
+
+/**
+ *  Background map view
+ */
+
+var DefaultSlideView = require('./default-slide-view');
+var TravelItems = require('./travel-items.js');
+
+module.exports = DefaultSlideView.extend({
+
+  render: function render() {
+    var template = this.options.template;
+
+    this.$el.html(template({
+      items: TravelItems
+    }));
+
+    this.$el.attr({
+      'id': Handlebars.helpers.t(this.options.translateKey + '.key'),
+      'data-background': this.options.background,
+      'data-title': Handlebars.helpers.t(this.options.translateKey + '.title'),
+      'data-key': this.options.translateKey,
+      'data-index': this.options.index
+    });
+
+    this.$el.css('background-color', this.options.background);
+
+    this._initViews();
+
+    return this;
+  },
+
+  _initViews: function _initViews() {}
+
+});
 
 });
 
@@ -696,9 +749,25 @@ module.exports = [{
 
 });
 
+require.register("js/travel-items.js", function(exports, require, module) {
+'use strict';
+
+module.exports = [{
+  type: '',
+  title: '',
+  desc: '',
+  cost: '550',
+  imageURL: 'http://farm6.static.flickr.com/5026/5629801428_1a7d254810_b.jpg',
+  wikipediaURL: '',
+  itemURL: ''
+}];
+
+});
+
 require.register("locales/en.json", function(exports, require, module) {
 module.exports = {
   "date": "9th September 2017",
+  "powered-by": "Powered by:",
   "home": {
     "key": "wedding",
     "title": "Wedding",
@@ -739,7 +808,12 @@ module.exports = {
   "honeymoon": {
     "key": "honeymoon",
     "title": "Honeymoon",
-    "desc": ""
+    "desc": "This plane bound for New Zealand!, and we would like visit several places. Below you will find a big list of several activities we would like to live in this country, It will be the first time we will visit it (and we feel it will be the last one, it is Spain's antipodes!). </br></br> If you are interested in help us with any of them, just add your email after the list and we will answer you with the instructions, easy peasy.",
+    "items": [
+      {
+        "img": "http://farm6.static.flickr.com/5026/5629801428_1a7d254810_b.jpg"
+      }
+    ]
   },
   "contact": {
     "key": "contact",
@@ -752,6 +826,7 @@ module.exports = {
 require.register("locales/es.json", function(exports, require, module) {
 module.exports = {
   "date": "9 Septiembre 2017",
+  "powered-by": "Patrocinado por:",
   "home": {
     "key": "boda",
     "title": "boda",
@@ -793,7 +868,7 @@ module.exports = {
   "honeymoon": {
     "key": "viaje",
     "title": "Viaje",
-    "desc": ""
+    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Aquí debajo encontrarás un listado de actividades que nos encantaría vivir en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir."
   },
   "contact": {
     "key": "contacto",
@@ -938,7 +1013,7 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"home.title",{"name":"t","hash":{},"data":data}))
     + "\" title=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"home.title",{"name":"t","hash":{},"data":data}))
-    + "\"/>\n  <h1 class=\"Color Text-title\">JAVIER + LAURA</h1>\n  <h2 class=\"content-item Color-main Text-highlight u-tSpace--xl\">"
+    + "\"/>\n  <h1 class=\"Color Text-title\">JAVIER + LAURA</h1>\n  <h2 class=\"content-item Color--main Text-highlight u-tSpace--xl\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"date",{"name":"t","hash":{},"data":data}))
     + "</h2>\n  <a href=\"#/"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.key",{"name":"t","hash":{},"data":data}))
@@ -958,10 +1033,48 @@ if (typeof define === 'function' && define.amd) {
 });
 
 ;require.register("templates/honeymoon.hbs", function(exports, require, module) {
-var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<section class=\"slide\" id=\""
-    + container.escapeExpression((helpers.t || (depth0 && depth0.t) || helpers.helperMissing).call(depth0 != null ? depth0 : {},"honeymoon.key",{"name":"t","hash":{},"data":data}))
-    + "\" data-background=\"#FFF\">\n  <div class=\"content\">\n    <div class=\"content-item\">Slide 7</div>\n    <div class=\"content-item\">paco</div>\n  </div>\n</section>";
+var __templateData = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "      <li class=\"pure-u-1 pure-u-md-1-2 pure-u-lg-1-3\">\n        <div class=\"l-box\">\n          <div class=\"TravelList-item\">\n            <div class=\"TravelList-itemImage\">\n              <img class=\"pure-img\" src=\""
+    + alias4(((helper = (helper = helpers.imageURL || (depth0 != null ? depth0.imageURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"imageURL","hash":{},"data":data}) : helper)))
+    + "\" title=\""
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.title : depth0),{"name":"t","hash":{},"data":data}))
+    + "\" alt=\""
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.title : depth0),{"name":"t","hash":{},"data":data}))
+    + "\"/>\n              <span class=\"TravelList-itemCost\">"
+    + alias4(((helper = (helper = helpers.cost || (depth0 != null ? depth0.cost : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cost","hash":{},"data":data}) : helper)))
+    + "€</span>\n            </div>\n            <div class=\"TravelList-itemInfo\">\n              <h4 class=\"TravelList-itemTitle Text\">"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.title : depth0),{"name":"t","hash":{},"data":data}))
+    + "</h4>\n              <p class=\"Text Text--paragraph TravelList-itemDesc\">"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.desc : depth0),{"name":"t","hash":{},"data":data}))
+    + "</p>\n            </div>\n            <div class=\"TravelList-itemFooter\">\n              <p class=\"TravelList-itemType Text Text--paragraph\">"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),{"name":"t","hash":{},"data":data}))
+    + "</p>\n\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.wikipediaURL : depth0),"!=",null,{"name":"ifCond","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.itemURL : depth0),"!=",null,{"name":"ifCond","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "            </div>\n          </div>\n        </div>\n      </li>\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "                <a href=\""
+    + container.escapeExpression((helpers.t || (depth0 && depth0.t) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.wikipediaURL : depth0),{"name":"t","hash":{},"data":data}))
+    + "\" class=\"TravelList-itemWikipedia\" target=\"_blank\">\n                  <i class=\" fa fa-wikipedia-w\"></i>\n                </a>\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "                <a href=\""
+    + container.escapeExpression((helpers.t || (depth0 && depth0.t) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.itemURL : depth0),{"name":"t","hash":{},"data":data}))
+    + "\" class=\"TravelList-itemLink\" target=\"_blank\">\n                  <i class=\" fa fa-link\"></i>\n                </a>\n";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
+
+  return "<div class=\"Slide-content Slide-content--centered\">\n  <div class=\"Slide-contentItem u-tSpace--xl\">\n    <i class=\"Slide-icon Color Color--dark fa fa-globe fa-lg\"></i>\n  </div>\n  <h2 class=\"Color Color--dark Slide-title Text-title\">"
+    + container.escapeExpression((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"honeymoon.title",{"name":"t","hash":{},"data":data}))
+    + "</h2>\n  <p class=\"Slide-contentParagraph Text Color Color--dark Text-paragraph u-tSpace--xl\">"
+    + ((stack1 = (helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"honeymoon.desc",{"name":"t","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n\n  <div class=\"u-tSpace--xxl\">\n    <p class=\"Text Color--dark Text-paragraph\">"
+    + ((stack1 = (helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"powered-by",{"name":"t","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n    <ul class=\"TravelList-sponsorList\">\n      <li class=\"u-rSpace-m\">\n        <a href=\"https://carto.com\" alt=\"CARTO\" title=\"CARTO\" target=\"_blank\"><svg width=\"68px\" height=\"28px\" viewBox=\"2 33 68 27\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <defs> <filter x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\" filterUnits=\"objectBoundingBox\" id=\"cartoLogo-Blur\"> <feOffset dx=\"0\" dy=\"1\" in=\"SourceAlpha\" result=\"shadowOffsetOuter1\"></feOffset> <feGaussianBlur stdDeviation=\"0.5\" in=\"shadowOffsetOuter1\" result=\"shadowBlurOuter1\"></feGaussianBlur> <feColorMatrix values=\"0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0.75 0.75 0.75 0.75 0\" type=\"matrix\" in=\"shadowBlurOuter1\" result=\"shadowMatrixOuter1\"></feColorMatrix> <feMerge> <feMergeNode in=\"shadowMatrixOuter1\"></feMergeNode> <feMergeNode in=\"SourceGraphic\"></feMergeNode> </feMerge> </filter> </defs> <g filter=\"url(#cartoLogo-Blur)\" fill=\"none\" fill-rule=\"evenodd\" transform=\"translate(3, 33)\"> <circle cx=\"52.5\" cy=\"12.5\" r=\"12.5\" id=\"halo\" fill-opacity=\"0.3\" fill=\"#FFFFFF\"></circle> <path d=\"M4.56199178,16.7836993 C6.33902821,16.7836993 7.36601679,15.9967983 8.12760383,14.9280222 L6.44288099,13.7065639 C5.95823469,14.3055483 5.46204919,14.7048712 4.61968777,14.7048712 C3.48884641,14.7048712 2.69264178,13.7417983 2.69264178,12.5085951 L2.69264178,12.4851056 C2.69264178,11.2871368 3.48884641,10.3005743 4.61968777,10.3005743 C5.39281401,10.3005743 5.9236171,10.6881524 6.385185,11.2636472 L8.06990784,9.93648577 C7.35447759,8.93817848 6.29287142,8.23349098 4.64276617,8.23349098 C2.19645628,8.23349098 0.396341463,10.1126576 0.396341463,12.5085951 L0.396341463,12.5320847 C0.396341463,14.9867462 2.25415227,16.7836993 4.56199178,16.7836993 L4.56199178,16.7836993 Z M11.9673421,16.6192722 L14.3097992,16.6192722 L14.8867591,15.1394285 L18.0138817,15.1394285 L18.5908415,16.6192722 L20.9909946,16.6192722 L17.5523137,8.33919411 L15.3944838,8.33919411 L11.9673421,16.6192722 Z M15.5444934,13.3659649 L16.45609,11.0404962 L17.3561474,13.3659649 L15.5444934,13.3659649 Z M25.3499968,16.6192722 L27.5886011,16.6192722 L27.5886011,14.1293764 L28.5809721,14.1293764 L30.207999,16.6192722 L32.78124,16.6192722 L30.854194,13.7535431 C31.8581042,13.3189858 32.5158385,12.4851056 32.5158385,11.2166681 L32.5158385,11.1931785 C32.5158385,10.3827879 32.2735154,9.7603139 31.8004082,9.27877744 C31.258066,8.72677223 30.4041653,8.39791807 29.1694712,8.39791807 L25.3499968,8.39791807 L25.3499968,16.6192722 Z M27.5886011,12.3441681 L27.5886011,10.3592983 L29.0656184,10.3592983 C29.8041271,10.3592983 30.2772342,10.6881524 30.2772342,11.3458608 L30.2772342,11.3693504 C30.2772342,11.9683347 29.8272055,12.3441681 29.0771576,12.3441681 L27.5886011,12.3441681 Z M39.1942194,16.6192722 L41.4328237,16.6192722 L41.4328237,10.3945326 L43.8560552,10.3945326 L43.8560552,8.39791807 L36.7825271,8.39791807 L36.7825271,10.3945326 L39.1942194,10.3945326 L39.1942194,16.6192722 Z M52.4193803,16.7708268 C54.7933139,16.7708268 56.7177673,14.8587096 56.7177673,12.4999935 C56.7177673,10.1412775 54.7933139,8.22916031 52.4193803,8.22916031 C50.0454467,8.22916031 48.1209933,10.1412775 48.1209933,12.4999935 C48.1209933,14.8587096 50.0454467,16.7708268 52.4193803,16.7708268 Z\" fill=\"#FFFFFF\"></path> </g> </svg></a>\n      </li>\n      <li class=\"u-lSpace-m\">\n        <a href=\"http://mochiling.es\" alt=\"Mochiling.es\" title=\"Mochiling.es\" target=\"_blank\"><svg version=\"1.1\" width=\"40px\" height=\"45px\" viewBox=\"0 0 39 41\" preserveAspectRatio=\"xMinYMin\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"><defs><rect id=\"path-1\" x=\"22\" y=\"23\" width=\"16\" height=\"12\" rx=\"2\"></rect><mask id=\"mask-2\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"16\" height=\"12\" fill=\"white\"><use xlink:href=\"#path-1\"></use></mask><rect id=\"path-3\" x=\"23\" y=\"9\" width=\"16\" height=\"12\" rx=\"2\"></rect><mask id=\"mask-4\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"16\" height=\"12\" fill=\"white\"><use xlink:href=\"#path-3\"></use></mask><rect id=\"path-5\" x=\"1\" y=\"23\" width=\"16\" height=\"12\" rx=\"2\"></rect><mask id=\"mask-6\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"16\" height=\"12\" fill=\"white\"><use xlink:href=\"#path-5\"></use></mask><rect id=\"path-7\" x=\"0\" y=\"9\" width=\"16\" height=\"12\" rx=\"2\"></rect><mask id=\"mask-8\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"16\" height=\"12\" fill=\"white\"><use xlink:href=\"#path-7\"></use></mask><rect id=\"path-9\" x=\"20\" y=\"24\" width=\"16\" height=\"16\" rx=\"2\"></rect><mask id=\"mask-10\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" fill=\"white\"><use xlink:href=\"#path-9\"></use></mask><rect id=\"path-11\" x=\"3\" y=\"24\" width=\"16\" height=\"16\" rx=\"2\"></rect><mask id=\"mask-12\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" fill=\"white\"><use xlink:href=\"#path-11\"></use></mask><rect id=\"path-13\" x=\"2\" y=\"4\" width=\"35\" height=\"25\" rx=\"2\"></rect><mask id=\"mask-14\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"35\" height=\"25\" fill=\"white\"><use xlink:href=\"#path-13\"></use></mask><rect id=\"path-15\" x=\"8\" y=\"3\" width=\"6\" height=\"30\" rx=\"2\"></rect><mask id=\"mask-16\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"6\" height=\"30\" fill=\"white\"><use xlink:href=\"#path-15\"></use></mask><rect id=\"path-17\" x=\"24\" y=\"3\" width=\"6\" height=\"30\" rx=\"2\"></rect><mask id=\"mask-18\" maskContentUnits=\"userSpaceOnUse\" maskUnits=\"objectBoundingBox\" x=\"0\" y=\"0\" width=\"6\" height=\"30\" fill=\"white\"><use xlink:href=\"#path-17\"></use></mask></defs><g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\"><g id=\"Logo\" transform=\"translate(0.000000, 1.000000)\"><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-2)\" stroke-width=\"2\" xlink:href=\"#path-1\"></use><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-4)\" stroke-width=\"2\" xlink:href=\"#path-3\"></use><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-6)\" stroke-width=\"2\" xlink:href=\"#path-5\"></use><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-8)\" stroke-width=\"2\" xlink:href=\"#path-7\"></use><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-10)\" stroke-width=\"2\" fill=\"#FFFFFF\" xlink:href=\"#path-9\"></use><ellipse id=\"Oval\" stroke=\"#979797\" cx=\"19\" cy=\"6.5\" rx=\"6\" ry=\"6.5\"></ellipse><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-12)\" stroke-width=\"2\" fill=\"#FFFFFF\" xlink:href=\"#path-11\"></use><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-14)\" stroke-width=\"2\" fill=\"#FFFFFF\" xlink:href=\"#path-13\"></use><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-16)\" stroke-width=\"2\" fill=\"#FFFFFF\" xlink:href=\"#path-15\"></use><use id=\"Rectangle-4\" stroke=\"#979797\" mask=\"url(#mask-18)\" stroke-width=\"2\" fill=\"#FFFFFF\" xlink:href=\"#path-17\"></use><circle id=\"Oval-3\" fill=\"#9B9B9B\" cx=\"11\" cy=\"28\" r=\"1\"></circle><circle id=\"Oval-3\" fill=\"#9B9B9B\" cx=\"27\" cy=\"28\" r=\"1\"></circle></g></g></svg></a>\n    </li>\n  </div>\n\n  <ul class=\"TravelList pure-g\">\n"
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.items : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "  </ul>\n</div>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
