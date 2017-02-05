@@ -88,3 +88,26 @@
   justify-content: center;
   align-items: center;
 }
+.TravelList-map {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 705px;
+  overflow: hidden;
+  z-index: -1;
+}
+
+@include screen(600px, 1000px) {
+  .TravelList-map {
+    width: 75%;
+    opacity: 0.75;
+  }
+}
+
+@include screen(0, 600px) {
+  .TravelList-map {
+    width: 100%;
+    opacity: 0.5;
+  }
+}

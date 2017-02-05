@@ -357,6 +357,8 @@ require.register("js/background-map-slide-view.js", function(exports, require, m
 
 var DefaultSlideView = require('./default-slide-view');
 var TravelItems = require('./travel-items.js');
+var L = require('leaflet');
+var $ = require('jquery');
 
 module.exports = DefaultSlideView.extend({
 
@@ -371,18 +373,58 @@ module.exports = DefaultSlideView.extend({
       'id': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-background': this.options.background,
       'data-title': Handlebars.helpers.t(this.options.translateKey + '.title'),
-      'data-key': this.options.translateKey,
+      'data-key': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-index': this.options.index
     });
 
     this.$el.css('background-color', this.options.background);
 
-    this._initViews();
+    setTimeout(this._initViews.bind(this), 1000);
 
     return this;
   },
 
-  _initViews: function _initViews() {}
+  _initViews: function _initViews() {
+    var map = L.map('js-map', {
+      doubleClickZoom: false,
+      boxZoom: false,
+      dragging: false,
+      attributionControl: false,
+      zoomControl: false,
+      scrollWheelZoom: false,
+      touchZoom: false,
+      keyboard: false
+    }).setView([-41.419045, 173.254395], 6);
+
+    var polygonStyle = {
+      "color": "#E6E6E6",
+      "weight": 1,
+      "opacity": 0.65
+    };
+
+    var geojsonMarkerOptions = {
+      radius: 4,
+      fillColor: "#DF685C",
+      color: "#FFFFFF",
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 1
+    };
+
+    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM xavijam.oceania_adm0 where iso_alpha3='NZL'", function (data) {
+      L.geoJson(data, {
+        style: polygonStyle
+      }).addTo(map);
+    });
+
+    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom, cartodb_id FROM pois_nueva_zelanda", function (data) {
+      L.geoJson(data, {
+        pointToLayer: function pointToLayer(feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+        }
+      }).addTo(map);
+    });
+  }
 
 });
 
@@ -415,7 +457,7 @@ module.exports = Backbone.View.extend({
       'id': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-background': this.options.background,
       'data-title': Handlebars.helpers.t(this.options.translateKey + '.title'),
-      'data-key': this.options.translateKey,
+      'data-key': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-index': this.options.index
     });
 
@@ -797,7 +839,7 @@ module.exports = [{
   desc: 'honeymoon.items.milford-sound.desc',
   cost: '~122',
   wikipediaURL: 'honeymoon.items.milford-sound.wikipedia',
-  imageURL: 'http://www.queenstownnz.co.nz/content/plugins/operator/images/540x420scale/7D725F59-09F6-19EC-B8C4AAF16390EDB9.jpg',
+  imageURL: 'http://photo980x880.mnstatic.com/a1caf2ac7c25b47264c262c3f66fd26a/milford-sound.jpg',
   itemURL: 'honeymoon.items.milford-sound.url'
 }, {
   type: 'honeymoon.leisure',
@@ -1238,7 +1280,7 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
 
-  return "<div class=\"Slide-content Slide-content--centered\">\n  <div class=\"Slide-contentItem u-tSpace--xxxl\">\n    <i class=\"Slide-icon Color Color--dark fa fa-globe fa-lg\"></i>\n  </div>\n  <h2 class=\"Color Color--dark Slide-title Text-title\">"
+  return "<div class=\"Slide-content Slide-content--centered\">\n  <div id=\"js-map\" class=\"TravelList-map\"></div>\n  \n  <div class=\"Slide-contentItem u-tSpace--xxxl\">\n    <i class=\"Slide-icon Color Color--dark fa fa-globe fa-lg\"></i>\n  </div>\n  <h2 class=\"Color Color--dark Slide-title Text-title\">"
     + container.escapeExpression((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"honeymoon.title",{"name":"t","hash":{},"data":data}))
     + "</h2>\n  <p class=\"Slide-contentParagraph Text Color Color--dark Text-paragraph u-tSpace--xl\">"
     + ((stack1 = (helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"honeymoon.desc",{"name":"t","hash":{},"data":data})) != null ? stack1 : "")

@@ -84,6 +84,25 @@
   justify-content: center;
   align-items: center; }
 
+.TravelList-map {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 705px;
+  overflow: hidden;
+  z-index: -1; }
+
+@media only screen and (min-width: 600px) and (max-width: 1000px) {
+  .TravelList-map {
+    width: 75%;
+    opacity: 0.75; } }
+
+@media only screen and (min-width: 0) and (max-width: 600px) {
+  .TravelList-map {
+    width: 100%;
+    opacity: 0.5; } }
+
 
 .Color {
   color: white; }
@@ -423,7 +442,8 @@ body {
   overflow-y: auto; }
 
 .Slide-content {
-  margin: auto; }
+  margin: auto;
+  z-index: 1; }
 
 .Slide-content--centered {
   text-align: center; }

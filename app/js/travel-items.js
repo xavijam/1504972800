@@ -50,7 +50,7 @@ module.exports = [
     desc: 'honeymoon.items.milford-sound.desc',
     cost: '~122',
     wikipediaURL: 'honeymoon.items.milford-sound.wikipedia',
-    imageURL: 'http://www.queenstownnz.co.nz/content/plugins/operator/images/540x420scale/7D725F59-09F6-19EC-B8C4AAF16390EDB9.jpg',
+    imageURL: 'http://photo980x880.mnstatic.com/a1caf2ac7c25b47264c262c3f66fd26a/milford-sound.jpg',
     itemURL: 'honeymoon.items.milford-sound.url'
   },
   {

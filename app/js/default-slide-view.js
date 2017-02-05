@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
       'id': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-background': this.options.background,
       'data-title': Handlebars.helpers.t(this.options.translateKey + '.title'),
-      'data-key': this.options.translateKey,
+      'data-key': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-index': this.options.index
     });
 
