@@ -12,11 +12,15 @@ Pending things
 - [x] Chosen for custom selects? :S
 - [x] Finish accomodation slide!.
 - [x] Check problem with scroll within slide
-
-- [ ] Add honeymoon slide!.
+- [x] Add honeymoon slide!.
+- [ ] Honeymoon map.
+- [ ] Honeymoon form.
 - [ ] Create contact slide.
 
 - [ ] Different animations for each slide.
+  - https://codepen.io/TomMcPadden/pen/yAblG
+  - http://codepen.io/ItsJonQ/pen/yvfDF/
+  - http://takentech.com/flyaway/
 - [ ] Notes in each slide (links, notes, etc...).
 - [ ] Dots tooltip.
 - [ ] Check deploy script, with --production flag.
