@@ -170,8 +170,8 @@ function init() {
   var Carousel = new Flickity('.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: 10,
-    prevNextButtons: !isMobile.any,
+    dragThreshold: 80,
+    prevNextButtons: true,
     pageDots: true,
     setGallerySize: false,
     contain: true,
@@ -357,6 +357,7 @@ require.register("js/background-map-slide-view.js", function(exports, require, m
 
 var DefaultSlideView = require('./default-slide-view');
 var TravelItems = require('./travel-items.js');
+var _ = require('underscore');
 var L = require('leaflet');
 var $ = require('jquery');
 
@@ -394,7 +395,7 @@ module.exports = DefaultSlideView.extend({
       scrollWheelZoom: false,
       touchZoom: false,
       keyboard: false
-    }).setView([-41.419045, 173.254395], 6);
+    }).setView([-40.823163, 171.595703], 6);
 
     var polygonStyle = {
       "color": "#E6E6E6",
@@ -402,7 +403,7 @@ module.exports = DefaultSlideView.extend({
       "opacity": 0.65
     };
 
-    var geojsonMarkerOptions = {
+    var markerStyle = {
       radius: 4,
       fillColor: "#DF685C",
       color: "#FFFFFF",
@@ -411,18 +412,53 @@ module.exports = DefaultSlideView.extend({
       fillOpacity: 1
     };
 
-    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM xavijam.oceania_adm0 where iso_alpha3='NZL'", function (data) {
+    var lineStyle = {
+      color: "#314c96",
+      weight: 2,
+      opacity: 0.3
+    };
+
+    var loadPoints = function loadPoints() {
+      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM pois_nueva_zelanda", function (data) {
+        L.geoJson(data, {
+          pointToLayer: function pointToLayer(feature, latlng) {
+            return L.circleMarker(latlng, markerStyle);
+          },
+          onEachFeature: function onEachFeature() {}
+        }).addTo(map);
+      });
+    };
+
+    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM xavijam.oceania_adm0 where iso_alpha3='NZL'", function (data) {
       L.geoJson(data, {
         style: polygonStyle
       }).addTo(map);
-    });
 
-    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom, cartodb_id FROM pois_nueva_zelanda", function (data) {
-      L.geoJson(data, {
-        pointToLayer: function pointToLayer(feature, latlng) {
-          return L.circleMarker(latlng, geojsonMarkerOptions);
-        }
-      }).addTo(map);
+      var onLineLoaded = _.after(3, loadPoints);
+
+      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_taupo_a_blue_pools_walk", function (data) {
+        L.geoJson(data, {
+          style: lineStyle
+        }).addTo(map);
+
+        onLineLoaded();
+      });
+
+      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_sky_tower_a_taupo", function (data) {
+        L.geoJson(data, {
+          style: lineStyle
+        }).addTo(map);
+
+        onLineLoaded();
+      });
+
+      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_blue_pools_walk_a_kaikoura", function (data) {
+        L.geoJson(data, {
+          style: lineStyle
+        }).addTo(map);
+
+        onLineLoaded();
+      });
     });
   }
 
@@ -815,7 +851,7 @@ module.exports = [{
   desc: 'honeymoon.items.franz-josef.desc',
   cost: '~305',
   wikipediaURL: 'honeymoon.items.franz-josef.wikipedia',
-  imageURL: 'https://exp.cdn-hotels.com/hotels/1000000/90000/83700/83615/83615_72_z.jpg',
+  imageURL: 'http://exp.cdn-hotels.com/hotels/1000000/90000/83700/83615/83615_72_z.jpg',
   itemURL: 'honeymoon.items.franz-josef.url'
 }, {
   type: 'honeymoon.expense',
@@ -823,7 +859,7 @@ module.exports = [{
   desc: 'honeymoon.items.ferry.desc',
   cost: '~170',
   wikipediaURL: 'honeymoon.items.ferry.wikipedia',
-  imageURL: 'https://s-media-cache-ak0.pinimg.com/736x/c0/c2/cb/c0c2cb31e09703f4bc749d2f59f9fb8a.jpg',
+  imageURL: 'http://s-media-cache-ak0.pinimg.com/736x/c0/c2/cb/c0c2cb31e09703f4bc749d2f59f9fb8a.jpg',
   itemURL: 'honeymoon.items.ferry.url'
 }, {
   type: 'honeymoon.leisure',
@@ -855,7 +891,7 @@ module.exports = [{
   desc: 'honeymoon.items.maori.desc',
   cost: '~162',
   wikipediaURL: 'honeymoon.items.maori.wikipedia',
-  imageURL: 'https://cache-graphicslib.viator.com/graphicslib/thumbs674x446/2295/SITours/rotorua-maori-hangi-dinner-and-performance-in-rotorua-359846.jpg',
+  imageURL: 'http://cache-graphicslib.viator.com/graphicslib/thumbs674x446/2295/SITours/rotorua-maori-hangi-dinner-and-performance-in-rotorua-359846.jpg',
   itemURL: 'honeymoon.items.maori.url'
 }, {
   type: 'honeymoon.leisure',

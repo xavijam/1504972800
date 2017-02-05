@@ -93,6 +93,10 @@
   overflow: hidden;
   z-index: -1; }
 
+.leaflet-marker-pane,
+.leaflet-shadow-pane {
+  display: none !important; }
+
 @media only screen and (min-width: 600px) and (max-width: 1000px) {
   .TravelList-map {
     width: 75%;
@@ -472,7 +476,7 @@ body {
 
 @media only screen and (min-width: 0) and (max-width: 450px) {
   .Slide-contentParagraph {
-    max-width: 85%; } }
+    max-width: 75%; } }
 
 
 .Text {
