@@ -4,6 +4,7 @@
 
 .TravelList {
   width: 100%;
+  max-width: 1020px;
   margin: 40px auto;
 }
 .TravelList .l-box {
@@ -35,19 +36,31 @@
   text-align: left;
 }
 .TravelList-itemFooter > * {
-  padding: 15px 20px;
-}
-.TravelList-itemTitle {
-
+  padding: 14px 20px;
 }
 .TravelList-itemCost {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 14px;
+  right: 14px;
+  padding: 4px 10px;
+  font-weight: bold!important;
+  font-family: 'Lato';
+  font-size: 14px;
+  border: 2px solid white;
+  border-radius: 20px;
+  background: rgba(black, 0.3);
   z-index: 10;
 }
+.TravelList-itemTitle {
+  font-weight: bold;
+  font-family: 'Lato';
+  text-transform: uppercase;
+}
 .TravelList-itemDesc {
-  
+  font-size: 14px;
+  font-family: 'Lato';
+  line-height: 22px;
+  color: #666666;
 }
 .TravelList-itemLink {
   flex: 1;
@@ -57,11 +70,18 @@
   flex: 1;
   border-left: 1px solid #EEEEEE;
 }
+.TravelList-itemLink,
+.TravelList-itemWikipedia {
+  color: #999;
+  &:hover {
+    color: #676767;
+  }
+}
 .TravelList-itemType {
   flex: 10;
-}
-.TravelList-sponsor {
-
+  color: #999;
+  text-transform: capitalize;
+  font-size: 14px;
 }
 .TravelList-sponsorList {
   display: flex;
