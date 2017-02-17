@@ -30458,6 +30458,151 @@ L.control.layers = function (baseLayers, overlays, options) {
   })();
 });
 
+require.register("local-storage/local-storage.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "local-storage");
+  (function() {
+    'use strict';
+
+var stub = require('./stub');
+var tracking = require('./tracking');
+var ls = 'localStorage' in global && global.localStorage ? global.localStorage : stub;
+
+function accessor (key, value) {
+  if (arguments.length === 1) {
+    return get(key);
+  }
+  return set(key, value);
+}
+
+function get (key) {
+  return JSON.parse(ls.getItem(key));
+}
+
+function set (key, value) {
+  try {
+    ls.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function remove (key) {
+  return ls.removeItem(key);
+}
+
+function clear () {
+  return ls.clear();
+}
+
+accessor.set = set;
+accessor.get = get;
+accessor.remove = remove;
+accessor.clear = clear;
+accessor.on = tracking.on;
+accessor.off = tracking.off;
+
+module.exports = accessor;
+  })();
+});
+
+require.register("local-storage/stub.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "local-storage");
+  (function() {
+    'use strict';
+
+var ms = {};
+
+function getItem (key) {
+  return key in ms ? ms[key] : null;
+}
+
+function setItem (key, value) {
+  ms[key] = value;
+  return true;
+}
+
+function removeItem (key) {
+  var found = key in ms;
+  if (found) {
+    return delete ms[key];
+  }
+  return false;
+}
+
+function clear () {
+  ms = {};
+  return true;
+}
+
+module.exports = {
+  getItem: getItem,
+  setItem: setItem,
+  removeItem: removeItem,
+  clear: clear
+};
+  })();
+});
+
+require.register("local-storage/tracking.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "local-storage");
+  (function() {
+    'use strict';
+
+var listeners = {};
+var listening = false;
+
+function listen () {
+  if (global.addEventListener) {
+    global.addEventListener('storage', change, false);
+  } else if (global.attachEvent) {
+    global.attachEvent('onstorage', change);
+  } else {
+    global.onstorage = change;
+  }
+}
+
+function change (e) {
+  if (!e) {
+    e = global.event;
+  }
+  var all = listeners[e.key];
+  if (all) {
+    all.forEach(fire);
+  }
+
+  function fire (listener) {
+    listener(JSON.parse(e.newValue), JSON.parse(e.oldValue), e.url || e.uri);
+  }
+}
+
+function on (key, fn) {
+  if (listeners[key]) {
+    listeners[key].push(fn);
+  } else {
+    listeners[key] = [fn];
+  }
+  if (listening === false) {
+    listen();
+  }
+}
+
+function off (key, fn) {
+  var ns = listeners[key];
+  if (ns.length > 1) {
+    ns.splice(ns.indexOf(fn), 1);
+  } else {
+    listeners[key] = [];
+  }
+}
+
+module.exports = {
+  on: on,
+  off: off
+};
+  })();
+});
+
 require.register("node-polyglot/index.js", function(exports, require, module) {
   require = __makeRelativeRequire(require, {}, "node-polyglot");
   (function() {
@@ -38595,6 +38740,7 @@ require.alias("has/src/index.js", "has");
 require.alias("ismobilejs/isMobile.js", "ismobilejs");
 require.alias("jquery/dist/jquery.js", "jquery");
 require.alias("leaflet/dist/leaflet-src.js", "leaflet");
+require.alias("local-storage/local-storage.js", "local-storage");
 require.alias("process/browser.js", "process");
 require.alias("select2/dist/js/select2.js", "select2");
 require.alias("underscore/underscore.js", "underscore");
