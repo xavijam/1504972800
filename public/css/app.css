@@ -1,7 +1,20 @@
+.TravelList-map {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 900px;
+  overflow: hidden;
+  z-index: -1; }
+
+.TravelList-map .leaflet-marker-pane,
+.TravelList-map .leaflet-shadow-pane {
+  display: none !important; }
+
 .TravelList {
   width: 100%;
   max-width: 1020px;
-  margin: 40px auto; }
+  margin: 40px auto 0; }
 
 .TravelList .l-box {
   margin: 20px; }
@@ -84,18 +97,9 @@
   justify-content: center;
   align-items: center; }
 
-.TravelList-map {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 50%;
-  height: 705px;
-  overflow: hidden;
-  z-index: -1; }
-
-.leaflet-marker-pane,
-.leaflet-shadow-pane {
-  display: none !important; }
+.TravelList-disclaimer {
+  max-width: 400px;
+  margin: 30px auto; }
 
 @media only screen and (min-width: 600px) and (max-width: 1000px) {
   .TravelList-map {
@@ -164,6 +168,98 @@ body {
   src: local("☺"), url("../fonts/Lato-Regular.woff") format("woff"), url("../fonts/Lato-Regular.ttf") format("truetype"), url("../fonts/Lato-Regular.svg") format("svg");
   font-weight: normal;
   font-style: normal; }
+
+
+.Form {
+  margin: 0 auto; }
+
+.Form-fieldset {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.Form-field {
+  position: relative; }
+
+.Form-inputIcon {
+  position: absolute;
+  left: 17px;
+  top: 16px;
+  color: #C4C4C4; }
+
+.Form-inputIcon:after {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: -3px;
+  height: 25px;
+  width: 1px;
+  background: #C4C4C4; }
+
+.Form-input {
+  padding: 12px 12px 12px 60px;
+  line-height: 22px;
+  font-family: 'Lato';
+  font-size: 18px;
+  font-weight: 300;
+  color: #787878;
+  letter-spacing: 0px;
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid #C4C4C4; }
+
+.Form-input:focus {
+  border-color: #999; }
+  .Form-input:focus + .Form-inputIcon {
+    color: #999; }
+    .Form-input:focus + .Form-inputIcon:after {
+      background: #999; }
+
+.Form-input:disabled {
+  border-color: #C4C4C4;
+  background: rgba(196, 196, 196, 0.1); }
+  .Form-input:disabled + .Form-inputIcon {
+    color: #C4C4C4; }
+    .Form-input:disabled + .Form-inputIcon:after {
+      background: #C4C4C4; }
+
+.Form-input::-webkit-input-placeholder {
+  color: rgba(196, 196, 196, 0.5); }
+
+.Form-input::-moz-placeholder {
+  color: rgba(196, 196, 196, 0.5); }
+
+.Form-input:-ms-input-placeholder {
+  color: rgba(196, 196, 196, 0.5); }
+
+.Form-input:-moz-placeholder {
+  color: rgba(196, 196, 196, 0.5); }
+
+.Form-input--withSubmit {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0; }
+
+.Form-submit {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #C37D9C;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  outline: none;
+  background: rgba(195, 125, 156, 0.8); }
+  .Form-submit:hover, .Form-submit:focus {
+    background: #C37D9C; }
+
+.Form-submitIcon {
+  color: white; }
+
+.Form-submit:disabled {
+  border: 1px solid rgba(195, 125, 156, 0.8);
+  background: rgba(195, 125, 156, 0.8); }
+  .Form-submit:disabled:hover, .Form-submit:disabled:focus {
+    background: rgba(195, 125, 156, 0.8); }
 
 
 .u-tSpace {
@@ -447,6 +543,7 @@ body {
 
 .Slide-content {
   margin: auto;
+  padding: 100px 0;
   z-index: 1; }
 
 .Slide-content--centered {
@@ -505,6 +602,14 @@ body {
   letter-spacing: 0px;
   line-height: 28px;
   opacity: 0.86; }
+
+.Text-disclaimer {
+  font-family: 'Lato';
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  line-height: 18px;
+  opacity: 0.35; }
 
 .Text-highlight {
   padding: 10px 30px 18px;

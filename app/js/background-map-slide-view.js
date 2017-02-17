@@ -2,11 +2,13 @@
  *  Background map view
  */
 
-var DefaultSlideView = require('./default-slide-view');
-var TravelItems = require('./travel-items.js');
 var _ = require('underscore');
 var L = require('leaflet');
 var $ = require('jquery');
+var DefaultSlideView = require('./default-slide-view');
+var TravelItems = require('./travel-items.js');
+var HoneymoonFormView = require('./honeymoon-form-view');
+var QUERY_TEMPLATE = _.template('http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=<%= q %>');
 
 module.exports = DefaultSlideView.extend({
 
@@ -29,15 +31,13 @@ module.exports = DefaultSlideView.extend({
 
     this.$el.css('background-color', this.options.background);
 
-    setTimeout(
-      this._initViews.bind(this),
-      1000
-    );
+    this._initViews();
+    setTimeout(this._initMap.bind(this), 0);
 
     return this;
   },
 
-  _initViews: function () {
+  _initMap: function () {
     var map = L.map('js-map', {
       doubleClickZoom: false,
       boxZoom: false,
@@ -71,7 +71,7 @@ module.exports = DefaultSlideView.extend({
     };
 
     var loadPoints = function () {
-      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM pois_nueva_zelanda", function(data) {
+      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM pois_nueva_zelanda' }), function(data) {
         L.geoJson(data, {
           pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, markerStyle);
@@ -81,14 +81,14 @@ module.exports = DefaultSlideView.extend({
       });
     };
 
-    $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM xavijam.oceania_adm0 where iso_alpha3='NZL'", function(data) {
+    $.getJSON(QUERY_TEMPLATE({ q: "SELECT the_geom FROM oceania_adm0 where iso_alpha3='NZL'" }), function(data) {
       L.geoJson(data, {
         style: polygonStyle
       }).addTo(map);
 
       var onLineLoaded = _.after(3, loadPoints);
 
-      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_taupo_a_blue_pools_walk", function(data) {
+      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_taupo_a_blue_pools_walk' }), function(data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -96,7 +96,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-      $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_sky_tower_a_taupo", function(data) {
+      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_sky_tower_a_taupo' }), function(data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -104,7 +104,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-       $.getJSON("http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM indicaciones_de_blue_pools_walk_a_kaikoura", function(data) {
+       $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_blue_pools_walk_a_kaikoura' }), function(data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -112,6 +112,11 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
     });
+  },
+
+  _initViews: function () {
+    var form = new HoneymoonFormView();
+    this.$('.Slide-content').append(form.render().el)
   }
 
 });

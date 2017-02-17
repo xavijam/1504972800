@@ -1,0 +1,29 @@
+<div class="Form-fieldset">
+  <div class="Form-field">
+    <input type="email" name="email" class="Form-input Form-input--withSubmit js-textInput" placeholder="{{ t 'honeymoon.email-placeholder' }}" value="{{value}}"
+      {{#ifCond state '==' 'loading' }}
+        disabled
+      {{/ifCond}}
+    />
+    <i class="Form-inputIcon fa fa-envelope-o"></i>
+  </div>
+  <div class="Form-field">
+    {{#ifCond state '==' 'loading' }}
+      <button type="button" class="Form-submit" disabled>
+        <i class="Form-submitIcon fa fa-circle-o-notch fa-spin fa-fw"></i>
+      </button>
+    {{/ifCond}}
+    {{#ifCond state '==' 'idle' }}
+      <button type="submit" class="Form-submit">
+        <i class="Form-submitIcon fa fa-arrow-right"></i>
+      </button>
+    {{/ifCond}}
+    {{#ifCond state '==' 'success' }}
+      <button type="submit" class="Form-submit" disabled>
+        <i class="Form-submitIcon fa fa-check"></i>
+      </button>
+    {{/ifCond}}
+  </div>
+</div>
+
+<input type="text" name="_gotcha" style="display:none" />

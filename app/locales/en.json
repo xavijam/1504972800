@@ -44,6 +44,8 @@
     "desc": "This plane bound for New Zealand!, and we would like visit several places. We have our flight tickets and backpacks, and we want you to help us in our route.<br/><br/> Below you will find a big list of several activities we would like to live in this country, It will be the first time we will visit it (and we feel it will be the last one, it is Spain's antipodes!). </br></br> If you are interested in help us with any of them, just add your email after the list and we will answer you with the instructions, easy peasy.",
     "expense": "expense",
     "leisure": "leisure",
+    "disclaimer": "Choose the option(s) you want and help with what you consider, it is not needed to pay the whole activity or expense.",
+    "email-placeholder": "Add your email",
     "items": {
       "renting": {
         "title": "Campervan renting",

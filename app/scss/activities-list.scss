@@ -2,10 +2,23 @@
 
 // Styles for honeymoon activities list
 
+.TravelList-map {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 900px;
+  overflow: hidden;
+  z-index: -1;
+}
+.TravelList-map .leaflet-marker-pane,
+.TravelList-map .leaflet-shadow-pane {
+  display: none!important;
+}
 .TravelList {
   width: 100%;
   max-width: 1020px;
-  margin: 40px auto;
+  margin: 40px auto 0;
 }
 .TravelList .l-box {
   margin: 20px;
@@ -88,27 +101,16 @@
   justify-content: center;
   align-items: center;
 }
-.TravelList-map {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 50%;
-  height: 705px;
-  overflow: hidden;
-  z-index: -1;
+.TravelList-disclaimer {
+  max-width: 400px;
+  margin: 30px auto;
 }
-.leaflet-marker-pane,
-.leaflet-shadow-pane {
-  display: none!important;
-}
-
 @include screen(600px, 1000px) {
   .TravelList-map {
     width: 75%;
     opacity: 0.75;
   }
 }
-
 @include screen(0, 600px) {
   .TravelList-map {
     width: 100%;

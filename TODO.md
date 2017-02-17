@@ -13,7 +13,10 @@ Pending things
 - [x] Finish accomodation slide!.
 - [x] Check problem with scroll within slide
 - [x] Add honeymoon slide!.
-- [ ] Honeymoon map.
+- [x] Honeymoon map.
+- [ ] Add more activities in travel slide.
+- [ ] Review texts in spanish.
+- [ ] Review texts in english.
 - [ ] Honeymoon form.
 - [ ] Create contact slide.
 
@@ -22,7 +25,8 @@ Pending things
   - http://codepen.io/ItsJonQ/pen/yvfDF/
   - http://takentech.com/flyaway/
 - [ ] Notes in each slide (links, notes, etc...).
-- [ ] Dots tooltip.
+- [ ] Review dots in mobile.
+
 - [ ] Check deploy script, with --production flag.
 - [ ] Deploy web.
-- [ ] Local Storage.
+- [x] Local Storage.
