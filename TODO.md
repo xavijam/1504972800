@@ -14,10 +14,11 @@ Pending things
 - [x] Check problem with scroll within slide
 - [x] Add honeymoon slide!.
 - [x] Honeymoon map.
-- [ ] Add more activities in travel slide.
+- [x] Add more activities in travel slide.
+- [x] Honeymoon form.
+- [x] Local Storage.
 - [ ] Review texts in spanish.
 - [ ] Review texts in english.
-- [ ] Honeymoon form.
 - [ ] Create contact slide.
 
 - [ ] Different animations for each slide.
@@ -29,4 +30,3 @@ Pending things
 
 - [ ] Check deploy script, with --production flag.
 - [ ] Deploy web.
-- [x] Local Storage.

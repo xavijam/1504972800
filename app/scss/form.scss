@@ -104,5 +104,10 @@ $button-color: #C37D9C;
   &:hover,
   &:focus {
     background: $button-disabled-color;
+    cursor: default;
   }
+}
+.Form-submit:disabled.Form-submit--success {
+  background: #62C791;
+  border: 1px solid #62C791;
 }

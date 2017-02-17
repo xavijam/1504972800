@@ -259,7 +259,12 @@ body {
   border: 1px solid rgba(195, 125, 156, 0.8);
   background: rgba(195, 125, 156, 0.8); }
   .Form-submit:disabled:hover, .Form-submit:disabled:focus {
-    background: rgba(195, 125, 156, 0.8); }
+    background: rgba(195, 125, 156, 0.8);
+    cursor: default; }
+
+.Form-submit:disabled.Form-submit--success {
+  background: #62C791;
+  border: 1px solid #62C791; }
 
 
 .u-tSpace {

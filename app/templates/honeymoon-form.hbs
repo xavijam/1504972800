@@ -4,6 +4,7 @@
       {{#ifCond state '==' 'loading' }}
         disabled
       {{/ifCond}}
+      required
     />
     <i class="Form-inputIcon fa fa-envelope-o"></i>
   </div>
@@ -19,11 +20,9 @@
       </button>
     {{/ifCond}}
     {{#ifCond state '==' 'success' }}
-      <button type="submit" class="Form-submit" disabled>
+      <button type="submit" class="Form-submit Form-submit--success" disabled>
         <i class="Form-submitIcon fa fa-check"></i>
       </button>
     {{/ifCond}}
   </div>
 </div>
-
-<input type="text" name="_gotcha" style="display:none" />

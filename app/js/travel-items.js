@@ -86,7 +86,7 @@ module.exports = [
     desc: 'honeymoon.items.oamaru.desc',
     cost: '~40',
     wikipediaURL: 'honeymoon.items.oamaru.wikipedia',
-    imageURL: 'http://www.backpackerguide.nz/wp-content/uploads/2014/10/Penguins-Crossing-Oamaru1-e1412224639301.jpg',
+    imageURL: 'https://s-media-cache-ak0.pinimg.com/originals/7b/1b/89/7b1b893ccd0dcca603fd5736b8d8281c.jpg',
     itemURL: 'honeymoon.items.oamaru.url'
   },
   {

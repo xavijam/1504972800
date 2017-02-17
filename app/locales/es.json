@@ -73,7 +73,7 @@
       },
       "hobbiton": {
         "title": "Hobbiton",
-        "desc": "¿Sabes que el Señor de los Anillos se rodó en Nueva Zelanda? ¡A visitarlo!",
+        "desc": "¿Sabes que el Hobbit y el Señor de los Anillos se rodó en Nueva Zelanda? ¡A visitarlo!",
         "url": "http://www.hobbitontours.com/",
         "wikipedia": "https://es.wikipedia.org/wiki/Hobbiton_Movie_Set"
       },
@@ -95,11 +95,29 @@
         "url": "https://www.tamakimaorivillage.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Rotorua"
       },
+      "campervan-park": {
+        "title": "Parque para caravanas",
+        "desc": "No está permitido aparcar la caravana en cualquier lugar para dormir, así que necesitaremos elegir un camping o un parque para caravanas cada día.",
+        "url": "http://www.holidayparks.co.nz/find-a-park?region=All&search=&field_star_rating_value=All&group=All",
+        "wikipedia": "https://es.wikipedia.org/wiki/Camping_in_New_Zealand"
+      },
       "oamaru": {
         "title": "Visitar pingüinos",
         "desc": "Nos encantan los pingüinos y nos gustaría visitarlos en Oamaru, y posiblemente adoptar uno. Tu también puedes, ¡mira la web!.",
         "url": "http://www.penguins.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Oamaru"
+      },
+      "kaikoura": {
+        "title": "Ballenas en Kaikorua",
+        "desc": "No podemos perder la oportunidad de ver ballenas nadando en las frías aguas de Kaikorua.",
+        "url": "http://www.whalewatch.co.nz/",
+        "wikipedia": "https://es.wikipedia.org/wiki/Kaikoura"
+      },
+      "waitomo": {
+        "title": "Luciernagas de Waitomo",
+        "desc": "Hay varias cuevas de luciernagas en Nueva Zelanda, pero estas son las más famosas.",
+        "url": "http://www.waitomo.com/Waitomo-Glowworm-Caves/Pages/default.aspx",
+        "wikipedia": "https://es.wikipedia.org/wiki/Waitomo_Glowworm_Caves"
       }
     }
   },

@@ -72,7 +72,7 @@
       },
       "hobbiton": {
         "title": "Hobbiton visit",
-        "desc": "Do you know where Lord of the Rings was filmed? There we want to go :D.",
+        "desc": "Do you know where Hobbit or Lord of the Rings was filmed? There we want to go :D.",
         "url": "http://www.hobbitontours.com/",
         "wikipedia": "https://en.wikipedia.org/wiki/Hobbiton_Movie_Set"
       },
@@ -94,11 +94,29 @@
         "url": "https://www.tamakimaorivillage.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Rotorua"
       },
+      "campervan-park": {
+        "title": "Campervan park",
+        "desc": "It is not allowed to park the campervan wherever you want for sleeping, so we need to choose a campervan-park or camping for each night.",
+        "url": "http://www.holidayparks.co.nz/find-a-park?region=All&search=&field_star_rating_value=All&group=All",
+        "wikipedia": "https://en.wikipedia.org/wiki/Camping_in_New_Zealand"
+      },
       "oamaru": {
         "title": "Penguins sightseeing",
-        "desc": "We really love penguins, and we would like to visit them in Oamaru and adopt one. Check the web!.",
+        "desc": "We really love penguins, and we would like to visit them in Oamaru and adopt one. Check the web!",
         "url": "http://www.penguins.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Oamaru"
+      },
+      "kaikoura": {
+        "title": "Whales in Kaikorua",
+        "desc": "We can't miss the oportunity to see the whales swimming in the Kaikorua waters.",
+        "url": "http://www.whalewatch.co.nz/",
+        "wikipedia": "https://en.wikipedia.org/wiki/Kaikoura"
+      },
+      "waitomo": {
+        "title": "Waitomo glowworm caves",
+        "desc": "There are several glowworm caves in New Zealand, but this is the most famous one.",
+        "url": "http://www.waitomo.com/Waitomo-Glowworm-Caves/Pages/default.aspx",
+        "wikipedia": "https://en.wikipedia.org/wiki/Waitomo_Glowworm_Caves"
       }
     }
   },

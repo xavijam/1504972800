@@ -997,7 +997,7 @@ module.exports = [{
   desc: 'honeymoon.items.oamaru.desc',
   cost: '~40',
   wikipediaURL: 'honeymoon.items.oamaru.wikipedia',
-  imageURL: 'http://www.backpackerguide.nz/wp-content/uploads/2014/10/Penguins-Crossing-Oamaru1-e1412224639301.jpg',
+  imageURL: 'https://s-media-cache-ak0.pinimg.com/originals/7b/1b/89/7b1b893ccd0dcca603fd5736b8d8281c.jpg',
   itemURL: 'honeymoon.items.oamaru.url'
 }, {
   type: 'honeymoon.leisure',
@@ -1110,7 +1110,7 @@ module.exports = {
       },
       "hobbiton": {
         "title": "Hobbiton visit",
-        "desc": "Do you know where Lord of the Rings was filmed? There we want to go :D.",
+        "desc": "Do you know where Hobbit or Lord of the Rings was filmed? There we want to go :D.",
         "url": "http://www.hobbitontours.com/",
         "wikipedia": "https://en.wikipedia.org/wiki/Hobbiton_Movie_Set"
       },
@@ -1132,11 +1132,29 @@ module.exports = {
         "url": "https://www.tamakimaorivillage.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Rotorua"
       },
+      "campervan-park": {
+        "title": "Campervan park",
+        "desc": "It is not allowed to park the campervan wherever you want for sleeping, so we need to choose a campervan-park or camping for each night.",
+        "url": "http://www.holidayparks.co.nz/find-a-park?region=All&search=&field_star_rating_value=All&group=All",
+        "wikipedia": "https://en.wikipedia.org/wiki/Camping_in_New_Zealand"
+      },
       "oamaru": {
         "title": "Penguins sightseeing",
-        "desc": "We really love penguins, and we would like to visit them in Oamaru and adopt one. Check the web!.",
+        "desc": "We really love penguins, and we would like to visit them in Oamaru and adopt one. Check the web!",
         "url": "http://www.penguins.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Oamaru"
+      },
+      "kaikoura": {
+        "title": "Whales in Kaikorua",
+        "desc": "We can't miss the oportunity to see the whales swimming in the Kaikorua waters.",
+        "url": "http://www.whalewatch.co.nz/",
+        "wikipedia": "https://en.wikipedia.org/wiki/Kaikoura"
+      },
+      "waitomo": {
+        "title": "Waitomo glowworm caves",
+        "desc": "There are several glowworm caves in New Zealand, but this is the most famous one.",
+        "url": "http://www.waitomo.com/Waitomo-Glowworm-Caves/Pages/default.aspx",
+        "wikipedia": "https://en.wikipedia.org/wiki/Waitomo_Glowworm_Caves"
       }
     }
   },
@@ -1224,7 +1242,7 @@ module.exports = {
       },
       "hobbiton": {
         "title": "Hobbiton",
-        "desc": "¿Sabes que el Señor de los Anillos se rodó en Nueva Zelanda? ¡A visitarlo!",
+        "desc": "¿Sabes que el Hobbit y el Señor de los Anillos se rodó en Nueva Zelanda? ¡A visitarlo!",
         "url": "http://www.hobbitontours.com/",
         "wikipedia": "https://es.wikipedia.org/wiki/Hobbiton_Movie_Set"
       },
@@ -1246,11 +1264,29 @@ module.exports = {
         "url": "https://www.tamakimaorivillage.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Rotorua"
       },
+      "campervan-park": {
+        "title": "Parque para caravanas",
+        "desc": "No está permitido aparcar la caravana en cualquier lugar para dormir, así que necesitaremos elegir un camping o un parque para caravanas cada día.",
+        "url": "http://www.holidayparks.co.nz/find-a-park?region=All&search=&field_star_rating_value=All&group=All",
+        "wikipedia": "https://es.wikipedia.org/wiki/Camping_in_New_Zealand"
+      },
       "oamaru": {
         "title": "Visitar pingüinos",
         "desc": "Nos encantan los pingüinos y nos gustaría visitarlos en Oamaru, y posiblemente adoptar uno. Tu también puedes, ¡mira la web!.",
         "url": "http://www.penguins.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Oamaru"
+      },
+      "kaikoura": {
+        "title": "Ballenas en Kaikorua",
+        "desc": "No podemos perder la oportunidad de ver ballenas nadando en las frías aguas de Kaikorua.",
+        "url": "http://www.whalewatch.co.nz/",
+        "wikipedia": "https://es.wikipedia.org/wiki/Kaikoura"
+      },
+      "waitomo": {
+        "title": "Luciernagas de Waitomo",
+        "desc": "Hay varias cuevas de luciernagas en Nueva Zelanda, pero estas son las más famosas.",
+        "url": "http://www.waitomo.com/Waitomo-Glowworm-Caves/Pages/default.aspx",
+        "wikipedia": "https://es.wikipedia.org/wiki/Waitomo_Glowworm_Caves"
       }
     }
   },
@@ -1424,7 +1460,7 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
 },"5":function(container,depth0,helpers,partials,data) {
     return "      <button type=\"submit\" class=\"Form-submit\">\n        <i class=\"Form-submitIcon fa fa-arrow-right\"></i>\n      </button>\n";
 },"7":function(container,depth0,helpers,partials,data) {
-    return "      <button type=\"submit\" class=\"Form-submit\" disabled>\n        <i class=\"Form-submitIcon fa fa-check\"></i>\n      </button>\n";
+    return "      <button type=\"submit\" class=\"Form-submit Form-submit--success\" disabled>\n        <i class=\"Form-submitIcon fa fa-check\"></i>\n      </button>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
@@ -1434,11 +1470,11 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
     + alias3(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper)))
     + "\"\n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.state : depth0),"==","loading",{"name":"ifCond","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    />\n    <i class=\"Form-inputIcon fa fa-envelope-o\"></i>\n  </div>\n  <div class=\"Form-field\">\n"
+    + "      required\n    />\n    <i class=\"Form-inputIcon fa fa-envelope-o\"></i>\n  </div>\n  <div class=\"Form-field\">\n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.state : depth0),"==","loading",{"name":"ifCond","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.state : depth0),"==","idle",{"name":"ifCond","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.state : depth0),"==","success",{"name":"ifCond","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "  </div>\n</div>\n\n<input type=\"text\" name=\"_gotcha\" style=\"display:none\" />";
+    + "  </div>\n</div>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
