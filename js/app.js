@@ -502,10 +502,11 @@ require('select2');
 module.exports = Backbone.View.extend({
 
   tagName: 'li',
+  className: 'u-bSpace--m',
 
   events: {
     'change .js-allergy': '_onChange',
-    'keyUp .js-name': '_onChange',
+    'focusout .js-name': '_onChange',
     'click .js-remove': 'remove'
   },
 
@@ -515,6 +516,7 @@ module.exports = Backbone.View.extend({
 
   render: function render() {
     this.$el.html(template({
+      index: this.collection.indexOf(this.model),
       name: this.model.get('name'),
       allergy: this.model.get('allergy')
     }));
@@ -527,7 +529,7 @@ module.exports = Backbone.View.extend({
     this.$('.js-allergy').select2({
       placeholder: 'placeholder',
       minimumResultsForSearch: Infinity
-    });
+    }).val(this.model.get('allergy')).trigger('change');
   },
 
   _onChange: function _onChange() {
@@ -600,16 +602,16 @@ module.exports = Backbone.View.extend({
 
   initialize: function initialize() {
     this.listenTo(this.collection, 'add', this._renderAttendee);
-    // this.listenTo(this.collection, 'change', this._storeInfo);
   },
 
   render: function render() {
-    this.collection.each(this._renderAttendee);
+    this.collection.each(this._renderAttendee.bind(this));
     return this;
   },
 
   _renderAttendee: function _renderAttendee(mdl) {
     var attendeeView = new AttendeeItemView({
+      collection: this.collection,
       model: mdl
     });
     this.$el.append(attendeeView.render().el);
@@ -680,50 +682,72 @@ module.exports = Backbone.View.extend({
   className: 'Contact',
 
   events: {
+    'focusout .js-email': '_setLocalStorage',
+    'focusout .js-phone': '_setLocalStorage',
+    'focusout .js-song': '_setLocalStorage',
+    'change .js-return': '_setLocalStorage',
+    'change .js-going': '_setLocalStorage',
     'submit': '_onSubmit'
   },
 
   initialize: function initialize() {
-    var storedFormValues = LocalStorage('contact.values') || '';
-    this.collection = new AttendeesCollection(storedFormValues.attendees, { parse: true });
+    var storedAttendees = LocalStorage('contact.attendees') || '';
+    this.collection = new AttendeesCollection(storedAttendees, { parse: true });
 
     this.model = new Backbone.Model({
       state: 'idle'
     });
 
-    this.listenTo(this.model, 'change:state', this.render);
+    this._initBinds();
   },
 
   render: function render() {
+    var storedInputValue = LocalStorage('contact.data');
+
     this.$el.html(template({
-      phone: '',
-      email: '',
-      comment: '',
-      song: ''
+      phone: storedInputValue.phone,
+      email: storedInputValue.email,
+      song: storedInputValue.song
     }));
     this._initViews();
     return this;
   },
 
+  _initBinds: function _initBinds() {
+    this.listenTo(this.model, 'change:state', this.render);
+    this.listenTo(this.collection, 'add remove change', this._setLocalStorage);
+  },
+
   _initViews: function _initViews() {
+    var storedInputValue = LocalStorage('contact.data');
+
     // Attendees view
     var attendeesView = new AttendeesView({
-      collection: this.collection
+      collection: this.collection,
+      state: this.model.get('state')
     });
     this.$('.js-attendees').append(attendeesView.render().el);
 
     // Render buses form
-    this._renderCustomSelect('js-going', transportGoingRoutes);
-    this._renderCustomSelect('js-return', transportReturnRoutes);
-
-    // Render sender info (phone, email)
-    // Render a song you would like to hear in the wedding
+    this._renderCustomSelect('js-going', transportGoingRoutes, 'transport-going', storedInputValue['transport_going']);
+    this._renderCustomSelect('js-return', transportReturnRoutes, 'transport-return', storedInputValue['transport_return']);
   },
 
-  _renderCustomSelect: function _renderCustomSelect(id, data) {
+  _setLocalStorage: function _setLocalStorage() {
+    LocalStorage('contact.attendees', this.collection.toJSON());
+    LocalStorage('contact.data', {
+      transport_going: this.$('.js-going').val(),
+      transport_return: this.$('.js-return').val(),
+      phone: this.$('.js-phone').val(),
+      email: this.$('.js-email').val(),
+      song: this.$('.js-song').val()
+    });
+  },
+
+  _renderCustomSelect: function _renderCustomSelect(id, data, key, value) {
     var $select = this.$('.' + id);
     $select.append($('<option>')); // For placeholder
-    $select.append($('<option>').val('None').text('None')); // For None
+    $select.append($('<option>').val(Handlebars.helpers.t('contact.we-dont-need')).text(Handlebars.helpers.t('contact.we-dont-need'))); // For None
 
     _.each(data, function (item) {
       var desc = item.desc ? ' (' + item.desc + ')' : '';
@@ -732,9 +756,11 @@ module.exports = Backbone.View.extend({
     }, this);
 
     $select.select2({
-      placeholder: 'hello',
+      placeholder: Handlebars.helpers.t('contact.placeholder-' + key),
       minimumResultsForSearch: Infinity
     });
+
+    $select.val(value).trigger('change');
   },
 
   _reviewForm: function _reviewForm() {
@@ -742,6 +768,13 @@ module.exports = Backbone.View.extend({
     var email = this.$('.js-email').val();
     var numberAttendees = this.collection.size();
     var validAttendees = this.collection.isValid();
+
+    this.$('.js-phone').toggleClass('has-errors', !phone);
+    this.$('.js-email').toggleClass('has-errors', !email);
+    this.$('.js-addAttendee').toggleClass('has-errors', !numberAttendees);
+    this.$('.js-name').each(function (i, el) {
+      $(el).toggleClass('has-errors', !$(el).val());
+    });
   },
 
   _isValid: function _isValid() {
@@ -749,7 +782,6 @@ module.exports = Backbone.View.extend({
     var email = this.$('.js-email').val();
     var numberAttendees = this.collection.size();
     var validAttendees = this.collection.isValid();
-
     return numberAttendees > 0 && validAttendees && phone && email;
   },
 
@@ -1359,8 +1391,8 @@ module.exports = {
   "date": "9th September 2017",
   "powered-by": "Powered by:",
   "form": {
-    "email": "Your email",
-    "phone": "Your phone",
+    "email": "*Your email",
+    "phone": "*Your phone",
     "song": "Your favourite song for the weeding",
     "questions": "Any question?",
     "error": "Error",
@@ -1494,7 +1526,22 @@ module.exports = {
     "attendees": "attendees",
     "bus-info": "buses",
     "your-info": "details",
-    "other-contact": "Or if you prefer to call or write us directly."
+    "other-contact": "Or if you prefer to call or write us directly.",
+    "name": "Name",
+    "placeholder-transport-going": "Do you need bus for going? Choose your point",
+    "placeholder-transport-return": "Do you need bus for return? Choose your stop",
+    "add-attendee": "Add attendee",
+    "we-dont-need": "We don't need",
+    "allergy": {
+      "placeholder": "Allergy/Others",
+      "nothing": "Nothing",
+      "nuts": "Nuts",
+      "lactose": "Lactose",
+      "egg": "Egg",
+      "vegan": "Vegan",
+      "celiac": "Celiac",
+      "vegetarian": "Vegetarian"
+    }
   }
 };
 });
@@ -1504,8 +1551,8 @@ module.exports = {
   "date": "9 Septiembre 2017",
   "powered-by": "Patrocinado por:",
   "form": {
-    "email": "Tu email",
-    "phone": "Tu teléfono",
+    "email": "*Tu email",
+    "phone": "*Tu teléfono",
     "song": "Tu canción favorita para la boda",
     "questions": "Alguna pregunta?",
     "error": "Error",
@@ -1643,7 +1690,21 @@ module.exports = {
     "attendees": "asistentes",
     "bus-info": "buses",
     "your-info": "detalles",
-    "other-contact": "O si lo prefieres, puedes llamarnos o escribirnos."
+    "placeholder-transport-going": "¿Necesitáis autobús de ida? Elige desde donde",
+    "placeholder-transport-return": "¿Necesitáis autobús de vuelta? Elige tu parada",
+    "we-dont-need": "No lo necesitamos",
+    "add-attendee": "Añadir asistente",
+    "other-contact": "O si lo prefieres, puedes llamarnos o escribirnos.",
+    "allergy": {
+      "placeholder": "Alergia/Otros",
+      "nothing": "Nada",
+      "nuts": "Frutos secos",
+      "lactose": "Lactosa",
+      "egg": "Huevo",
+      "vegan": "Vegano",
+      "celiac": "Celiaca/o",
+      "vegetarian": "Vegetariana/o"
+    }
   }
 };
 });
@@ -1760,11 +1821,33 @@ if (typeof define === 'function' && define.amd) {
 
 ;require.register("templates/contact/attendee-item.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper;
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "<input type=\"text\" name=\"name\" value=\""
-    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)))
-    + "\" class=\"Form-input js-name\" placeholder=\"Placeholder\">\n<select class=\"js-allergy\" name=\"allergy\">\n  <option></option>\n  <option></option>\n  <option></option>\n  <option></option>\n  <option></option>\n</select>\n<i class=\"fa fa-trash js-remove\"></i>";
+  return "<div class=\"Form-fieldset\">\n  <div class=\"Form-field Contact-attendeeName u-rSpace--m\">\n    <input type=\"text\" name=\""
+    + alias4(((helper = (helper = helpers.index || (depth0 != null ? depth0.index : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
+    + "-name\" value=\""
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "\" class=\"Form-input js-name\" placeholder=\""
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.name",{"name":"t","hash":{},"data":data}))
+    + "\" >\n  </div>\n  <div class=\"Form-field Contact-attendeeAllergy\">\n    <select class=\"js-allergy\" name=\""
+    + alias4(((helper = (helper = helpers.index || (depth0 != null ? depth0.index : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
+    + "-allergy\" data-placeholder=\""
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.placeholder",{"name":"t","hash":{},"data":data}))
+    + "\">\n      <option></option>\n      <option>"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.nothing",{"name":"t","hash":{},"data":data}))
+    + "</option>\n      <option>"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.vegetarian",{"name":"t","hash":{},"data":data}))
+    + "</option>\n      <option>"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.celiac",{"name":"t","hash":{},"data":data}))
+    + "</option>\n      <option>"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.vegan",{"name":"t","hash":{},"data":data}))
+    + "</option>\n      <option>"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.egg",{"name":"t","hash":{},"data":data}))
+    + "</option>\n      <option>"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.lactose",{"name":"t","hash":{},"data":data}))
+    + "</option>\n      <option>"
+    + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.allergy.nuts",{"name":"t","hash":{},"data":data}))
+    + "</option>\n    </select>\n  </div>\n  <i class=\"fa fa-trash Contact-attendeeRemove js-remove\"></i>\n</div>\n";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
@@ -1779,7 +1862,9 @@ if (typeof define === 'function' && define.amd) {
 
 ;require.register("templates/contact/attendees.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<button type=\"button\" class=\"js-addAttendee\">Add attendee</button>";
+    return "<button type=\"button\" class=\"Button Button--withIcon js-addAttendee\">\n  <i class=\"fa fa-plus u-rSpace--m\"></i> "
+    + container.escapeExpression((helpers.t || (depth0 && depth0.t) || helpers.helperMissing).call(depth0 != null ? depth0 : {},"contact.add-attendee",{"name":"t","hash":{},"data":data}))
+    + "\n</button>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
@@ -1798,9 +1883,11 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
 
   return "<div class=\"Contact-block js-attendees\">\n  <h4 class=\"Contact-blockTitle\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.attendees",{"name":"t","hash":{},"data":data}))
-    + "</h4>\n</div>\n<div class=\"Contact-block js-buses\">\n  <h4 class=\"Contact-blockTitle\">"
+    + "</h4>\n</div>\n<div class=\"Contact-block js-buses\">\n  <h4 class=\"Contact-blockTitle\">\n    "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.bus-info",{"name":"t","hash":{},"data":data}))
-    + "</h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field\">\n      <select class=\"js-going Contact-input--large\"></select>\n    </div>\n  </div>\n  <div class=\"Form-fieldset u-tSpace--m\">\n    <div class=\"Form-field\">\n      <select class=\"js-return Contact-input--large\"></select>\n    </div>\n  </div>\n</div>\n<div class=\"Contact-block js-info\">\n  <h4 class=\"Contact-blockTitle\">"
+    + "\n    <a href=\"#/"
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going",{"name":"t","hash":{},"data":data}))
+    + "\" class=\"Color Color--alternative u-lSpace--m\">\n      <i class=\"fa fa-link\"></i>\n    </a>\n  </h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field\">\n      <select class=\"js-going Contact-input--large\" name=\"going\"></select>\n    </div>\n  </div>\n  <div class=\"Form-fieldset u-tSpace--m\">\n    <div class=\"Form-field\">\n      <select class=\"js-return Contact-input--large\" name=\"return\"></select>\n    </div>\n  </div>\n</div>\n<div class=\"Contact-block js-info\">\n  <h4 class=\"Contact-blockTitle\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.your-info",{"name":"t","hash":{},"data":data}))
     + "</h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field u-rSpace--m\">\n      <input type=\"text\" value=\""
     + alias3(((helper = (helper = helpers.phone || (depth0 != null ? depth0.phone : depth0)) != null ? helper : alias2),(typeof helper === alias4 ? helper.call(alias1,{"name":"phone","hash":{},"data":data}) : helper)))
