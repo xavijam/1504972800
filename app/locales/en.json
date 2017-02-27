@@ -1,6 +1,16 @@
 {
   "date": "9th September 2017",
   "powered-by": "Powered by:",
+  "form": {
+    "email": "Your email",
+    "phone": "Your phone",
+    "song": "Your favourite song for the weeding",
+    "questions": "Any question?",
+    "error": "Error",
+    "send": "Send",
+    "sending": "Sending...",
+    "sent": "Sent"
+  },
   "home": {
     "key": "wedding",
     "title": "Wedding",
@@ -123,6 +133,9 @@
   "contact": {
     "key": "contact",
     "title": "Contact",
-    "desc": ""
+    "desc": "This is the perfect place for confirming your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
+    "attendance": "attendance",
+    "bus-info": "buses",
+    "your-info": "details"
   }
 }

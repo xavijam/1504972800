@@ -21,13 +21,14 @@
   margin: 40px auto 0;
 }
 .TravelList .l-box {
-  margin: 20px;
+  margin: 10px;
 }
 .TravelList-item {
   position: relative;
-  min-width: 320px;
   background: white;
-  box-shadow: 0 0 25px 1px rgba(black, 0.1);
+  border: 1px solid #DEDEDE;
+  border-radius: 6px;
+  overflow: hidden;
 }
 .TravelList-itemImage {
   width: 100%;
@@ -102,7 +103,7 @@
   align-items: center;
 }
 .TravelList-disclaimer {
-  max-width: 400px;
+  max-width: 300px;
   margin: 30px auto;
 }
 @include screen(600px, 1000px) {

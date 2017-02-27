@@ -2137,6 +2137,65 @@ module.exports = defineProperties;
   })();
 });
 
+require.register("desandro-matches-selector/matches-selector.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "desandro-matches-selector");
+  (function() {
+    /**
+ * matchesSelector v2.0.2
+ * matchesSelector( element, '.selector' )
+ * MIT license
+ */
+
+/*jshint browser: true, strict: true, undef: true, unused: true */
+
+( function( window, factory ) {
+  /*global define: false, module: false */
+  'use strict';
+  // universal module definition
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory();
+  } else {
+    // browser global
+    window.matchesSelector = factory();
+  }
+
+}( window, function factory() {
+  'use strict';
+
+  var matchesMethod = ( function() {
+    var ElemProto = window.Element.prototype;
+    // check for the standard method name first
+    if ( ElemProto.matches ) {
+      return 'matches';
+    }
+    // check un-prefixed
+    if ( ElemProto.matchesSelector ) {
+      return 'matchesSelector';
+    }
+    // check vendor prefixes
+    var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
+
+    for ( var i=0; i < prefixes.length; i++ ) {
+      var prefix = prefixes[i];
+      var method = prefix + 'MatchesSelector';
+      if ( ElemProto[ method ] ) {
+        return method;
+      }
+    }
+  })();
+
+  return function matchesSelector( elem, selector ) {
+    return elem[ matchesMethod ]( selector );
+  };
+
+}));
+  })();
+});
+
 require.register("es-abstract/es5.js", function(exports, require, module) {
   require = __makeRelativeRequire(require, {}, "es-abstract");
   (function() {
@@ -2315,6 +2374,364 @@ require.register("es-to-primitive/helpers/isPrimitive.js", function(exports, req
     module.exports = function isPrimitive(value) {
 	return value === null || (typeof value !== 'function' && typeof value !== 'object');
 };
+  })();
+});
+
+require.register("ev-emitter/ev-emitter.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "ev-emitter");
+  (function() {
+    /**
+ * EvEmitter v1.0.3
+ * Lil' event emitter
+ * MIT License
+ */
+
+/* jshint unused: true, undef: true, strict: true */
+
+( function( global, factory ) {
+  // universal module definition
+  /* jshint strict: false */ /* globals define, module, window */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD - RequireJS
+    define( factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS - Browserify, Webpack
+    module.exports = factory();
+  } else {
+    // Browser globals
+    global.EvEmitter = factory();
+  }
+
+}( typeof window != 'undefined' ? window : this, function() {
+
+"use strict";
+
+function EvEmitter() {}
+
+var proto = EvEmitter.prototype;
+
+proto.on = function( eventName, listener ) {
+  if ( !eventName || !listener ) {
+    return;
+  }
+  // set events hash
+  var events = this._events = this._events || {};
+  // set listeners array
+  var listeners = events[ eventName ] = events[ eventName ] || [];
+  // only add once
+  if ( listeners.indexOf( listener ) == -1 ) {
+    listeners.push( listener );
+  }
+
+  return this;
+};
+
+proto.once = function( eventName, listener ) {
+  if ( !eventName || !listener ) {
+    return;
+  }
+  // add event
+  this.on( eventName, listener );
+  // set once flag
+  // set onceEvents hash
+  var onceEvents = this._onceEvents = this._onceEvents || {};
+  // set onceListeners object
+  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || {};
+  // set flag
+  onceListeners[ listener ] = true;
+
+  return this;
+};
+
+proto.off = function( eventName, listener ) {
+  var listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) {
+    return;
+  }
+  var index = listeners.indexOf( listener );
+  if ( index != -1 ) {
+    listeners.splice( index, 1 );
+  }
+
+  return this;
+};
+
+proto.emitEvent = function( eventName, args ) {
+  var listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) {
+    return;
+  }
+  var i = 0;
+  var listener = listeners[i];
+  args = args || [];
+  // once stuff
+  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
+
+  while ( listener ) {
+    var isOnce = onceListeners && onceListeners[ listener ];
+    if ( isOnce ) {
+      // remove listener
+      // remove before trigger to prevent recursion
+      this.off( eventName, listener );
+      // unset once flag
+      delete onceListeners[ listener ];
+    }
+    // trigger listener
+    listener.apply( this, args );
+    // get next listener
+    i += isOnce ? 0 : 1;
+    listener = listeners[i];
+  }
+
+  return this;
+};
+
+return EvEmitter;
+
+}));
+  })();
+});
+
+require.register("fizzy-ui-utils/utils.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "fizzy-ui-utils");
+  (function() {
+    /**
+ * Fizzy UI utils v2.0.3
+ * MIT license
+ */
+
+/*jshint browser: true, undef: true, unused: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false */ /*globals define, module, require */
+
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'desandro-matches-selector/matches-selector'
+    ], function( matchesSelector ) {
+      return factory( window, matchesSelector );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('desandro-matches-selector')
+    );
+  } else {
+    // browser global
+    window.fizzyUIUtils = factory(
+      window,
+      window.matchesSelector
+    );
+  }
+
+}( window, function factory( window, matchesSelector ) {
+
+'use strict';
+
+var utils = {};
+
+// ----- extend ----- //
+
+// extends objects
+utils.extend = function( a, b ) {
+  for ( var prop in b ) {
+    a[ prop ] = b[ prop ];
+  }
+  return a;
+};
+
+// ----- modulo ----- //
+
+utils.modulo = function( num, div ) {
+  return ( ( num % div ) + div ) % div;
+};
+
+// ----- makeArray ----- //
+
+// turn element or nodeList into an array
+utils.makeArray = function( obj ) {
+  var ary = [];
+  if ( Array.isArray( obj ) ) {
+    // use object if already an array
+    ary = obj;
+  } else if ( obj && typeof obj.length == 'number' ) {
+    // convert nodeList to array
+    for ( var i=0; i < obj.length; i++ ) {
+      ary.push( obj[i] );
+    }
+  } else {
+    // array of single index
+    ary.push( obj );
+  }
+  return ary;
+};
+
+// ----- removeFrom ----- //
+
+utils.removeFrom = function( ary, obj ) {
+  var index = ary.indexOf( obj );
+  if ( index != -1 ) {
+    ary.splice( index, 1 );
+  }
+};
+
+// ----- getParent ----- //
+
+utils.getParent = function( elem, selector ) {
+  while ( elem != document.body ) {
+    elem = elem.parentNode;
+    if ( matchesSelector( elem, selector ) ) {
+      return elem;
+    }
+  }
+};
+
+// ----- getQueryElement ----- //
+
+// use element as selector string
+utils.getQueryElement = function( elem ) {
+  if ( typeof elem == 'string' ) {
+    return document.querySelector( elem );
+  }
+  return elem;
+};
+
+// ----- handleEvent ----- //
+
+// enable .ontype to trigger from .addEventListener( elem, 'type' )
+utils.handleEvent = function( event ) {
+  var method = 'on' + event.type;
+  if ( this[ method ] ) {
+    this[ method ]( event );
+  }
+};
+
+// ----- filterFindElements ----- //
+
+utils.filterFindElements = function( elems, selector ) {
+  // make array of elems
+  elems = utils.makeArray( elems );
+  var ffElems = [];
+
+  elems.forEach( function( elem ) {
+    // check that elem is an actual element
+    if ( !( elem instanceof HTMLElement ) ) {
+      return;
+    }
+    // add elem if no selector
+    if ( !selector ) {
+      ffElems.push( elem );
+      return;
+    }
+    // filter & find items if we have a selector
+    // filter
+    if ( matchesSelector( elem, selector ) ) {
+      ffElems.push( elem );
+    }
+    // find children
+    var childElems = elem.querySelectorAll( selector );
+    // concat childElems to filterFound array
+    for ( var i=0; i < childElems.length; i++ ) {
+      ffElems.push( childElems[i] );
+    }
+  });
+
+  return ffElems;
+};
+
+// ----- debounceMethod ----- //
+
+utils.debounceMethod = function( _class, methodName, threshold ) {
+  // original method
+  var method = _class.prototype[ methodName ];
+  var timeoutName = methodName + 'Timeout';
+
+  _class.prototype[ methodName ] = function() {
+    var timeout = this[ timeoutName ];
+    if ( timeout ) {
+      clearTimeout( timeout );
+    }
+    var args = arguments;
+
+    var _this = this;
+    this[ timeoutName ] = setTimeout( function() {
+      method.apply( _this, args );
+      delete _this[ timeoutName ];
+    }, threshold || 100 );
+  };
+};
+
+// ----- docReady ----- //
+
+utils.docReady = function( callback ) {
+  var readyState = document.readyState;
+  if ( readyState == 'complete' || readyState == 'interactive' ) {
+    // do async to allow for other scripts to run. metafizzy/flickity#441
+    setTimeout( callback );
+  } else {
+    document.addEventListener( 'DOMContentLoaded', callback );
+  }
+};
+
+// ----- htmlInit ----- //
+
+// http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/
+utils.toDashed = function( str ) {
+  return str.replace( /(.)([A-Z])/g, function( match, $1, $2 ) {
+    return $1 + '-' + $2;
+  }).toLowerCase();
+};
+
+var console = window.console;
+/**
+ * allow user to initialize classes via [data-namespace] or .js-namespace class
+ * htmlInit( Widget, 'widgetName' )
+ * options are parsed from data-namespace-options
+ */
+utils.htmlInit = function( WidgetClass, namespace ) {
+  utils.docReady( function() {
+    var dashedNamespace = utils.toDashed( namespace );
+    var dataAttr = 'data-' + dashedNamespace;
+    var dataAttrElems = document.querySelectorAll( '[' + dataAttr + ']' );
+    var jsDashElems = document.querySelectorAll( '.js-' + dashedNamespace );
+    var elems = utils.makeArray( dataAttrElems )
+      .concat( utils.makeArray( jsDashElems ) );
+    var dataOptionsAttr = dataAttr + '-options';
+    var jQuery = window.jQuery;
+
+    elems.forEach( function( elem ) {
+      var attr = elem.getAttribute( dataAttr ) ||
+        elem.getAttribute( dataOptionsAttr );
+      var options;
+      try {
+        options = attr && JSON.parse( attr );
+      } catch ( error ) {
+        // log error, do not initialize
+        if ( console ) {
+          console.error( 'Error parsing ' + dataAttr + ' on ' + elem.className +
+          ': ' + error );
+        }
+        return;
+      }
+      // initialize
+      var instance = new WidgetClass( elem, options );
+      // make available via $().data('namespace')
+      if ( jQuery ) {
+        jQuery.data( elem, namespace, instance );
+      }
+    });
+
+  });
+};
+
+// -----  ----- //
+
+return utils;
+
+}));
   })();
 });
 
@@ -4957,425 +5374,149 @@ return Slide;
   })();
 });
 
-require.register("flickity/node_modules/desandro-matches-selector/matches-selector.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/desandro-matches-selector");
+require.register("for-each/index.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "for-each");
   (function() {
-    /**
- * matchesSelector v2.0.1
- * matchesSelector( element, '.selector' )
- * MIT license
- */
+    var isFunction = require('is-function')
 
-/*jshint browser: true, strict: true, undef: true, unused: true */
+module.exports = forEach
 
-( function( window, factory ) {
-  /*global define: false, module: false */
-  'use strict';
-  // universal module definition
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD
-    define( factory );
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS
-    module.exports = factory();
-  } else {
-    // browser global
-    window.matchesSelector = factory();
-  }
+var toString = Object.prototype.toString
+var hasOwnProperty = Object.prototype.hasOwnProperty
 
-}( window, function factory() {
-  'use strict';
-
-  var matchesMethod = ( function() {
-    var ElemProto = Element.prototype;
-    // check for the standard method name first
-    if ( ElemProto.matches ) {
-      return 'matches';
+function forEach(list, iterator, context) {
+    if (!isFunction(iterator)) {
+        throw new TypeError('iterator must be a function')
     }
-    // check un-prefixed
-    if ( ElemProto.matchesSelector ) {
-      return 'matchesSelector';
+
+    if (arguments.length < 3) {
+        context = this
     }
-    // check vendor prefixes
-    var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
+    
+    if (toString.call(list) === '[object Array]')
+        forEachArray(list, iterator, context)
+    else if (typeof list === 'string')
+        forEachString(list, iterator, context)
+    else
+        forEachObject(list, iterator, context)
+}
 
-    for ( var i=0; i < prefixes.length; i++ ) {
-      var prefix = prefixes[i];
-      var method = prefix + 'MatchesSelector';
-      if ( ElemProto[ method ] ) {
-        return method;
-      }
-    }
-  })();
-
-  return function matchesSelector( elem, selector ) {
-    return elem[ matchesMethod ]( selector );
-  };
-
-}));
-  })();
-});
-
-require.register("flickity/node_modules/ev-emitter/ev-emitter.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/ev-emitter");
-  (function() {
-    /**
- * EvEmitter v1.0.3
- * Lil' event emitter
- * MIT License
- */
-
-/* jshint unused: true, undef: true, strict: true */
-
-( function( global, factory ) {
-  // universal module definition
-  /* jshint strict: false */ /* globals define, module, window */
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD - RequireJS
-    define( factory );
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS - Browserify, Webpack
-    module.exports = factory();
-  } else {
-    // Browser globals
-    global.EvEmitter = factory();
-  }
-
-}( typeof window != 'undefined' ? window : this, function() {
-
-"use strict";
-
-function EvEmitter() {}
-
-var proto = EvEmitter.prototype;
-
-proto.on = function( eventName, listener ) {
-  if ( !eventName || !listener ) {
-    return;
-  }
-  // set events hash
-  var events = this._events = this._events || {};
-  // set listeners array
-  var listeners = events[ eventName ] = events[ eventName ] || [];
-  // only add once
-  if ( listeners.indexOf( listener ) == -1 ) {
-    listeners.push( listener );
-  }
-
-  return this;
-};
-
-proto.once = function( eventName, listener ) {
-  if ( !eventName || !listener ) {
-    return;
-  }
-  // add event
-  this.on( eventName, listener );
-  // set once flag
-  // set onceEvents hash
-  var onceEvents = this._onceEvents = this._onceEvents || {};
-  // set onceListeners object
-  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || {};
-  // set flag
-  onceListeners[ listener ] = true;
-
-  return this;
-};
-
-proto.off = function( eventName, listener ) {
-  var listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) {
-    return;
-  }
-  var index = listeners.indexOf( listener );
-  if ( index != -1 ) {
-    listeners.splice( index, 1 );
-  }
-
-  return this;
-};
-
-proto.emitEvent = function( eventName, args ) {
-  var listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) {
-    return;
-  }
-  var i = 0;
-  var listener = listeners[i];
-  args = args || [];
-  // once stuff
-  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
-
-  while ( listener ) {
-    var isOnce = onceListeners && onceListeners[ listener ];
-    if ( isOnce ) {
-      // remove listener
-      // remove before trigger to prevent recursion
-      this.off( eventName, listener );
-      // unset once flag
-      delete onceListeners[ listener ];
-    }
-    // trigger listener
-    listener.apply( this, args );
-    // get next listener
-    i += isOnce ? 0 : 1;
-    listener = listeners[i];
-  }
-
-  return this;
-};
-
-return EvEmitter;
-
-}));
-  })();
-});
-
-require.register("flickity/node_modules/fizzy-ui-utils/utils.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/fizzy-ui-utils");
-  (function() {
-    /**
- * Fizzy UI utils v2.0.3
- * MIT license
- */
-
-/*jshint browser: true, undef: true, unused: true, strict: true */
-
-( function( window, factory ) {
-  // universal module definition
-  /*jshint strict: false */ /*globals define, module, require */
-
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD
-    define( [
-      'desandro-matches-selector/matches-selector'
-    ], function( matchesSelector ) {
-      return factory( window, matchesSelector );
-    });
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS
-    module.exports = factory(
-      window,
-      require('desandro-matches-selector')
-    );
-  } else {
-    // browser global
-    window.fizzyUIUtils = factory(
-      window,
-      window.matchesSelector
-    );
-  }
-
-}( window, function factory( window, matchesSelector ) {
-
-'use strict';
-
-var utils = {};
-
-// ----- extend ----- //
-
-// extends objects
-utils.extend = function( a, b ) {
-  for ( var prop in b ) {
-    a[ prop ] = b[ prop ];
-  }
-  return a;
-};
-
-// ----- modulo ----- //
-
-utils.modulo = function( num, div ) {
-  return ( ( num % div ) + div ) % div;
-};
-
-// ----- makeArray ----- //
-
-// turn element or nodeList into an array
-utils.makeArray = function( obj ) {
-  var ary = [];
-  if ( Array.isArray( obj ) ) {
-    // use object if already an array
-    ary = obj;
-  } else if ( obj && typeof obj.length == 'number' ) {
-    // convert nodeList to array
-    for ( var i=0; i < obj.length; i++ ) {
-      ary.push( obj[i] );
-    }
-  } else {
-    // array of single index
-    ary.push( obj );
-  }
-  return ary;
-};
-
-// ----- removeFrom ----- //
-
-utils.removeFrom = function( ary, obj ) {
-  var index = ary.indexOf( obj );
-  if ( index != -1 ) {
-    ary.splice( index, 1 );
-  }
-};
-
-// ----- getParent ----- //
-
-utils.getParent = function( elem, selector ) {
-  while ( elem != document.body ) {
-    elem = elem.parentNode;
-    if ( matchesSelector( elem, selector ) ) {
-      return elem;
-    }
-  }
-};
-
-// ----- getQueryElement ----- //
-
-// use element as selector string
-utils.getQueryElement = function( elem ) {
-  if ( typeof elem == 'string' ) {
-    return document.querySelector( elem );
-  }
-  return elem;
-};
-
-// ----- handleEvent ----- //
-
-// enable .ontype to trigger from .addEventListener( elem, 'type' )
-utils.handleEvent = function( event ) {
-  var method = 'on' + event.type;
-  if ( this[ method ] ) {
-    this[ method ]( event );
-  }
-};
-
-// ----- filterFindElements ----- //
-
-utils.filterFindElements = function( elems, selector ) {
-  // make array of elems
-  elems = utils.makeArray( elems );
-  var ffElems = [];
-
-  elems.forEach( function( elem ) {
-    // check that elem is an actual element
-    if ( !( elem instanceof HTMLElement ) ) {
-      return;
-    }
-    // add elem if no selector
-    if ( !selector ) {
-      ffElems.push( elem );
-      return;
-    }
-    // filter & find items if we have a selector
-    // filter
-    if ( matchesSelector( elem, selector ) ) {
-      ffElems.push( elem );
-    }
-    // find children
-    var childElems = elem.querySelectorAll( selector );
-    // concat childElems to filterFound array
-    for ( var i=0; i < childElems.length; i++ ) {
-      ffElems.push( childElems[i] );
-    }
-  });
-
-  return ffElems;
-};
-
-// ----- debounceMethod ----- //
-
-utils.debounceMethod = function( _class, methodName, threshold ) {
-  // original method
-  var method = _class.prototype[ methodName ];
-  var timeoutName = methodName + 'Timeout';
-
-  _class.prototype[ methodName ] = function() {
-    var timeout = this[ timeoutName ];
-    if ( timeout ) {
-      clearTimeout( timeout );
-    }
-    var args = arguments;
-
-    var _this = this;
-    this[ timeoutName ] = setTimeout( function() {
-      method.apply( _this, args );
-      delete _this[ timeoutName ];
-    }, threshold || 100 );
-  };
-};
-
-// ----- docReady ----- //
-
-utils.docReady = function( callback ) {
-  var readyState = document.readyState;
-  if ( readyState == 'complete' || readyState == 'interactive' ) {
-    // do async to allow for other scripts to run. metafizzy/flickity#441
-    setTimeout( callback );
-  } else {
-    document.addEventListener( 'DOMContentLoaded', callback );
-  }
-};
-
-// ----- htmlInit ----- //
-
-// http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/
-utils.toDashed = function( str ) {
-  return str.replace( /(.)([A-Z])/g, function( match, $1, $2 ) {
-    return $1 + '-' + $2;
-  }).toLowerCase();
-};
-
-var console = window.console;
-/**
- * allow user to initialize classes via [data-namespace] or .js-namespace class
- * htmlInit( Widget, 'widgetName' )
- * options are parsed from data-namespace-options
- */
-utils.htmlInit = function( WidgetClass, namespace ) {
-  utils.docReady( function() {
-    var dashedNamespace = utils.toDashed( namespace );
-    var dataAttr = 'data-' + dashedNamespace;
-    var dataAttrElems = document.querySelectorAll( '[' + dataAttr + ']' );
-    var jsDashElems = document.querySelectorAll( '.js-' + dashedNamespace );
-    var elems = utils.makeArray( dataAttrElems )
-      .concat( utils.makeArray( jsDashElems ) );
-    var dataOptionsAttr = dataAttr + '-options';
-    var jQuery = window.jQuery;
-
-    elems.forEach( function( elem ) {
-      var attr = elem.getAttribute( dataAttr ) ||
-        elem.getAttribute( dataOptionsAttr );
-      var options;
-      try {
-        options = attr && JSON.parse( attr );
-      } catch ( error ) {
-        // log error, do not initialize
-        if ( console ) {
-          console.error( 'Error parsing ' + dataAttr + ' on ' + elem.className +
-          ': ' + error );
+function forEachArray(array, iterator, context) {
+    for (var i = 0, len = array.length; i < len; i++) {
+        if (hasOwnProperty.call(array, i)) {
+            iterator.call(context, array[i], i, array)
         }
-        return;
-      }
-      // initialize
-      var instance = new WidgetClass( elem, options );
-      // make available via $().data('namespace')
-      if ( jQuery ) {
-        jQuery.data( elem, namespace, instance );
-      }
-    });
+    }
+}
 
-  });
-};
+function forEachString(string, iterator, context) {
+    for (var i = 0, len = string.length; i < len; i++) {
+        // no such thing as a sparse string.
+        iterator.call(context, string.charAt(i), i, string)
+    }
+}
 
-// -----  ----- //
-
-return utils;
-
-}));
+function forEachObject(object, iterator, context) {
+    for (var k in object) {
+        if (hasOwnProperty.call(object, k)) {
+            iterator.call(context, object[k], k, object)
+        }
+    }
+}
   })();
 });
 
-require.register("flickity/node_modules/get-size/get-size.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/get-size");
+require.register("foreach/index.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "foreach");
+  (function() {
+    var hasOwn = Object.prototype.hasOwnProperty;
+var toString = Object.prototype.toString;
+
+module.exports = function forEach (obj, fn, ctx) {
+    if (toString.call(fn) !== '[object Function]') {
+        throw new TypeError('iterator must be a function');
+    }
+    var l = obj.length;
+    if (l === +l) {
+        for (var i = 0; i < l; i++) {
+            fn.call(ctx, obj[i], i, obj);
+        }
+    } else {
+        for (var k in obj) {
+            if (hasOwn.call(obj, k)) {
+                fn.call(ctx, obj[k], k, obj);
+            }
+        }
+    }
+};
+  })();
+});
+
+require.register("function-bind/implementation.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "function-bind");
+  (function() {
+    var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
+var slice = Array.prototype.slice;
+var toStr = Object.prototype.toString;
+var funcType = '[object Function]';
+
+module.exports = function bind(that) {
+    var target = this;
+    if (typeof target !== 'function' || toStr.call(target) !== funcType) {
+        throw new TypeError(ERROR_MESSAGE + target);
+    }
+    var args = slice.call(arguments, 1);
+
+    var bound;
+    var binder = function () {
+        if (this instanceof bound) {
+            var result = target.apply(
+                this,
+                args.concat(slice.call(arguments))
+            );
+            if (Object(result) === result) {
+                return result;
+            }
+            return this;
+        } else {
+            return target.apply(
+                that,
+                args.concat(slice.call(arguments))
+            );
+        }
+    };
+
+    var boundLength = Math.max(0, target.length - args.length);
+    var boundArgs = [];
+    for (var i = 0; i < boundLength; i++) {
+        boundArgs.push('$' + i);
+    }
+
+    bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this,arguments); }')(binder);
+
+    if (target.prototype) {
+        var Empty = function Empty() {};
+        Empty.prototype = target.prototype;
+        bound.prototype = new Empty();
+        Empty.prototype = null;
+    }
+
+    return bound;
+};
+  })();
+});
+
+require.register("function-bind/index.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "function-bind");
+  (function() {
+    var implementation = require('./implementation');
+
+module.exports = Function.prototype.bind || implementation;
+  })();
+});
+
+require.register("get-size/get-size.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "get-size");
   (function() {
     /*!
  * getSize v2.0.2
@@ -5586,1174 +5727,6 @@ function getSize( elem ) {
 return getSize;
 
 });
-  })();
-});
-
-require.register("flickity/node_modules/tap-listener/node_modules/unipointer/unipointer.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/tap-listener/node_modules/unipointer");
-  (function() {
-    /*!
- * Unipointer v2.1.0
- * base class for doing one thing with pointer event
- * MIT license
- */
-
-/*jshint browser: true, undef: true, unused: true, strict: true */
-
-( function( window, factory ) {
-  // universal module definition
-  /* jshint strict: false */ /*global define, module, require */
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD
-    define( [
-      'ev-emitter/ev-emitter'
-    ], function( EvEmitter ) {
-      return factory( window, EvEmitter );
-    });
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS
-    module.exports = factory(
-      window,
-      require('ev-emitter')
-    );
-  } else {
-    // browser global
-    window.Unipointer = factory(
-      window,
-      window.EvEmitter
-    );
-  }
-
-}( window, function factory( window, EvEmitter ) {
-
-'use strict';
-
-function noop() {}
-
-function Unipointer() {}
-
-// inherit EvEmitter
-var proto = Unipointer.prototype = Object.create( EvEmitter.prototype );
-
-proto.bindStartEvent = function( elem ) {
-  this._bindStartEvent( elem, true );
-};
-
-proto.unbindStartEvent = function( elem ) {
-  this._bindStartEvent( elem, false );
-};
-
-/**
- * works as unbinder, as you can ._bindStart( false ) to unbind
- * @param {Boolean} isBind - will unbind if falsey
- */
-proto._bindStartEvent = function( elem, isBind ) {
-  // munge isBind, default to true
-  isBind = isBind === undefined ? true : !!isBind;
-  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
-
-  if ( window.navigator.pointerEnabled ) {
-    // W3C Pointer Events, IE11. See https://coderwall.com/p/mfreca
-    elem[ bindMethod ]( 'pointerdown', this );
-  } else if ( window.navigator.msPointerEnabled ) {
-    // IE10 Pointer Events
-    elem[ bindMethod ]( 'MSPointerDown', this );
-  } else {
-    // listen for both, for devices like Chrome Pixel
-    elem[ bindMethod ]( 'mousedown', this );
-    elem[ bindMethod ]( 'touchstart', this );
-  }
-};
-
-// trigger handler methods for events
-proto.handleEvent = function( event ) {
-  var method = 'on' + event.type;
-  if ( this[ method ] ) {
-    this[ method ]( event );
-  }
-};
-
-// returns the touch that we're keeping track of
-proto.getTouch = function( touches ) {
-  for ( var i=0; i < touches.length; i++ ) {
-    var touch = touches[i];
-    if ( touch.identifier == this.pointerIdentifier ) {
-      return touch;
-    }
-  }
-};
-
-// ----- start event ----- //
-
-proto.onmousedown = function( event ) {
-  // dismiss clicks from right or middle buttons
-  var button = event.button;
-  if ( button && ( button !== 0 && button !== 1 ) ) {
-    return;
-  }
-  this._pointerDown( event, event );
-};
-
-proto.ontouchstart = function( event ) {
-  this._pointerDown( event, event.changedTouches[0] );
-};
-
-proto.onMSPointerDown =
-proto.onpointerdown = function( event ) {
-  this._pointerDown( event, event );
-};
-
-/**
- * pointer start
- * @param {Event} event
- * @param {Event or Touch} pointer
- */
-proto._pointerDown = function( event, pointer ) {
-  // dismiss other pointers
-  if ( this.isPointerDown ) {
-    return;
-  }
-
-  this.isPointerDown = true;
-  // save pointer identifier to match up touch events
-  this.pointerIdentifier = pointer.pointerId !== undefined ?
-    // pointerId for pointer events, touch.indentifier for touch events
-    pointer.pointerId : pointer.identifier;
-
-  this.pointerDown( event, pointer );
-};
-
-proto.pointerDown = function( event, pointer ) {
-  this._bindPostStartEvents( event );
-  this.emitEvent( 'pointerDown', [ event, pointer ] );
-};
-
-// hash of events to be bound after start event
-var postStartEvents = {
-  mousedown: [ 'mousemove', 'mouseup' ],
-  touchstart: [ 'touchmove', 'touchend', 'touchcancel' ],
-  pointerdown: [ 'pointermove', 'pointerup', 'pointercancel' ],
-  MSPointerDown: [ 'MSPointerMove', 'MSPointerUp', 'MSPointerCancel' ]
-};
-
-proto._bindPostStartEvents = function( event ) {
-  if ( !event ) {
-    return;
-  }
-  // get proper events to match start event
-  var events = postStartEvents[ event.type ];
-  // bind events to node
-  events.forEach( function( eventName ) {
-    window.addEventListener( eventName, this );
-  }, this );
-  // save these arguments
-  this._boundPointerEvents = events;
-};
-
-proto._unbindPostStartEvents = function() {
-  // check for _boundEvents, in case dragEnd triggered twice (old IE8 bug)
-  if ( !this._boundPointerEvents ) {
-    return;
-  }
-  this._boundPointerEvents.forEach( function( eventName ) {
-    window.removeEventListener( eventName, this );
-  }, this );
-
-  delete this._boundPointerEvents;
-};
-
-// ----- move event ----- //
-
-proto.onmousemove = function( event ) {
-  this._pointerMove( event, event );
-};
-
-proto.onMSPointerMove =
-proto.onpointermove = function( event ) {
-  if ( event.pointerId == this.pointerIdentifier ) {
-    this._pointerMove( event, event );
-  }
-};
-
-proto.ontouchmove = function( event ) {
-  var touch = this.getTouch( event.changedTouches );
-  if ( touch ) {
-    this._pointerMove( event, touch );
-  }
-};
-
-/**
- * pointer move
- * @param {Event} event
- * @param {Event or Touch} pointer
- * @private
- */
-proto._pointerMove = function( event, pointer ) {
-  this.pointerMove( event, pointer );
-};
-
-// public
-proto.pointerMove = function( event, pointer ) {
-  this.emitEvent( 'pointerMove', [ event, pointer ] );
-};
-
-// ----- end event ----- //
-
-
-proto.onmouseup = function( event ) {
-  this._pointerUp( event, event );
-};
-
-proto.onMSPointerUp =
-proto.onpointerup = function( event ) {
-  if ( event.pointerId == this.pointerIdentifier ) {
-    this._pointerUp( event, event );
-  }
-};
-
-proto.ontouchend = function( event ) {
-  var touch = this.getTouch( event.changedTouches );
-  if ( touch ) {
-    this._pointerUp( event, touch );
-  }
-};
-
-/**
- * pointer up
- * @param {Event} event
- * @param {Event or Touch} pointer
- * @private
- */
-proto._pointerUp = function( event, pointer ) {
-  this._pointerDone();
-  this.pointerUp( event, pointer );
-};
-
-// public
-proto.pointerUp = function( event, pointer ) {
-  this.emitEvent( 'pointerUp', [ event, pointer ] );
-};
-
-// ----- pointer done ----- //
-
-// triggered on pointer up & pointer cancel
-proto._pointerDone = function() {
-  // reset properties
-  this.isPointerDown = false;
-  delete this.pointerIdentifier;
-  // remove events
-  this._unbindPostStartEvents();
-  this.pointerDone();
-};
-
-proto.pointerDone = noop;
-
-// ----- pointer cancel ----- //
-
-proto.onMSPointerCancel =
-proto.onpointercancel = function( event ) {
-  if ( event.pointerId == this.pointerIdentifier ) {
-    this._pointerCancel( event, event );
-  }
-};
-
-proto.ontouchcancel = function( event ) {
-  var touch = this.getTouch( event.changedTouches );
-  if ( touch ) {
-    this._pointerCancel( event, touch );
-  }
-};
-
-/**
- * pointer cancel
- * @param {Event} event
- * @param {Event or Touch} pointer
- * @private
- */
-proto._pointerCancel = function( event, pointer ) {
-  this._pointerDone();
-  this.pointerCancel( event, pointer );
-};
-
-// public
-proto.pointerCancel = function( event, pointer ) {
-  this.emitEvent( 'pointerCancel', [ event, pointer ] );
-};
-
-// -----  ----- //
-
-// utility function for getting x/y coords from event
-Unipointer.getPointerPoint = function( pointer ) {
-  return {
-    x: pointer.pageX,
-    y: pointer.pageY
-  };
-};
-
-// -----  ----- //
-
-return Unipointer;
-
-}));
-  })();
-});
-
-require.register("flickity/node_modules/tap-listener/tap-listener.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/tap-listener");
-  (function() {
-    /*!
- * Tap listener v2.0.0
- * listens to taps
- * MIT license
- */
-
-/*jshint browser: true, unused: true, undef: true, strict: true */
-
-( function( window, factory ) {
-  // universal module definition
-  /*jshint strict: false*/ /*globals define, module, require */
-
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD
-    define( [
-      'unipointer/unipointer'
-    ], function( Unipointer ) {
-      return factory( window, Unipointer );
-    });
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS
-    module.exports = factory(
-      window,
-      require('unipointer')
-    );
-  } else {
-    // browser global
-    window.TapListener = factory(
-      window,
-      window.Unipointer
-    );
-  }
-
-}( window, function factory( window, Unipointer ) {
-
-'use strict';
-
-// --------------------------  TapListener -------------------------- //
-
-function TapListener( elem ) {
-  this.bindTap( elem );
-}
-
-// inherit Unipointer & EventEmitter
-var proto = TapListener.prototype = Object.create( Unipointer.prototype );
-
-/**
- * bind tap event to element
- * @param {Element} elem
- */
-proto.bindTap = function( elem ) {
-  if ( !elem ) {
-    return;
-  }
-  this.unbindTap();
-  this.tapElement = elem;
-  this._bindStartEvent( elem, true );
-};
-
-proto.unbindTap = function() {
-  if ( !this.tapElement ) {
-    return;
-  }
-  this._bindStartEvent( this.tapElement, true );
-  delete this.tapElement;
-};
-
-/**
- * pointer up
- * @param {Event} event
- * @param {Event or Touch} pointer
- */
-proto.pointerUp = function( event, pointer ) {
-  // ignore emulated mouse up clicks
-  if ( this.isIgnoringMouseUp && event.type == 'mouseup' ) {
-    return;
-  }
-
-  var pointerPoint = Unipointer.getPointerPoint( pointer );
-  var boundingRect = this.tapElement.getBoundingClientRect();
-  var scrollX = window.pageXOffset;
-  var scrollY = window.pageYOffset;
-  // calculate if pointer is inside tapElement
-  var isInside = pointerPoint.x >= boundingRect.left + scrollX &&
-    pointerPoint.x <= boundingRect.right + scrollX &&
-    pointerPoint.y >= boundingRect.top + scrollY &&
-    pointerPoint.y <= boundingRect.bottom + scrollY;
-  // trigger callback if pointer is inside element
-  if ( isInside ) {
-    this.emitEvent( 'tap', [ event, pointer ] );
-  }
-
-  // set flag for emulated clicks 300ms after touchend
-  if ( event.type != 'mouseup' ) {
-    this.isIgnoringMouseUp = true;
-    // reset flag after 300ms
-    var _this = this;
-    setTimeout( function() {
-      delete _this.isIgnoringMouseUp;
-    }, 400 );
-  }
-};
-
-proto.destroy = function() {
-  this.pointerDone();
-  this.unbindTap();
-};
-
-// -----  ----- //
-
-return TapListener;
-
-}));
-  })();
-});
-
-require.register("flickity/node_modules/unidragger/node_modules/unipointer/unipointer.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/unidragger/node_modules/unipointer");
-  (function() {
-    /*!
- * Unipointer v2.1.0
- * base class for doing one thing with pointer event
- * MIT license
- */
-
-/*jshint browser: true, undef: true, unused: true, strict: true */
-
-( function( window, factory ) {
-  // universal module definition
-  /* jshint strict: false */ /*global define, module, require */
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD
-    define( [
-      'ev-emitter/ev-emitter'
-    ], function( EvEmitter ) {
-      return factory( window, EvEmitter );
-    });
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS
-    module.exports = factory(
-      window,
-      require('ev-emitter')
-    );
-  } else {
-    // browser global
-    window.Unipointer = factory(
-      window,
-      window.EvEmitter
-    );
-  }
-
-}( window, function factory( window, EvEmitter ) {
-
-'use strict';
-
-function noop() {}
-
-function Unipointer() {}
-
-// inherit EvEmitter
-var proto = Unipointer.prototype = Object.create( EvEmitter.prototype );
-
-proto.bindStartEvent = function( elem ) {
-  this._bindStartEvent( elem, true );
-};
-
-proto.unbindStartEvent = function( elem ) {
-  this._bindStartEvent( elem, false );
-};
-
-/**
- * works as unbinder, as you can ._bindStart( false ) to unbind
- * @param {Boolean} isBind - will unbind if falsey
- */
-proto._bindStartEvent = function( elem, isBind ) {
-  // munge isBind, default to true
-  isBind = isBind === undefined ? true : !!isBind;
-  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
-
-  if ( window.navigator.pointerEnabled ) {
-    // W3C Pointer Events, IE11. See https://coderwall.com/p/mfreca
-    elem[ bindMethod ]( 'pointerdown', this );
-  } else if ( window.navigator.msPointerEnabled ) {
-    // IE10 Pointer Events
-    elem[ bindMethod ]( 'MSPointerDown', this );
-  } else {
-    // listen for both, for devices like Chrome Pixel
-    elem[ bindMethod ]( 'mousedown', this );
-    elem[ bindMethod ]( 'touchstart', this );
-  }
-};
-
-// trigger handler methods for events
-proto.handleEvent = function( event ) {
-  var method = 'on' + event.type;
-  if ( this[ method ] ) {
-    this[ method ]( event );
-  }
-};
-
-// returns the touch that we're keeping track of
-proto.getTouch = function( touches ) {
-  for ( var i=0; i < touches.length; i++ ) {
-    var touch = touches[i];
-    if ( touch.identifier == this.pointerIdentifier ) {
-      return touch;
-    }
-  }
-};
-
-// ----- start event ----- //
-
-proto.onmousedown = function( event ) {
-  // dismiss clicks from right or middle buttons
-  var button = event.button;
-  if ( button && ( button !== 0 && button !== 1 ) ) {
-    return;
-  }
-  this._pointerDown( event, event );
-};
-
-proto.ontouchstart = function( event ) {
-  this._pointerDown( event, event.changedTouches[0] );
-};
-
-proto.onMSPointerDown =
-proto.onpointerdown = function( event ) {
-  this._pointerDown( event, event );
-};
-
-/**
- * pointer start
- * @param {Event} event
- * @param {Event or Touch} pointer
- */
-proto._pointerDown = function( event, pointer ) {
-  // dismiss other pointers
-  if ( this.isPointerDown ) {
-    return;
-  }
-
-  this.isPointerDown = true;
-  // save pointer identifier to match up touch events
-  this.pointerIdentifier = pointer.pointerId !== undefined ?
-    // pointerId for pointer events, touch.indentifier for touch events
-    pointer.pointerId : pointer.identifier;
-
-  this.pointerDown( event, pointer );
-};
-
-proto.pointerDown = function( event, pointer ) {
-  this._bindPostStartEvents( event );
-  this.emitEvent( 'pointerDown', [ event, pointer ] );
-};
-
-// hash of events to be bound after start event
-var postStartEvents = {
-  mousedown: [ 'mousemove', 'mouseup' ],
-  touchstart: [ 'touchmove', 'touchend', 'touchcancel' ],
-  pointerdown: [ 'pointermove', 'pointerup', 'pointercancel' ],
-  MSPointerDown: [ 'MSPointerMove', 'MSPointerUp', 'MSPointerCancel' ]
-};
-
-proto._bindPostStartEvents = function( event ) {
-  if ( !event ) {
-    return;
-  }
-  // get proper events to match start event
-  var events = postStartEvents[ event.type ];
-  // bind events to node
-  events.forEach( function( eventName ) {
-    window.addEventListener( eventName, this );
-  }, this );
-  // save these arguments
-  this._boundPointerEvents = events;
-};
-
-proto._unbindPostStartEvents = function() {
-  // check for _boundEvents, in case dragEnd triggered twice (old IE8 bug)
-  if ( !this._boundPointerEvents ) {
-    return;
-  }
-  this._boundPointerEvents.forEach( function( eventName ) {
-    window.removeEventListener( eventName, this );
-  }, this );
-
-  delete this._boundPointerEvents;
-};
-
-// ----- move event ----- //
-
-proto.onmousemove = function( event ) {
-  this._pointerMove( event, event );
-};
-
-proto.onMSPointerMove =
-proto.onpointermove = function( event ) {
-  if ( event.pointerId == this.pointerIdentifier ) {
-    this._pointerMove( event, event );
-  }
-};
-
-proto.ontouchmove = function( event ) {
-  var touch = this.getTouch( event.changedTouches );
-  if ( touch ) {
-    this._pointerMove( event, touch );
-  }
-};
-
-/**
- * pointer move
- * @param {Event} event
- * @param {Event or Touch} pointer
- * @private
- */
-proto._pointerMove = function( event, pointer ) {
-  this.pointerMove( event, pointer );
-};
-
-// public
-proto.pointerMove = function( event, pointer ) {
-  this.emitEvent( 'pointerMove', [ event, pointer ] );
-};
-
-// ----- end event ----- //
-
-
-proto.onmouseup = function( event ) {
-  this._pointerUp( event, event );
-};
-
-proto.onMSPointerUp =
-proto.onpointerup = function( event ) {
-  if ( event.pointerId == this.pointerIdentifier ) {
-    this._pointerUp( event, event );
-  }
-};
-
-proto.ontouchend = function( event ) {
-  var touch = this.getTouch( event.changedTouches );
-  if ( touch ) {
-    this._pointerUp( event, touch );
-  }
-};
-
-/**
- * pointer up
- * @param {Event} event
- * @param {Event or Touch} pointer
- * @private
- */
-proto._pointerUp = function( event, pointer ) {
-  this._pointerDone();
-  this.pointerUp( event, pointer );
-};
-
-// public
-proto.pointerUp = function( event, pointer ) {
-  this.emitEvent( 'pointerUp', [ event, pointer ] );
-};
-
-// ----- pointer done ----- //
-
-// triggered on pointer up & pointer cancel
-proto._pointerDone = function() {
-  // reset properties
-  this.isPointerDown = false;
-  delete this.pointerIdentifier;
-  // remove events
-  this._unbindPostStartEvents();
-  this.pointerDone();
-};
-
-proto.pointerDone = noop;
-
-// ----- pointer cancel ----- //
-
-proto.onMSPointerCancel =
-proto.onpointercancel = function( event ) {
-  if ( event.pointerId == this.pointerIdentifier ) {
-    this._pointerCancel( event, event );
-  }
-};
-
-proto.ontouchcancel = function( event ) {
-  var touch = this.getTouch( event.changedTouches );
-  if ( touch ) {
-    this._pointerCancel( event, touch );
-  }
-};
-
-/**
- * pointer cancel
- * @param {Event} event
- * @param {Event or Touch} pointer
- * @private
- */
-proto._pointerCancel = function( event, pointer ) {
-  this._pointerDone();
-  this.pointerCancel( event, pointer );
-};
-
-// public
-proto.pointerCancel = function( event, pointer ) {
-  this.emitEvent( 'pointerCancel', [ event, pointer ] );
-};
-
-// -----  ----- //
-
-// utility function for getting x/y coords from event
-Unipointer.getPointerPoint = function( pointer ) {
-  return {
-    x: pointer.pageX,
-    y: pointer.pageY
-  };
-};
-
-// -----  ----- //
-
-return Unipointer;
-
-}));
-  })();
-});
-
-require.register("flickity/node_modules/unidragger/unidragger.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "flickity/node_modules/unidragger");
-  (function() {
-    /*!
- * Unidragger v2.1.0
- * Draggable base class
- * MIT license
- */
-
-/*jshint browser: true, unused: true, undef: true, strict: true */
-
-( function( window, factory ) {
-  // universal module definition
-  /*jshint strict: false */ /*globals define, module, require */
-
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD
-    define( [
-      'unipointer/unipointer'
-    ], function( Unipointer ) {
-      return factory( window, Unipointer );
-    });
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS
-    module.exports = factory(
-      window,
-      require('unipointer')
-    );
-  } else {
-    // browser global
-    window.Unidragger = factory(
-      window,
-      window.Unipointer
-    );
-  }
-
-}( window, function factory( window, Unipointer ) {
-
-'use strict';
-
-// -----  ----- //
-
-function noop() {}
-
-// -------------------------- Unidragger -------------------------- //
-
-function Unidragger() {}
-
-// inherit Unipointer & EvEmitter
-var proto = Unidragger.prototype = Object.create( Unipointer.prototype );
-
-// ----- bind start ----- //
-
-proto.bindHandles = function() {
-  this._bindHandles( true );
-};
-
-proto.unbindHandles = function() {
-  this._bindHandles( false );
-};
-
-var navigator = window.navigator;
-/**
- * works as unbinder, as you can .bindHandles( false ) to unbind
- * @param {Boolean} isBind - will unbind if falsey
- */
-proto._bindHandles = function( isBind ) {
-  // munge isBind, default to true
-  isBind = isBind === undefined ? true : !!isBind;
-  // extra bind logic
-  var binderExtra;
-  if ( navigator.pointerEnabled ) {
-    binderExtra = function( handle ) {
-      // disable scrolling on the element
-      handle.style.touchAction = isBind ? 'none' : '';
-    };
-  } else if ( navigator.msPointerEnabled ) {
-    binderExtra = function( handle ) {
-      // disable scrolling on the element
-      handle.style.msTouchAction = isBind ? 'none' : '';
-    };
-  } else {
-    binderExtra = noop;
-  }
-  // bind each handle
-  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
-  for ( var i=0; i < this.handles.length; i++ ) {
-    var handle = this.handles[i];
-    this._bindStartEvent( handle, isBind );
-    binderExtra( handle );
-    handle[ bindMethod ]( 'click', this );
-  }
-};
-
-// ----- start event ----- //
-
-/**
- * pointer start
- * @param {Event} event
- * @param {Event or Touch} pointer
- */
-proto.pointerDown = function( event, pointer ) {
-  // dismiss range sliders
-  if ( event.target.nodeName == 'INPUT' && event.target.type == 'range' ) {
-    // reset pointerDown logic
-    this.isPointerDown = false;
-    delete this.pointerIdentifier;
-    return;
-  }
-
-  this._dragPointerDown( event, pointer );
-  // kludge to blur focused inputs in dragger
-  var focused = document.activeElement;
-  if ( focused && focused.blur ) {
-    focused.blur();
-  }
-  // bind move and end events
-  this._bindPostStartEvents( event );
-  this.emitEvent( 'pointerDown', [ event, pointer ] );
-};
-
-// base pointer down logic
-proto._dragPointerDown = function( event, pointer ) {
-  // track to see when dragging starts
-  this.pointerDownPoint = Unipointer.getPointerPoint( pointer );
-
-  var canPreventDefault = this.canPreventDefaultOnPointerDown( event, pointer );
-  if ( canPreventDefault ) {
-    event.preventDefault();
-  }
-};
-
-// overwriteable method so Flickity can prevent for scrolling
-proto.canPreventDefaultOnPointerDown = function( event ) {
-  // prevent default, unless touchstart or <select>
-  return event.target.nodeName != 'SELECT';
-};
-
-// ----- move event ----- //
-
-/**
- * drag move
- * @param {Event} event
- * @param {Event or Touch} pointer
- */
-proto.pointerMove = function( event, pointer ) {
-  var moveVector = this._dragPointerMove( event, pointer );
-  this.emitEvent( 'pointerMove', [ event, pointer, moveVector ] );
-  this._dragMove( event, pointer, moveVector );
-};
-
-// base pointer move logic
-proto._dragPointerMove = function( event, pointer ) {
-  var movePoint = Unipointer.getPointerPoint( pointer );
-  var moveVector = {
-    x: movePoint.x - this.pointerDownPoint.x,
-    y: movePoint.y - this.pointerDownPoint.y
-  };
-  // start drag if pointer has moved far enough to start drag
-  if ( !this.isDragging && this.hasDragStarted( moveVector ) ) {
-    this._dragStart( event, pointer );
-  }
-  return moveVector;
-};
-
-// condition if pointer has moved far enough to start drag
-proto.hasDragStarted = function( moveVector ) {
-  return Math.abs( moveVector.x ) > 3 || Math.abs( moveVector.y ) > 3;
-};
-
-
-// ----- end event ----- //
-
-/**
- * pointer up
- * @param {Event} event
- * @param {Event or Touch} pointer
- */
-proto.pointerUp = function( event, pointer ) {
-  this.emitEvent( 'pointerUp', [ event, pointer ] );
-  this._dragPointerUp( event, pointer );
-};
-
-proto._dragPointerUp = function( event, pointer ) {
-  if ( this.isDragging ) {
-    this._dragEnd( event, pointer );
-  } else {
-    // pointer didn't move enough for drag to start
-    this._staticClick( event, pointer );
-  }
-};
-
-// -------------------------- drag -------------------------- //
-
-// dragStart
-proto._dragStart = function( event, pointer ) {
-  this.isDragging = true;
-  this.dragStartPoint = Unipointer.getPointerPoint( pointer );
-  // prevent clicks
-  this.isPreventingClicks = true;
-
-  this.dragStart( event, pointer );
-};
-
-proto.dragStart = function( event, pointer ) {
-  this.emitEvent( 'dragStart', [ event, pointer ] );
-};
-
-// dragMove
-proto._dragMove = function( event, pointer, moveVector ) {
-  // do not drag if not dragging yet
-  if ( !this.isDragging ) {
-    return;
-  }
-
-  this.dragMove( event, pointer, moveVector );
-};
-
-proto.dragMove = function( event, pointer, moveVector ) {
-  event.preventDefault();
-  this.emitEvent( 'dragMove', [ event, pointer, moveVector ] );
-};
-
-// dragEnd
-proto._dragEnd = function( event, pointer ) {
-  // set flags
-  this.isDragging = false;
-  // re-enable clicking async
-  setTimeout( function() {
-    delete this.isPreventingClicks;
-  }.bind( this ) );
-
-  this.dragEnd( event, pointer );
-};
-
-proto.dragEnd = function( event, pointer ) {
-  this.emitEvent( 'dragEnd', [ event, pointer ] );
-};
-
-// ----- onclick ----- //
-
-// handle all clicks and prevent clicks when dragging
-proto.onclick = function( event ) {
-  if ( this.isPreventingClicks ) {
-    event.preventDefault();
-  }
-};
-
-// ----- staticClick ----- //
-
-// triggered after pointer down & up with no/tiny movement
-proto._staticClick = function( event, pointer ) {
-  // ignore emulated mouse up clicks
-  if ( this.isIgnoringMouseUp && event.type == 'mouseup' ) {
-    return;
-  }
-
-  // allow click in <input>s and <textarea>s
-  var nodeName = event.target.nodeName;
-  if ( nodeName == 'INPUT' || nodeName == 'TEXTAREA' ) {
-    event.target.focus();
-  }
-  this.staticClick( event, pointer );
-
-  // set flag for emulated clicks 300ms after touchend
-  if ( event.type != 'mouseup' ) {
-    this.isIgnoringMouseUp = true;
-    // reset flag after 300ms
-    setTimeout( function() {
-      delete this.isIgnoringMouseUp;
-    }.bind( this ), 400 );
-  }
-};
-
-proto.staticClick = function( event, pointer ) {
-  this.emitEvent( 'staticClick', [ event, pointer ] );
-};
-
-// ----- utils ----- //
-
-Unidragger.getPointerPoint = Unipointer.getPointerPoint;
-
-// -----  ----- //
-
-return Unidragger;
-
-}));
-  })();
-});
-
-require.register("for-each/index.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "for-each");
-  (function() {
-    var isFunction = require('is-function')
-
-module.exports = forEach
-
-var toString = Object.prototype.toString
-var hasOwnProperty = Object.prototype.hasOwnProperty
-
-function forEach(list, iterator, context) {
-    if (!isFunction(iterator)) {
-        throw new TypeError('iterator must be a function')
-    }
-
-    if (arguments.length < 3) {
-        context = this
-    }
-    
-    if (toString.call(list) === '[object Array]')
-        forEachArray(list, iterator, context)
-    else if (typeof list === 'string')
-        forEachString(list, iterator, context)
-    else
-        forEachObject(list, iterator, context)
-}
-
-function forEachArray(array, iterator, context) {
-    for (var i = 0, len = array.length; i < len; i++) {
-        if (hasOwnProperty.call(array, i)) {
-            iterator.call(context, array[i], i, array)
-        }
-    }
-}
-
-function forEachString(string, iterator, context) {
-    for (var i = 0, len = string.length; i < len; i++) {
-        // no such thing as a sparse string.
-        iterator.call(context, string.charAt(i), i, string)
-    }
-}
-
-function forEachObject(object, iterator, context) {
-    for (var k in object) {
-        if (hasOwnProperty.call(object, k)) {
-            iterator.call(context, object[k], k, object)
-        }
-    }
-}
-  })();
-});
-
-require.register("foreach/index.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "foreach");
-  (function() {
-    var hasOwn = Object.prototype.hasOwnProperty;
-var toString = Object.prototype.toString;
-
-module.exports = function forEach (obj, fn, ctx) {
-    if (toString.call(fn) !== '[object Function]') {
-        throw new TypeError('iterator must be a function');
-    }
-    var l = obj.length;
-    if (l === +l) {
-        for (var i = 0; i < l; i++) {
-            fn.call(ctx, obj[i], i, obj);
-        }
-    } else {
-        for (var k in obj) {
-            if (hasOwn.call(obj, k)) {
-                fn.call(ctx, obj[k], k, obj);
-            }
-        }
-    }
-};
-  })();
-});
-
-require.register("function-bind/implementation.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "function-bind");
-  (function() {
-    var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
-var slice = Array.prototype.slice;
-var toStr = Object.prototype.toString;
-var funcType = '[object Function]';
-
-module.exports = function bind(that) {
-    var target = this;
-    if (typeof target !== 'function' || toStr.call(target) !== funcType) {
-        throw new TypeError(ERROR_MESSAGE + target);
-    }
-    var args = slice.call(arguments, 1);
-
-    var bound;
-    var binder = function () {
-        if (this instanceof bound) {
-            var result = target.apply(
-                this,
-                args.concat(slice.call(arguments))
-            );
-            if (Object(result) === result) {
-                return result;
-            }
-            return this;
-        } else {
-            return target.apply(
-                that,
-                args.concat(slice.call(arguments))
-            );
-        }
-    };
-
-    var boundLength = Math.max(0, target.length - args.length);
-    var boundArgs = [];
-    for (var i = 0; i < boundLength; i++) {
-        boundArgs.push('$' + i);
-    }
-
-    bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this,arguments); }')(binder);
-
-    if (target.prototype) {
-        var Empty = function Empty() {};
-        Empty.prototype = target.prototype;
-        bound.prototype = new Empty();
-        Empty.prototype = null;
-    }
-
-    return bound;
-};
-  })();
-});
-
-require.register("function-bind/index.js", function(exports, require, module) {
-  require = __makeRelativeRequire(require, {}, "function-bind");
-  (function() {
-    var implementation = require('./implementation');
-
-module.exports = Function.prototype.bind || implementation;
   })();
 });
 
@@ -37107,6 +36080,125 @@ module.exports = function shimStringTrim() {
   })();
 });
 
+require.register("tap-listener/tap-listener.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "tap-listener");
+  (function() {
+    /*!
+ * Tap listener v2.0.0
+ * listens to taps
+ * MIT license
+ */
+
+/*jshint browser: true, unused: true, undef: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false*/ /*globals define, module, require */
+
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'unipointer/unipointer'
+    ], function( Unipointer ) {
+      return factory( window, Unipointer );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('unipointer')
+    );
+  } else {
+    // browser global
+    window.TapListener = factory(
+      window,
+      window.Unipointer
+    );
+  }
+
+}( window, function factory( window, Unipointer ) {
+
+'use strict';
+
+// --------------------------  TapListener -------------------------- //
+
+function TapListener( elem ) {
+  this.bindTap( elem );
+}
+
+// inherit Unipointer & EventEmitter
+var proto = TapListener.prototype = Object.create( Unipointer.prototype );
+
+/**
+ * bind tap event to element
+ * @param {Element} elem
+ */
+proto.bindTap = function( elem ) {
+  if ( !elem ) {
+    return;
+  }
+  this.unbindTap();
+  this.tapElement = elem;
+  this._bindStartEvent( elem, true );
+};
+
+proto.unbindTap = function() {
+  if ( !this.tapElement ) {
+    return;
+  }
+  this._bindStartEvent( this.tapElement, true );
+  delete this.tapElement;
+};
+
+/**
+ * pointer up
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerUp = function( event, pointer ) {
+  // ignore emulated mouse up clicks
+  if ( this.isIgnoringMouseUp && event.type == 'mouseup' ) {
+    return;
+  }
+
+  var pointerPoint = Unipointer.getPointerPoint( pointer );
+  var boundingRect = this.tapElement.getBoundingClientRect();
+  var scrollX = window.pageXOffset;
+  var scrollY = window.pageYOffset;
+  // calculate if pointer is inside tapElement
+  var isInside = pointerPoint.x >= boundingRect.left + scrollX &&
+    pointerPoint.x <= boundingRect.right + scrollX &&
+    pointerPoint.y >= boundingRect.top + scrollY &&
+    pointerPoint.y <= boundingRect.bottom + scrollY;
+  // trigger callback if pointer is inside element
+  if ( isInside ) {
+    this.emitEvent( 'tap', [ event, pointer ] );
+  }
+
+  // set flag for emulated clicks 300ms after touchend
+  if ( event.type != 'mouseup' ) {
+    this.isIgnoringMouseUp = true;
+    // reset flag after 300ms
+    var _this = this;
+    setTimeout( function() {
+      delete _this.isIgnoringMouseUp;
+    }, 400 );
+  }
+};
+
+proto.destroy = function() {
+  this.pointerDone();
+  this.unbindTap();
+};
+
+// -----  ----- //
+
+return TapListener;
+
+}));
+  })();
+});
+
 require.register("underscore/underscore.js", function(exports, require, module) {
   require = __makeRelativeRequire(require, {}, "underscore");
   (function() {
@@ -38661,6 +37753,605 @@ require.register("underscore/underscore.js", function(exports, require, module) 
   })();
 });
 
+require.register("unidragger/unidragger.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "unidragger");
+  (function() {
+    /*!
+ * Unidragger v2.1.0
+ * Draggable base class
+ * MIT license
+ */
+
+/*jshint browser: true, unused: true, undef: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false */ /*globals define, module, require */
+
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'unipointer/unipointer'
+    ], function( Unipointer ) {
+      return factory( window, Unipointer );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('unipointer')
+    );
+  } else {
+    // browser global
+    window.Unidragger = factory(
+      window,
+      window.Unipointer
+    );
+  }
+
+}( window, function factory( window, Unipointer ) {
+
+'use strict';
+
+// -----  ----- //
+
+function noop() {}
+
+// -------------------------- Unidragger -------------------------- //
+
+function Unidragger() {}
+
+// inherit Unipointer & EvEmitter
+var proto = Unidragger.prototype = Object.create( Unipointer.prototype );
+
+// ----- bind start ----- //
+
+proto.bindHandles = function() {
+  this._bindHandles( true );
+};
+
+proto.unbindHandles = function() {
+  this._bindHandles( false );
+};
+
+var navigator = window.navigator;
+/**
+ * works as unbinder, as you can .bindHandles( false ) to unbind
+ * @param {Boolean} isBind - will unbind if falsey
+ */
+proto._bindHandles = function( isBind ) {
+  // munge isBind, default to true
+  isBind = isBind === undefined ? true : !!isBind;
+  // extra bind logic
+  var binderExtra;
+  if ( navigator.pointerEnabled ) {
+    binderExtra = function( handle ) {
+      // disable scrolling on the element
+      handle.style.touchAction = isBind ? 'none' : '';
+    };
+  } else if ( navigator.msPointerEnabled ) {
+    binderExtra = function( handle ) {
+      // disable scrolling on the element
+      handle.style.msTouchAction = isBind ? 'none' : '';
+    };
+  } else {
+    binderExtra = noop;
+  }
+  // bind each handle
+  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
+  for ( var i=0; i < this.handles.length; i++ ) {
+    var handle = this.handles[i];
+    this._bindStartEvent( handle, isBind );
+    binderExtra( handle );
+    handle[ bindMethod ]( 'click', this );
+  }
+};
+
+// ----- start event ----- //
+
+/**
+ * pointer start
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerDown = function( event, pointer ) {
+  // dismiss range sliders
+  if ( event.target.nodeName == 'INPUT' && event.target.type == 'range' ) {
+    // reset pointerDown logic
+    this.isPointerDown = false;
+    delete this.pointerIdentifier;
+    return;
+  }
+
+  this._dragPointerDown( event, pointer );
+  // kludge to blur focused inputs in dragger
+  var focused = document.activeElement;
+  if ( focused && focused.blur ) {
+    focused.blur();
+  }
+  // bind move and end events
+  this._bindPostStartEvents( event );
+  this.emitEvent( 'pointerDown', [ event, pointer ] );
+};
+
+// base pointer down logic
+proto._dragPointerDown = function( event, pointer ) {
+  // track to see when dragging starts
+  this.pointerDownPoint = Unipointer.getPointerPoint( pointer );
+
+  var canPreventDefault = this.canPreventDefaultOnPointerDown( event, pointer );
+  if ( canPreventDefault ) {
+    event.preventDefault();
+  }
+};
+
+// overwriteable method so Flickity can prevent for scrolling
+proto.canPreventDefaultOnPointerDown = function( event ) {
+  // prevent default, unless touchstart or <select>
+  return event.target.nodeName != 'SELECT';
+};
+
+// ----- move event ----- //
+
+/**
+ * drag move
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerMove = function( event, pointer ) {
+  var moveVector = this._dragPointerMove( event, pointer );
+  this.emitEvent( 'pointerMove', [ event, pointer, moveVector ] );
+  this._dragMove( event, pointer, moveVector );
+};
+
+// base pointer move logic
+proto._dragPointerMove = function( event, pointer ) {
+  var movePoint = Unipointer.getPointerPoint( pointer );
+  var moveVector = {
+    x: movePoint.x - this.pointerDownPoint.x,
+    y: movePoint.y - this.pointerDownPoint.y
+  };
+  // start drag if pointer has moved far enough to start drag
+  if ( !this.isDragging && this.hasDragStarted( moveVector ) ) {
+    this._dragStart( event, pointer );
+  }
+  return moveVector;
+};
+
+// condition if pointer has moved far enough to start drag
+proto.hasDragStarted = function( moveVector ) {
+  return Math.abs( moveVector.x ) > 3 || Math.abs( moveVector.y ) > 3;
+};
+
+
+// ----- end event ----- //
+
+/**
+ * pointer up
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto.pointerUp = function( event, pointer ) {
+  this.emitEvent( 'pointerUp', [ event, pointer ] );
+  this._dragPointerUp( event, pointer );
+};
+
+proto._dragPointerUp = function( event, pointer ) {
+  if ( this.isDragging ) {
+    this._dragEnd( event, pointer );
+  } else {
+    // pointer didn't move enough for drag to start
+    this._staticClick( event, pointer );
+  }
+};
+
+// -------------------------- drag -------------------------- //
+
+// dragStart
+proto._dragStart = function( event, pointer ) {
+  this.isDragging = true;
+  this.dragStartPoint = Unipointer.getPointerPoint( pointer );
+  // prevent clicks
+  this.isPreventingClicks = true;
+
+  this.dragStart( event, pointer );
+};
+
+proto.dragStart = function( event, pointer ) {
+  this.emitEvent( 'dragStart', [ event, pointer ] );
+};
+
+// dragMove
+proto._dragMove = function( event, pointer, moveVector ) {
+  // do not drag if not dragging yet
+  if ( !this.isDragging ) {
+    return;
+  }
+
+  this.dragMove( event, pointer, moveVector );
+};
+
+proto.dragMove = function( event, pointer, moveVector ) {
+  event.preventDefault();
+  this.emitEvent( 'dragMove', [ event, pointer, moveVector ] );
+};
+
+// dragEnd
+proto._dragEnd = function( event, pointer ) {
+  // set flags
+  this.isDragging = false;
+  // re-enable clicking async
+  setTimeout( function() {
+    delete this.isPreventingClicks;
+  }.bind( this ) );
+
+  this.dragEnd( event, pointer );
+};
+
+proto.dragEnd = function( event, pointer ) {
+  this.emitEvent( 'dragEnd', [ event, pointer ] );
+};
+
+// ----- onclick ----- //
+
+// handle all clicks and prevent clicks when dragging
+proto.onclick = function( event ) {
+  if ( this.isPreventingClicks ) {
+    event.preventDefault();
+  }
+};
+
+// ----- staticClick ----- //
+
+// triggered after pointer down & up with no/tiny movement
+proto._staticClick = function( event, pointer ) {
+  // ignore emulated mouse up clicks
+  if ( this.isIgnoringMouseUp && event.type == 'mouseup' ) {
+    return;
+  }
+
+  // allow click in <input>s and <textarea>s
+  var nodeName = event.target.nodeName;
+  if ( nodeName == 'INPUT' || nodeName == 'TEXTAREA' ) {
+    event.target.focus();
+  }
+  this.staticClick( event, pointer );
+
+  // set flag for emulated clicks 300ms after touchend
+  if ( event.type != 'mouseup' ) {
+    this.isIgnoringMouseUp = true;
+    // reset flag after 300ms
+    setTimeout( function() {
+      delete this.isIgnoringMouseUp;
+    }.bind( this ), 400 );
+  }
+};
+
+proto.staticClick = function( event, pointer ) {
+  this.emitEvent( 'staticClick', [ event, pointer ] );
+};
+
+// ----- utils ----- //
+
+Unidragger.getPointerPoint = Unipointer.getPointerPoint;
+
+// -----  ----- //
+
+return Unidragger;
+
+}));
+  })();
+});
+
+require.register("unipointer/unipointer.js", function(exports, require, module) {
+  require = __makeRelativeRequire(require, {}, "unipointer");
+  (function() {
+    /*!
+ * Unipointer v2.1.0
+ * base class for doing one thing with pointer event
+ * MIT license
+ */
+
+/*jshint browser: true, undef: true, unused: true, strict: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /* jshint strict: false */ /*global define, module, require */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'ev-emitter/ev-emitter'
+    ], function( EvEmitter ) {
+      return factory( window, EvEmitter );
+    });
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      window,
+      require('ev-emitter')
+    );
+  } else {
+    // browser global
+    window.Unipointer = factory(
+      window,
+      window.EvEmitter
+    );
+  }
+
+}( window, function factory( window, EvEmitter ) {
+
+'use strict';
+
+function noop() {}
+
+function Unipointer() {}
+
+// inherit EvEmitter
+var proto = Unipointer.prototype = Object.create( EvEmitter.prototype );
+
+proto.bindStartEvent = function( elem ) {
+  this._bindStartEvent( elem, true );
+};
+
+proto.unbindStartEvent = function( elem ) {
+  this._bindStartEvent( elem, false );
+};
+
+/**
+ * works as unbinder, as you can ._bindStart( false ) to unbind
+ * @param {Boolean} isBind - will unbind if falsey
+ */
+proto._bindStartEvent = function( elem, isBind ) {
+  // munge isBind, default to true
+  isBind = isBind === undefined ? true : !!isBind;
+  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
+
+  if ( window.navigator.pointerEnabled ) {
+    // W3C Pointer Events, IE11. See https://coderwall.com/p/mfreca
+    elem[ bindMethod ]( 'pointerdown', this );
+  } else if ( window.navigator.msPointerEnabled ) {
+    // IE10 Pointer Events
+    elem[ bindMethod ]( 'MSPointerDown', this );
+  } else {
+    // listen for both, for devices like Chrome Pixel
+    elem[ bindMethod ]( 'mousedown', this );
+    elem[ bindMethod ]( 'touchstart', this );
+  }
+};
+
+// trigger handler methods for events
+proto.handleEvent = function( event ) {
+  var method = 'on' + event.type;
+  if ( this[ method ] ) {
+    this[ method ]( event );
+  }
+};
+
+// returns the touch that we're keeping track of
+proto.getTouch = function( touches ) {
+  for ( var i=0; i < touches.length; i++ ) {
+    var touch = touches[i];
+    if ( touch.identifier == this.pointerIdentifier ) {
+      return touch;
+    }
+  }
+};
+
+// ----- start event ----- //
+
+proto.onmousedown = function( event ) {
+  // dismiss clicks from right or middle buttons
+  var button = event.button;
+  if ( button && ( button !== 0 && button !== 1 ) ) {
+    return;
+  }
+  this._pointerDown( event, event );
+};
+
+proto.ontouchstart = function( event ) {
+  this._pointerDown( event, event.changedTouches[0] );
+};
+
+proto.onMSPointerDown =
+proto.onpointerdown = function( event ) {
+  this._pointerDown( event, event );
+};
+
+/**
+ * pointer start
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ */
+proto._pointerDown = function( event, pointer ) {
+  // dismiss other pointers
+  if ( this.isPointerDown ) {
+    return;
+  }
+
+  this.isPointerDown = true;
+  // save pointer identifier to match up touch events
+  this.pointerIdentifier = pointer.pointerId !== undefined ?
+    // pointerId for pointer events, touch.indentifier for touch events
+    pointer.pointerId : pointer.identifier;
+
+  this.pointerDown( event, pointer );
+};
+
+proto.pointerDown = function( event, pointer ) {
+  this._bindPostStartEvents( event );
+  this.emitEvent( 'pointerDown', [ event, pointer ] );
+};
+
+// hash of events to be bound after start event
+var postStartEvents = {
+  mousedown: [ 'mousemove', 'mouseup' ],
+  touchstart: [ 'touchmove', 'touchend', 'touchcancel' ],
+  pointerdown: [ 'pointermove', 'pointerup', 'pointercancel' ],
+  MSPointerDown: [ 'MSPointerMove', 'MSPointerUp', 'MSPointerCancel' ]
+};
+
+proto._bindPostStartEvents = function( event ) {
+  if ( !event ) {
+    return;
+  }
+  // get proper events to match start event
+  var events = postStartEvents[ event.type ];
+  // bind events to node
+  events.forEach( function( eventName ) {
+    window.addEventListener( eventName, this );
+  }, this );
+  // save these arguments
+  this._boundPointerEvents = events;
+};
+
+proto._unbindPostStartEvents = function() {
+  // check for _boundEvents, in case dragEnd triggered twice (old IE8 bug)
+  if ( !this._boundPointerEvents ) {
+    return;
+  }
+  this._boundPointerEvents.forEach( function( eventName ) {
+    window.removeEventListener( eventName, this );
+  }, this );
+
+  delete this._boundPointerEvents;
+};
+
+// ----- move event ----- //
+
+proto.onmousemove = function( event ) {
+  this._pointerMove( event, event );
+};
+
+proto.onMSPointerMove =
+proto.onpointermove = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerMove( event, event );
+  }
+};
+
+proto.ontouchmove = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerMove( event, touch );
+  }
+};
+
+/**
+ * pointer move
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerMove = function( event, pointer ) {
+  this.pointerMove( event, pointer );
+};
+
+// public
+proto.pointerMove = function( event, pointer ) {
+  this.emitEvent( 'pointerMove', [ event, pointer ] );
+};
+
+// ----- end event ----- //
+
+
+proto.onmouseup = function( event ) {
+  this._pointerUp( event, event );
+};
+
+proto.onMSPointerUp =
+proto.onpointerup = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerUp( event, event );
+  }
+};
+
+proto.ontouchend = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerUp( event, touch );
+  }
+};
+
+/**
+ * pointer up
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerUp = function( event, pointer ) {
+  this._pointerDone();
+  this.pointerUp( event, pointer );
+};
+
+// public
+proto.pointerUp = function( event, pointer ) {
+  this.emitEvent( 'pointerUp', [ event, pointer ] );
+};
+
+// ----- pointer done ----- //
+
+// triggered on pointer up & pointer cancel
+proto._pointerDone = function() {
+  // reset properties
+  this.isPointerDown = false;
+  delete this.pointerIdentifier;
+  // remove events
+  this._unbindPostStartEvents();
+  this.pointerDone();
+};
+
+proto.pointerDone = noop;
+
+// ----- pointer cancel ----- //
+
+proto.onMSPointerCancel =
+proto.onpointercancel = function( event ) {
+  if ( event.pointerId == this.pointerIdentifier ) {
+    this._pointerCancel( event, event );
+  }
+};
+
+proto.ontouchcancel = function( event ) {
+  var touch = this.getTouch( event.changedTouches );
+  if ( touch ) {
+    this._pointerCancel( event, touch );
+  }
+};
+
+/**
+ * pointer cancel
+ * @param {Event} event
+ * @param {Event or Touch} pointer
+ * @private
+ */
+proto._pointerCancel = function( event, pointer ) {
+  this._pointerDone();
+  this.pointerCancel( event, pointer );
+};
+
+// public
+proto.pointerCancel = function( event, pointer ) {
+  this.emitEvent( 'pointerCancel', [ event, pointer ] );
+};
+
+// -----  ----- //
+
+// utility function for getting x/y coords from event
+Unipointer.getPointerPoint = function( pointer ) {
+  return {
+    x: pointer.pageX,
+    y: pointer.pageY
+  };
+};
+
+// -----  ----- //
+
+return Unipointer;
+
+}));
+  })();
+});
+
 require.register("warning/browser.js", function(exports, require, module) {
   require = __makeRelativeRequire(require, {}, "warning");
   (function() {
@@ -38727,15 +38418,11 @@ module.exports = warning;
   })();
 });
 require.alias("backbone/backbone.js", "backbone");
+require.alias("desandro-matches-selector/matches-selector.js", "desandro-matches-selector");
+require.alias("ev-emitter/ev-emitter.js", "ev-emitter");
+require.alias("fizzy-ui-utils/utils.js", "fizzy-ui-utils");
 require.alias("flickity/js/index.js", "flickity");
-require.alias("flickity/node_modules/desandro-matches-selector/matches-selector.js", "flickity/node_modules/desandro-matches-selector");
-require.alias("flickity/node_modules/ev-emitter/ev-emitter.js", "flickity/node_modules/ev-emitter");
-require.alias("flickity/node_modules/fizzy-ui-utils/utils.js", "flickity/node_modules/fizzy-ui-utils");
-require.alias("flickity/node_modules/get-size/get-size.js", "flickity/node_modules/get-size");
-require.alias("flickity/node_modules/tap-listener/tap-listener.js", "flickity/node_modules/tap-listener");
-require.alias("flickity/node_modules/tap-listener/node_modules/unipointer/unipointer.js", "flickity/node_modules/tap-listener/node_modules/unipointer");
-require.alias("flickity/node_modules/unidragger/unidragger.js", "flickity/node_modules/unidragger");
-require.alias("flickity/node_modules/unidragger/node_modules/unipointer/unipointer.js", "flickity/node_modules/unidragger/node_modules/unipointer");
+require.alias("get-size/get-size.js", "get-size");
 require.alias("has/src/index.js", "has");
 require.alias("ismobilejs/isMobile.js", "ismobilejs");
 require.alias("jquery/dist/jquery.js", "jquery");
@@ -38743,7 +38430,10 @@ require.alias("leaflet/dist/leaflet-src.js", "leaflet");
 require.alias("local-storage/local-storage.js", "local-storage");
 require.alias("process/browser.js", "process");
 require.alias("select2/dist/js/select2.js", "select2");
+require.alias("tap-listener/tap-listener.js", "tap-listener");
 require.alias("underscore/underscore.js", "underscore");
+require.alias("unidragger/unidragger.js", "unidragger");
+require.alias("unipointer/unipointer.js", "unipointer");
 require.alias("warning/browser.js", "warning");process = require('process');require.register("___globals___", function(exports, require, module) {
   
 });})();require('___globals___');

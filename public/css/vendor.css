@@ -5328,8 +5328,8 @@ table {
 .select2-dropdown {
   margin-top: 5px;
   background-color: white;
-  border: 1px solid #FFF;
-  border-radius: 4px;
+  border: 2px solid #FFF;
+  border-radius: 6px;
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -5399,9 +5399,13 @@ table {
   width: 1px !important; }
 
 .select2-container--default .select2-selection--single {
-  width: 270px;
+  width: auto;
+  min-width: 180px;
+  height: 39px;
+  padding: 6px 12px 10px;
   background: transparent;
-  border-bottom: 1px dashed #FFF; }
+  border-radius: 6px;
+  border: 2px solid #FFF; }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
   color: rgba(255, 255, 255, 0.85);
@@ -5418,10 +5422,10 @@ table {
   color: rgba(255, 255, 255, 0.6); }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
-  height: 26px;
+  height: 39px;
   position: absolute;
-  top: -1px;
-  right: 1px;
+  top: 0;
+  right: 7px;
   width: 20px; }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
@@ -5574,7 +5578,7 @@ table {
   padding-left: 6em; }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: #5897fb;
+  background-color: #1abc9c;
   color: white; }
 
 .select2-container--default .select2-results__group {

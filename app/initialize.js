@@ -5,6 +5,7 @@ var Flickity = require('flickity');
 var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
 var BackgroundMapSlideView = require('js/background-map-slide-view');
+var ContactView = require('js/contact/contact-view');
 require('js/handlebars-helpers');
 var isMobile = require('ismobilejs');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
@@ -144,6 +145,21 @@ function init () {
   );
   items.add({
     key: Handlebars.helpers.t('honeymoon.key')
+  });
+
+  // Contact
+  Carousel.append(
+    new ContactView({
+      Carousel: Carousel,
+      template: require('templates/contact/contact-slide.hbs'),
+      index: 6,
+      background: '#FFF',
+      translateKey: 'contact'
+    })
+    .render().el
+  );
+  items.add({
+    key: Handlebars.helpers.t('contact.key')
   });
 
   // Initiate the router

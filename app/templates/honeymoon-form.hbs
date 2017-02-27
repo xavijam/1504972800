@@ -1,27 +1,28 @@
 <div class="Form-fieldset">
   <div class="Form-field">
-    <input type="email" name="email" class="Form-input Form-input--withSubmit js-textInput" placeholder="{{ t 'honeymoon.email-placeholder' }}" value="{{value}}"
-      {{#ifCond state '==' 'loading' }}
+    <input type="email" name="email" class="Form-input js-textInput" placeholder="{{ t 'honeymoon.email-placeholder' }}" value="{{value}}"
+      {{#ifCond state '!=' 'idle' }}
         disabled
       {{/ifCond}}
       required
     />
-    <i class="Form-inputIcon fa fa-envelope-o"></i>
   </div>
+</div>
+<div class="Form-fieldset u-tSpace--m">
   <div class="Form-field">
     {{#ifCond state '==' 'loading' }}
-      <button type="button" class="Form-submit" disabled>
-        <i class="Form-submitIcon fa fa-circle-o-notch fa-spin fa-fw"></i>
+      <button type="button" class="Form-submit Button Button--disabled" disabled>
+        {{ t 'form.sending' }}
       </button>
     {{/ifCond}}
     {{#ifCond state '==' 'idle' }}
-      <button type="submit" class="Form-submit">
-        <i class="Form-submitIcon fa fa-arrow-right"></i>
+      <button type="submit" class="Form-submit Button Button--primary">
+        {{ t 'form.send' }}
       </button>
     {{/ifCond}}
     {{#ifCond state '==' 'success' }}
-      <button type="submit" class="Form-submit Form-submit--success" disabled>
-        <i class="Form-submitIcon fa fa-check"></i>
+      <button type="submit" class="Form-submit Button Button--success" disabled>
+        {{ t 'form.sent' }}
       </button>
     {{/ifCond}}
   </div>

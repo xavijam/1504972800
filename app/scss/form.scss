@@ -2,9 +2,10 @@
 
 // Styles for all form things
 $input-main-color: #C4C4C4;
-$input-main-focus-color: #999;
-$border-radius: 4px;
+$input-main-focus-color: #1abc9c;
+$border-radius: 6px;
 $button-color: #C37D9C;
+$error-color: #e74c3c;
 
 .Form {
   margin: 0 auto;
@@ -16,64 +17,46 @@ $button-color: #C37D9C;
 }
 .Form-field {
   position: relative;
-}
-.Form-inputIcon {
-  position: absolute;
-  left: 17px;
-  top: 16px;
-  color: $input-main-color;
-}
-.Form-inputIcon:after {
-  content: '';
-  position: absolute;
-  left: 30px;
-  top: -3px;
-  height: 25px;
-  width: 1px;
-  background: $input-main-color;
+  width: 100%;
 }
 .Form-input {
-  padding: 12px 12px 12px 60px;
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  box-sizing: border-box;
   line-height: 22px;
   font-family: 'Lato';
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 300;
-  color: #787878;
+  color: #34495e;
   letter-spacing: 0px;
   outline: none;
   border-radius: $border-radius;
-  border: 1px solid $input-main-color;
+  border: 2px solid $input-main-color;
+  resize: none;
 }
 .Form-input:focus {
   border-color: $input-main-focus-color;
-  & + .Form-inputIcon {
-    color: $input-main-focus-color;
-    &:after {
-      background: $input-main-focus-color;
-    }
-  }
 }
 .Form-input:disabled {
   border-color: $input-main-color;
   background: rgba($input-main-color, 0.1);
-  & + .Form-inputIcon {
-    color: $input-main-color;
-    &:after {
-      background: $input-main-color;
-    }
-  }
+}
+.Form-input.has-errors {
+  color: $error-color;
+  border-color: $error-color;
 }
 .Form-input::-webkit-input-placeholder {
-  color: rgba($input-main-color, 0.5);
+  color: rgba($input-main-color, 0.8);
 }
 .Form-input::-moz-placeholder {
-  color: rgba($input-main-color, 0.5);
+  color: rgba($input-main-color, 0.8);
 }
 .Form-input:-ms-input-placeholder {
-  color: rgba($input-main-color, 0.5);
+  color: rgba($input-main-color, 0.8);
 }
 .Form-input:-moz-placeholder {
-  color: rgba($input-main-color, 0.5);
+  color: rgba($input-main-color, 0.8);
 }
 .Form-input--withSubmit {
   border-top-right-radius: 0;
@@ -81,33 +64,5 @@ $button-color: #C37D9C;
   border-right: 0;
 }
 .Form-submit {
-  display: inline-block;
-  width: 48px;
-  height: 48px;
-  border: 1px solid $button-color;
-  border-top-right-radius: $border-radius;
-  border-bottom-right-radius: $border-radius;
-  outline: none; 
-  background: rgba($button-color, 0.8);
-  &:hover,
-  &:focus {
-    background: $button-color;
-  }
-}
-.Form-submitIcon {
-  color: white;
-}
-.Form-submit:disabled {
-  $button-disabled-color: rgba($button-color, 0.8);
-  border: 1px solid $button-disabled-color;
-  background: $button-disabled-color;
-  &:hover,
-  &:focus {
-    background: $button-disabled-color;
-    cursor: default;
-  }
-}
-.Form-submit:disabled.Form-submit--success {
-  background: #62C791;
-  border: 1px solid #62C791;
+  min-width: 195px;
 }

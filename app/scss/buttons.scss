@@ -1,0 +1,45 @@
+@import 'media-queries';
+
+// Styles for all buttons
+
+$primary-color: #1abc9c;
+$disabled-color: #bdc3c7;
+$success-color: #2ecc71;
+$border-radius: 6px;
+
+.Button {
+  display: inline-block;
+  padding: 10px 19px;
+  line-height: 19px;
+  border-radius: $border-radius;
+  border: none;
+  font-family: 'Lato';
+  font-size: 17px;
+  font-weight: bold;
+  outline: none;
+}
+.Button--primary {
+  background: $primary-color;
+  color: white;
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    background: darken($primary-color, 1);
+  }
+}
+.Button--disabled {
+  background: $disabled-color;
+  color: rgba(white, 0.75);
+  &:hover,
+  &:focus  {
+    cursor: default;
+  }
+}
+.Button--success {
+  background: $success-color;
+  color: white;
+  &:hover,
+  &:focus  {
+    cursor: default;
+  }
+}

@@ -1,0 +1,38 @@
+<div class="Contact-block js-attendees">
+  <h4 class="Contact-blockTitle">{{ t 'contact.attendance' }}</h4>
+</div>
+<div class="Contact-block js-buses">
+  <h4 class="Contact-blockTitle">{{ t 'contact.bus-info' }}</h4>
+  <div class="Form-fieldset">
+    <div class="Form-field u-rSpace--m">
+      <select></select>
+    </div>
+    <div class="Form-field">
+      <select></select>
+    </div>
+  </div>
+</div>
+<div class="Contact-block js-info">
+  <h4 class="Contact-blockTitle">{{ t 'contact.your-info' }}</h4>
+  <div class="Form-fieldset">
+    <div class="Form-field u-rSpace--m">
+      <input type="text" value="{{ phone }}" name="phone" class="Form-input js-phone" placeholder="{{ t 'form.phone' }}" />
+    </div>
+    <div class="Form-field">
+      <input type="email" value="{{ email }}" name="email" class="Form-input js-email" placeholder="{{ t 'form.email' }}" />
+    </div>
+  </div>
+  <div class="Form-fieldset u-tSpace--m">
+    <div class="Form-field">
+      <input type="text" value="{{ song }}" name="song" class="Form-input js-song" placeholder="{{ t 'form.song' }}" />
+    </div>
+  </div>
+  <div class="Form-fieldset u-tSpace--m">
+    <div class="Form-field">
+      <textarea class="Form-input js-questions" name="questions" placeholder="{{ t 'form.questions' }}">{{ comment }}</textarea>
+    </div>
+  </div>
+</div>
+<button type="submit" class="Button Button--primary">
+  {{ t 'form.send' }}
+</button>

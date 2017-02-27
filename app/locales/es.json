@@ -1,6 +1,16 @@
 {
   "date": "9 Septiembre 2017",
   "powered-by": "Patrocinado por:",
+  "form": {
+    "email": "Tu email",
+    "phone": "Tu teléfono",
+    "song": "Tu canción favorita para la boda",
+    "questions": "Alguna pregunta?",
+    "error": "Error",
+    "send": "Enviar",
+    "sending": "Enviando...",
+    "sent": "Enviado"
+  },
   "home": {
     "key": "boda",
     "title": "boda",
@@ -45,6 +55,9 @@
     "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta?. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría vivir en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
     "expense": "gasto",
     "leisure": "ocio",
+    "send": "Enviar",
+    "sending": "Enviando...",
+    "sent": "Enviado",
     "disclaimer": "Elige la/s opcion/es que más te gusten y aporta lo que consideres, no es necesario pagar toda la actividad o gasto.",
     "email-placeholder": "Añade tu email",
     "items": {
