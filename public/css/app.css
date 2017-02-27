@@ -183,6 +183,9 @@
   line-height: 18px;
   text-transform: uppercase; }
 
+.Contact-input--large + .select2-container {
+  width: 100% !important; }
+
 
 html,
 body {

@@ -51,7 +51,7 @@ function init () {
       selectionItemTemplate: require('./templates/route-options.hbs'),
       selectionItemListClassname: 'List--horizontal',
       index: 0,
-      background: '#E2AB49',
+      background: '#6C818E',
       translateKey: 'transport-going',
       addDescription: true,
       selectPlaceholder: Handlebars.helpers.t('transport-going.placeholder'),
@@ -68,7 +68,7 @@ function init () {
       Carousel: Carousel,
       template: require('templates/church.hbs'),
       index: 1,
-      background: '#6C818E',
+      background: '#905E81',
       translateKey: 'church'
     })
     .render().el
@@ -83,7 +83,7 @@ function init () {
       Carousel: Carousel,
       template: require('templates/banquet.hbs'),
       index: 2,
-      background: '#FA8072',
+      background: '#E3AA45',
       translateKey: 'banquet'
     })
     .render().el
@@ -100,7 +100,7 @@ function init () {
       selectionItemTemplate: require('./templates/route-options.hbs'),
       selectionItemListClassname: 'List--horizontal',
       index: 3,
-      background: '#9B9B9B',
+      background: '#DF8075',
       addDescription: true,
       selectPlaceholder: Handlebars.helpers.t('transport-return.placeholder'),
       translateKey: 'transport-return',
@@ -120,7 +120,7 @@ function init () {
       selectionItemTemplate: require('./templates/accomodation-options.hbs'),
       selectionItemListClassname: 'List--vertical',
       index: 4,
-      background: '#4A4A4A',
+      background: '#767676',
       translateKey: 'accomodation',
       addDescription: false,
       selectPlaceholder: Handlebars.helpers.t('accomodation.placeholder'),
@@ -138,7 +138,7 @@ function init () {
       Carousel: Carousel,
       template: require('templates/honeymoon.hbs'),
       index: 5,
-      background: '#FFF',
+      background: '#FCFCFC',
       translateKey: 'honeymoon'
     })
     .render().el

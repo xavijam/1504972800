@@ -12,7 +12,7 @@ require('select2');
 module.exports = Backbone.View.extend({
 
   tagName: 'form',
-  className: 'ItemsForm js-selectionForm',
+  className: 'ItemsForm js-selectionForm light-theme',
 
   events: {
     'change .js-select': '_onSelectChange'

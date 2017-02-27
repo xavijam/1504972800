@@ -137,6 +137,10 @@
   "contact": {
     "key": "contacto",
     "title": "Contacto",
-    "desc": ""
+    "desc": "Este es el lugar para confirmar tu asistencia. Añade tantos asistentes como quieras, especificando el nombre y si el o ella tiene algún tipo de alergía o es vegetariana/o.",
+    "attendees": "asistentes",
+    "bus-info": "buses",
+    "your-info": "detalles",
+    "other-contact": "O si lo prefieres, puedes llamarnos o escribirnos."
   }
 }

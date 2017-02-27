@@ -134,8 +134,9 @@
     "key": "contact",
     "title": "Contact",
     "desc": "This is the perfect place for confirming your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
-    "attendance": "attendance",
+    "attendees": "attendees",
     "bus-info": "buses",
-    "your-info": "details"
+    "your-info": "details",
+    "other-contact": "Or if you prefer to call or write us directly."
   }
 }

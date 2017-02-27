@@ -1,14 +1,16 @@
 <div class="Contact-block js-attendees">
-  <h4 class="Contact-blockTitle">{{ t 'contact.attendance' }}</h4>
+  <h4 class="Contact-blockTitle">{{ t 'contact.attendees' }}</h4>
 </div>
 <div class="Contact-block js-buses">
   <h4 class="Contact-blockTitle">{{ t 'contact.bus-info' }}</h4>
   <div class="Form-fieldset">
-    <div class="Form-field u-rSpace--m">
-      <select></select>
-    </div>
     <div class="Form-field">
-      <select></select>
+      <select class="js-going Contact-input--large"></select>
+    </div>
+  </div>
+  <div class="Form-fieldset u-tSpace--m">
+    <div class="Form-field">
+      <select class="js-return Contact-input--large"></select>
     </div>
   </div>
 </div>
@@ -27,12 +29,11 @@
       <input type="text" value="{{ song }}" name="song" class="Form-input js-song" placeholder="{{ t 'form.song' }}" />
     </div>
   </div>
-  <div class="Form-fieldset u-tSpace--m">
-    <div class="Form-field">
-      <textarea class="Form-input js-questions" name="questions" placeholder="{{ t 'form.questions' }}">{{ comment }}</textarea>
-    </div>
-  </div>
 </div>
 <button type="submit" class="Button Button--primary">
   {{ t 'form.send' }}
 </button>
+
+<div class="u-tSpace--xxxl">
+  <p class="Slide-contentParagraph Text Color Color--dark Text-paragraph u-tSpace--xxxl">{{ t 'contact.other-contact' }}</p>
+</div>

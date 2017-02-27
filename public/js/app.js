@@ -201,7 +201,7 @@ function init() {
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
     index: 0,
-    background: '#E2AB49',
+    background: '#6C818E',
     translateKey: 'transport-going',
     addDescription: true,
     selectPlaceholder: Handlebars.helpers.t('transport-going.placeholder'),
@@ -216,7 +216,7 @@ function init() {
     Carousel: Carousel,
     template: require('templates/church.hbs'),
     index: 1,
-    background: '#6C818E',
+    background: '#905E81',
     translateKey: 'church'
   }).render().el);
   items.add({
@@ -228,7 +228,7 @@ function init() {
     Carousel: Carousel,
     template: require('templates/banquet.hbs'),
     index: 2,
-    background: '#FA8072',
+    background: '#E3AA45',
     translateKey: 'banquet'
   }).render().el);
   items.add({
@@ -242,7 +242,7 @@ function init() {
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
     index: 3,
-    background: '#9B9B9B',
+    background: '#DF8075',
     addDescription: true,
     selectPlaceholder: Handlebars.helpers.t('transport-return.placeholder'),
     translateKey: 'transport-return',
@@ -259,7 +259,7 @@ function init() {
     selectionItemTemplate: require('./templates/accomodation-options.hbs'),
     selectionItemListClassname: 'List--vertical',
     index: 4,
-    background: '#4A4A4A',
+    background: '#767676',
     translateKey: 'accomodation',
     addDescription: false,
     selectPlaceholder: Handlebars.helpers.t('accomodation.placeholder'),
@@ -274,7 +274,7 @@ function init() {
     Carousel: Carousel,
     template: require('templates/honeymoon.hbs'),
     index: 5,
-    background: '#FFF',
+    background: '#FCFCFC',
     translateKey: 'honeymoon'
   }).render().el);
   items.add({
@@ -670,6 +670,8 @@ var Backbone = require('backbone');
 var LocalStorage = require('local-storage');
 var AttendeesCollection = require('./attendees-collection');
 var AttendeesView = require('./attendees-view');
+var transportGoingRoutes = require('../transport-going-routes');
+var transportReturnRoutes = require('../transport-return-routes');
 var template = require('../../templates/contact/contact-form');
 
 module.exports = Backbone.View.extend({
@@ -704,7 +706,6 @@ module.exports = Backbone.View.extend({
   },
 
   _initViews: function _initViews() {
-
     // Attendees view
     var attendeesView = new AttendeesView({
       collection: this.collection
@@ -712,8 +713,28 @@ module.exports = Backbone.View.extend({
     this.$('.js-attendees').append(attendeesView.render().el);
 
     // Render buses form
+    this._renderCustomSelect('js-going', transportGoingRoutes);
+    this._renderCustomSelect('js-return', transportReturnRoutes);
+
     // Render sender info (phone, email)
     // Render a song you would like to hear in the wedding
+  },
+
+  _renderCustomSelect: function _renderCustomSelect(id, data) {
+    var $select = this.$('.' + id);
+    $select.append($('<option>')); // For placeholder
+    $select.append($('<option>').val('None').text('None')); // For None
+
+    _.each(data, function (item) {
+      var desc = item.desc ? ' (' + item.desc + ')' : '';
+      var $option = $('<option>').val(item.name).text(item.name + desc);
+      $select.append($option);
+    }, this);
+
+    $select.select2({
+      placeholder: 'hello',
+      minimumResultsForSearch: Infinity
+    });
   },
 
   _reviewForm: function _reviewForm() {
@@ -1024,7 +1045,7 @@ require('select2');
 module.exports = Backbone.View.extend({
 
   tagName: 'form',
-  className: 'ItemsForm js-selectionForm',
+  className: 'ItemsForm js-selectionForm light-theme',
 
   events: {
     'change .js-select': '_onSelectChange'
@@ -1470,9 +1491,10 @@ module.exports = {
     "key": "contact",
     "title": "Contact",
     "desc": "This is the perfect place for confirming your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
-    "attendance": "attendance",
+    "attendees": "attendees",
     "bus-info": "buses",
-    "your-info": "details"
+    "your-info": "details",
+    "other-contact": "Or if you prefer to call or write us directly."
   }
 };
 });
@@ -1617,7 +1639,11 @@ module.exports = {
   "contact": {
     "key": "contacto",
     "title": "Contacto",
-    "desc": ""
+    "desc": "Este es el lugar para confirmar tu asistencia. Añade tantos asistentes como quieras, especificando el nombre y si el o ella tiene algún tipo de alergía o es vegetariana/o.",
+    "attendees": "asistentes",
+    "bus-info": "buses",
+    "your-info": "detalles",
+    "other-contact": "O si lo prefieres, puedes llamarnos o escribirnos."
   }
 };
 });
@@ -1771,10 +1797,10 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4="function";
 
   return "<div class=\"Contact-block js-attendees\">\n  <h4 class=\"Contact-blockTitle\">"
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.attendance",{"name":"t","hash":{},"data":data}))
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.attendees",{"name":"t","hash":{},"data":data}))
     + "</h4>\n</div>\n<div class=\"Contact-block js-buses\">\n  <h4 class=\"Contact-blockTitle\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.bus-info",{"name":"t","hash":{},"data":data}))
-    + "</h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field u-rSpace--m\">\n      <select></select>\n    </div>\n    <div class=\"Form-field\">\n      <select></select>\n    </div>\n  </div>\n</div>\n<div class=\"Contact-block js-info\">\n  <h4 class=\"Contact-blockTitle\">"
+    + "</h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field\">\n      <select class=\"js-going Contact-input--large\"></select>\n    </div>\n  </div>\n  <div class=\"Form-fieldset u-tSpace--m\">\n    <div class=\"Form-field\">\n      <select class=\"js-return Contact-input--large\"></select>\n    </div>\n  </div>\n</div>\n<div class=\"Contact-block js-info\">\n  <h4 class=\"Contact-blockTitle\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.your-info",{"name":"t","hash":{},"data":data}))
     + "</h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field u-rSpace--m\">\n      <input type=\"text\" value=\""
     + alias3(((helper = (helper = helpers.phone || (depth0 != null ? depth0.phone : depth0)) != null ? helper : alias2),(typeof helper === alias4 ? helper.call(alias1,{"name":"phone","hash":{},"data":data}) : helper)))
@@ -1788,13 +1814,11 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
     + alias3(((helper = (helper = helpers.song || (depth0 != null ? depth0.song : depth0)) != null ? helper : alias2),(typeof helper === alias4 ? helper.call(alias1,{"name":"song","hash":{},"data":data}) : helper)))
     + "\" name=\"song\" class=\"Form-input js-song\" placeholder=\""
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"form.song",{"name":"t","hash":{},"data":data}))
-    + "\" />\n    </div>\n  </div>\n  <div class=\"Form-fieldset u-tSpace--m\">\n    <div class=\"Form-field\">\n      <textarea class=\"Form-input js-questions\" name=\"questions\" placeholder=\""
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"form.questions",{"name":"t","hash":{},"data":data}))
-    + "\">"
-    + alias3(((helper = (helper = helpers.comment || (depth0 != null ? depth0.comment : depth0)) != null ? helper : alias2),(typeof helper === alias4 ? helper.call(alias1,{"name":"comment","hash":{},"data":data}) : helper)))
-    + "</textarea>\n    </div>\n  </div>\n</div>\n<button type=\"submit\" class=\"Button Button--primary\">\n  "
+    + "\" />\n    </div>\n  </div>\n</div>\n<button type=\"submit\" class=\"Button Button--primary\">\n  "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"form.send",{"name":"t","hash":{},"data":data}))
-    + "\n</button>";
+    + "\n</button>\n\n<div class=\"u-tSpace--xxxl\">\n  <p class=\"Slide-contentParagraph Text Color Color--dark Text-paragraph u-tSpace--xxxl\">"
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.other-contact",{"name":"t","hash":{},"data":data}))
+    + "</p>\n</div>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {

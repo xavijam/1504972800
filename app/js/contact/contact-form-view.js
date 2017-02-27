@@ -8,6 +8,8 @@ var Backbone = require('backbone');
 var LocalStorage = require('local-storage');
 var AttendeesCollection = require('./attendees-collection');
 var AttendeesView = require('./attendees-view');
+var transportGoingRoutes = require('../transport-going-routes');
+var transportReturnRoutes = require('../transport-return-routes');
 var template = require('../../templates/contact/contact-form');
 
 module.exports = Backbone.View.extend({
@@ -44,8 +46,6 @@ module.exports = Backbone.View.extend({
   },
 
   _initViews: function () {
-    
-
     // Attendees view
     var attendeesView = new AttendeesView({
       collection: this.collection
@@ -53,8 +53,30 @@ module.exports = Backbone.View.extend({
     this.$('.js-attendees').append(attendeesView.render().el);
 
     // Render buses form
+    this._renderCustomSelect('js-going', transportGoingRoutes);
+    this._renderCustomSelect('js-return', transportReturnRoutes);
+
     // Render sender info (phone, email)
     // Render a song you would like to hear in the wedding
+  },
+
+  _renderCustomSelect: function (id, data) {
+    var $select = this.$('.' + id);
+    $select.append($('<option>')); // For placeholder
+    $select.append($('<option>').val('None').text('None')); // For None
+
+    _.each(data, function (item) {
+      var desc = item.desc ? ' (' + item.desc + ')' : '';
+      var $option = $('<option>')
+        .val(item.name)
+        .text(item.name + desc);
+      $select.append($option);
+    }, this);
+
+    $select.select2({
+      placeholder: 'hello',
+      minimumResultsForSearch: Infinity
+    });
   },
 
   _reviewForm: function () {
