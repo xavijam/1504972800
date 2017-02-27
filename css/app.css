@@ -17,13 +17,14 @@
   margin: 40px auto 0; }
 
 .TravelList .l-box {
-  margin: 20px; }
+  margin: 10px; }
 
 .TravelList-item {
   position: relative;
-  min-width: 320px;
   background: white;
-  box-shadow: 0 0 25px 1px rgba(0, 0, 0, 0.1); }
+  border: 1px solid #DEDEDE;
+  border-radius: 6px;
+  overflow: hidden; }
 
 .TravelList-itemImage {
   width: 100%;
@@ -98,7 +99,7 @@
   align-items: center; }
 
 .TravelList-disclaimer {
-  max-width: 400px;
+  max-width: 300px;
   margin: 30px auto; }
 
 @media only screen and (min-width: 600px) and (max-width: 1000px) {
@@ -112,6 +113,37 @@
     opacity: 0.5; } }
 
 
+.Button {
+  display: inline-block;
+  padding: 10px 19px;
+  line-height: 19px;
+  border-radius: 6px;
+  border: none;
+  font-family: 'Lato';
+  font-size: 17px;
+  font-weight: bold;
+  outline: none; }
+
+.Button--primary {
+  background: #1abc9c;
+  color: white; }
+  .Button--primary:hover, .Button--primary:focus {
+    cursor: pointer;
+    background: #19b898; }
+
+.Button--disabled {
+  background: #bdc3c7;
+  color: rgba(255, 255, 255, 0.75); }
+  .Button--disabled:hover, .Button--disabled:focus {
+    cursor: default; }
+
+.Button--success {
+  background: #2ecc71;
+  color: white; }
+  .Button--success:hover, .Button--success:focus {
+    cursor: default; }
+
+
 .Color {
   color: white; }
 
@@ -120,6 +152,36 @@
 
 .Color--dark {
   color: #4A4A4A; }
+
+.Color--primary {
+  color: #1abc9c; }
+
+
+.Contact {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px; }
+
+.Contact-block {
+  display: block;
+  position: relative;
+  max-width: 420px;
+  margin: 20px 0;
+  padding: 6px;
+  background: #EFEFEF;
+  border-radius: 4px; }
+
+.Contact-blockTitle {
+  position: absolute;
+  top: -25px;
+  left: 10px;
+  color: #34495e;
+  font-family: 'Lato';
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0px;
+  line-height: 18px;
+  text-transform: uppercase; }
 
 
 html,
@@ -179,61 +241,47 @@ body {
   align-items: center; }
 
 .Form-field {
-  position: relative; }
-
-.Form-inputIcon {
-  position: absolute;
-  left: 17px;
-  top: 16px;
-  color: #C4C4C4; }
-
-.Form-inputIcon:after {
-  content: '';
-  position: absolute;
-  left: 30px;
-  top: -3px;
-  height: 25px;
-  width: 1px;
-  background: #C4C4C4; }
+  position: relative;
+  width: 100%; }
 
 .Form-input {
-  padding: 12px 12px 12px 60px;
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  box-sizing: border-box;
   line-height: 22px;
   font-family: 'Lato';
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 300;
-  color: #787878;
+  color: #34495e;
   letter-spacing: 0px;
   outline: none;
-  border-radius: 4px;
-  border: 1px solid #C4C4C4; }
+  border-radius: 6px;
+  border: 2px solid #C4C4C4;
+  resize: none; }
 
 .Form-input:focus {
-  border-color: #999; }
-  .Form-input:focus + .Form-inputIcon {
-    color: #999; }
-    .Form-input:focus + .Form-inputIcon:after {
-      background: #999; }
+  border-color: #1abc9c; }
 
 .Form-input:disabled {
   border-color: #C4C4C4;
   background: rgba(196, 196, 196, 0.1); }
-  .Form-input:disabled + .Form-inputIcon {
-    color: #C4C4C4; }
-    .Form-input:disabled + .Form-inputIcon:after {
-      background: #C4C4C4; }
+
+.Form-input.has-errors {
+  color: #e74c3c;
+  border-color: #e74c3c; }
 
 .Form-input::-webkit-input-placeholder {
-  color: rgba(196, 196, 196, 0.5); }
+  color: rgba(196, 196, 196, 0.8); }
 
 .Form-input::-moz-placeholder {
-  color: rgba(196, 196, 196, 0.5); }
+  color: rgba(196, 196, 196, 0.8); }
 
 .Form-input:-ms-input-placeholder {
-  color: rgba(196, 196, 196, 0.5); }
+  color: rgba(196, 196, 196, 0.8); }
 
 .Form-input:-moz-placeholder {
-  color: rgba(196, 196, 196, 0.5); }
+  color: rgba(196, 196, 196, 0.8); }
 
 .Form-input--withSubmit {
   border-top-right-radius: 0;
@@ -241,34 +289,17 @@ body {
   border-right: 0; }
 
 .Form-submit {
-  display: inline-block;
-  width: 48px;
-  height: 48px;
-  border: 1px solid #C37D9C;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  outline: none;
-  background: rgba(195, 125, 156, 0.8); }
-  .Form-submit:hover, .Form-submit:focus {
-    background: #C37D9C; }
-
-.Form-submitIcon {
-  color: white; }
-
-.Form-submit:disabled {
-  border: 1px solid rgba(195, 125, 156, 0.8);
-  background: rgba(195, 125, 156, 0.8); }
-  .Form-submit:disabled:hover, .Form-submit:disabled:focus {
-    background: rgba(195, 125, 156, 0.8);
-    cursor: default; }
-
-.Form-submit:disabled.Form-submit--success {
-  background: #62C791;
-  border: 1px solid #62C791; }
+  min-width: 195px; }
 
 
 .u-tSpace {
   margin-top: 2px; }
+
+.u-tSpace--m {
+  margin-top: 6px; }
+
+.u-tSpace--l {
+  margin-top: 10px; }
 
 .u-tSpace--xl {
   margin-top: 14px; }
@@ -282,10 +313,10 @@ body {
 .u-rSpace {
   margin-right: 2px; }
 
-.u-rSpace-m {
+.u-rSpace--m {
   margin-right: 6px; }
 
-.u-rSpace-l {
+.u-rSpace--l {
   margin-right: 10px; }
 
 .u-rSpace--xl {
