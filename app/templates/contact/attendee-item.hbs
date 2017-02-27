@@ -1,9 +1,18 @@
-<input type="text" name="name" value="{{name}}" class="Form-input js-name" placeholder="Placeholder">
-<select class="js-allergy" name="allergy">
-  <option></option>
-  <option></option>
-  <option></option>
-  <option></option>
-  <option></option>
-</select>
-<i class="fa fa-trash js-remove"></i>
+<div class="Form-fieldset">
+  <div class="Form-field Contact-attendeeName u-rSpace--m">
+    <input type="text" name="{{index}}-name" value="{{name}}" class="Form-input js-name" placeholder="{{ t 'contact.name' }}" >
+  </div>
+  <div class="Form-field Contact-attendeeAllergy">
+    <select class="js-allergy" name="{{index}}-allergy" data-placeholder="{{ t 'contact.allergy.placeholder' }}">
+      <option></option>
+      <option>{{ t 'contact.allergy.nothing' }}</option>
+      <option>{{ t 'contact.allergy.vegetarian' }}</option>
+      <option>{{ t 'contact.allergy.celiac' }}</option>
+      <option>{{ t 'contact.allergy.vegan' }}</option>
+      <option>{{ t 'contact.allergy.egg' }}</option>
+      <option>{{ t 'contact.allergy.lactose' }}</option>
+      <option>{{ t 'contact.allergy.nuts' }}</option>
+    </select>
+  </div>
+  <i class="fa fa-trash Contact-attendeeRemove js-remove"></i>
+</div>

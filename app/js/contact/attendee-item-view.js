@@ -10,10 +10,11 @@ require('select2');
 module.exports = Backbone.View.extend({
 
   tagName: 'li',
+  className: 'u-bSpace--m',
 
   events: {
     'change .js-allergy': '_onChange',
-    'keyUp .js-name': '_onChange',
+    'focusout .js-name': '_onChange',
     'click .js-remove': 'remove'
   },
 
@@ -24,6 +25,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     this.$el.html(
       template({
+        index: this.collection.indexOf(this.model),
         name: this.model.get('name'),
         allergy: this.model.get('allergy')
       })
@@ -34,10 +36,12 @@ module.exports = Backbone.View.extend({
   },
 
   _initViews: function () {
-    this.$('.js-allergy').select2({
-      placeholder: 'placeholder',
-      minimumResultsForSearch: Infinity
-    });
+    this.$('.js-allergy')
+      .select2({
+        placeholder: 'placeholder',
+        minimumResultsForSearch: Infinity
+      })
+      .val(this.model.get('allergy')).trigger('change');
   },
 
   _onChange: function () {

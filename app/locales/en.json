@@ -2,8 +2,8 @@
   "date": "9th September 2017",
   "powered-by": "Powered by:",
   "form": {
-    "email": "Your email",
-    "phone": "Your phone",
+    "email": "*Your email",
+    "phone": "*Your phone",
     "song": "Your favourite song for the weeding",
     "questions": "Any question?",
     "error": "Error",
@@ -137,6 +137,21 @@
     "attendees": "attendees",
     "bus-info": "buses",
     "your-info": "details",
-    "other-contact": "Or if you prefer to call or write us directly."
+    "other-contact": "Or if you prefer to call or write us directly.",
+    "name": "Name",
+    "placeholder-transport-going": "Do you need bus for going? Choose your point",
+    "placeholder-transport-return": "Do you need bus for return? Choose your stop",
+    "add-attendee": "Add attendee",
+    "we-dont-need": "We don't need",
+    "allergy": {
+      "placeholder": "Allergy/Others",
+      "nothing": "Nothing",
+      "nuts": "Nuts",
+      "lactose": "Lactose",
+      "egg": "Egg",
+      "vegan": "Vegan",
+      "celiac": "Celiac",
+      "vegetarian": "Vegetarian"
+    }
   }
 }

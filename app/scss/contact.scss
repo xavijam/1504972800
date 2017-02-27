@@ -13,6 +13,7 @@
   padding: 6px;
   background: #EFEFEF;
   border-radius: 4px;
+  text-align: left;
 }
 .Contact-blockTitle {
   position: absolute;
@@ -28,4 +29,25 @@
 }
 .Contact-input--large + .select2-container {
   width: 100%!important;
+}
+.Contact-attendeeName {
+  flex: 6;
+}
+.Contact-attendeeAllergy {
+  flex: 4;
+
+  .select2-container--default .select2-selection--single {
+    min-width: 160px;
+    width: 160px;
+  }
+}
+.Contact-attendeeRemove {
+  position: absolute;
+  top: 12px;
+  right: -25px;
+  color: rgba(#E74C3C, 0.5);
+  &:hover {
+    cursor: pointer;
+    color: rgba(#E74C3C, 1);
+  }
 }

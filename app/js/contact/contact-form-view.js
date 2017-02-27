@@ -18,52 +18,78 @@ module.exports = Backbone.View.extend({
   className: 'Contact',
 
   events: {
+    'focusout .js-email': '_setLocalStorage',
+    'focusout .js-phone': '_setLocalStorage',
+    'focusout .js-song': '_setLocalStorage',
+    'change .js-return': '_setLocalStorage',
+    'change .js-going': '_setLocalStorage',
     'submit': '_onSubmit'
   },
 
   initialize: function () {
-    var storedFormValues = LocalStorage('contact.values') || '';
-    this.collection = new AttendeesCollection(storedFormValues.attendees, { parse: true });
+    var storedAttendees = LocalStorage('contact.attendees') || '';
+    this.collection = new AttendeesCollection(storedAttendees, { parse: true });
 
     this.model = new Backbone.Model({
       state: 'idle'
     });
 
-    this.listenTo(this.model, 'change:state', this.render);
+    this._initBinds();
   },
 
   render: function () {
+    var storedInputValue = LocalStorage('contact.data');
+
     this.$el.html(
       template({
-        phone: '',
-        email: '',
-        comment: '',
-        song: ''
+        phone: storedInputValue.phone,
+        email: storedInputValue.email,
+        song: storedInputValue.song
       })
     );
     this._initViews();
     return this;
   },
 
+  _initBinds: function () {
+    this.listenTo(this.model, 'change:state', this.render);
+    this.listenTo(this.collection, 'add remove change', this._setLocalStorage);
+  },
+
   _initViews: function () {
+    var storedInputValue = LocalStorage('contact.data');
+
     // Attendees view
     var attendeesView = new AttendeesView({
-      collection: this.collection
+      collection: this.collection,
+      state: this.model.get('state')
     });
     this.$('.js-attendees').append(attendeesView.render().el);
 
     // Render buses form
-    this._renderCustomSelect('js-going', transportGoingRoutes);
-    this._renderCustomSelect('js-return', transportReturnRoutes);
-
-    // Render sender info (phone, email)
-    // Render a song you would like to hear in the wedding
+    this._renderCustomSelect('js-going', transportGoingRoutes, 'transport-going', storedInputValue['transport_going']);
+    this._renderCustomSelect('js-return', transportReturnRoutes, 'transport-return', storedInputValue['transport_return']);
   },
 
-  _renderCustomSelect: function (id, data) {
+  _setLocalStorage: function () {
+    LocalStorage('contact.attendees', this.collection.toJSON());
+    LocalStorage('contact.data', {
+      transport_going: this.$('.js-going').val(),
+      transport_return: this.$('.js-return').val(),
+      phone: this.$('.js-phone').val(),
+      email: this.$('.js-email').val(),
+      song: this.$('.js-song').val()
+    });
+  },
+
+  _renderCustomSelect: function (id, data, key, value) {
     var $select = this.$('.' + id);
     $select.append($('<option>')); // For placeholder
-    $select.append($('<option>').val('None').text('None')); // For None
+    $select.append(
+      $('<option>')
+        .val(Handlebars.helpers.t('contact.we-dont-need'))
+        .text(Handlebars.helpers.t('contact.we-dont-need'))
+    ); // For None
 
     _.each(data, function (item) {
       var desc = item.desc ? ' (' + item.desc + ')' : '';
@@ -74,9 +100,11 @@ module.exports = Backbone.View.extend({
     }, this);
 
     $select.select2({
-      placeholder: 'hello',
+      placeholder: Handlebars.helpers.t('contact.placeholder-' + key),
       minimumResultsForSearch: Infinity
     });
+
+    $select.val(value).trigger('change');
   },
 
   _reviewForm: function () {
@@ -85,7 +113,12 @@ module.exports = Backbone.View.extend({
     var numberAttendees = this.collection.size();
     var validAttendees = this.collection.isValid();
 
-    
+    this.$('.js-phone').toggleClass('has-errors', !phone);
+    this.$('.js-email').toggleClass('has-errors', !email);
+    this.$('.js-addAttendee').toggleClass('has-errors', !numberAttendees);
+    this.$('.js-name').each(function (i, el) {
+      $(el).toggleClass('has-errors', !$(el).val());
+    });
   },
 
   _isValid: function () {
@@ -93,7 +126,6 @@ module.exports = Backbone.View.extend({
     var email = this.$('.js-email').val();
     var numberAttendees = this.collection.size();
     var validAttendees = this.collection.isValid();
-
     return numberAttendees > 0 && validAttendees && phone && email;
   },
 
@@ -110,6 +142,8 @@ module.exports = Backbone.View.extend({
 
   _sendForm: function () {
     this.model.set('state', 'loading');
+
+
   }
 
 });

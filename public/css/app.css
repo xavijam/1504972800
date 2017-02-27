@@ -129,7 +129,7 @@
   color: white; }
   .Button--primary:hover, .Button--primary:focus {
     cursor: pointer;
-    background: #19b898; }
+    background: #17a689; }
 
 .Button--disabled {
   background: #bdc3c7;
@@ -142,6 +142,19 @@
   color: white; }
   .Button--success:hover, .Button--success:focus {
     cursor: default; }
+
+.Button--withIcon {
+  padding: 7px 12px;
+  background: #415B76;
+  color: white;
+  font-size: 14px; }
+  .Button--withIcon:hover, .Button--withIcon:focus {
+    background: #2f4255; }
+
+.Button--withIcon.has-errors {
+  background: #E74C3C; }
+  .Button--withIcon.has-errors:hover, .Button--withIcon.has-errors:focus {
+    background: #d62c1a; }
 
 
 .Color {
@@ -156,6 +169,9 @@
 .Color--primary {
   color: #1abc9c; }
 
+.Color--alternative {
+  color: #34495e; }
+
 
 .Contact {
   display: flex;
@@ -169,7 +185,8 @@
   margin: 20px 0;
   padding: 6px;
   background: #EFEFEF;
-  border-radius: 4px; }
+  border-radius: 4px;
+  text-align: left; }
 
 .Contact-blockTitle {
   position: absolute;
@@ -185,6 +202,24 @@
 
 .Contact-input--large + .select2-container {
   width: 100% !important; }
+
+.Contact-attendeeName {
+  flex: 6; }
+
+.Contact-attendeeAllergy {
+  flex: 4; }
+  .Contact-attendeeAllergy .select2-container--default .select2-selection--single {
+    min-width: 160px;
+    width: 160px; }
+
+.Contact-attendeeRemove {
+  position: absolute;
+  top: 12px;
+  right: -25px;
+  color: rgba(231, 76, 60, 0.5); }
+  .Contact-attendeeRemove:hover {
+    cursor: pointer;
+    color: #e74c3c; }
 
 
 html,
@@ -239,6 +274,7 @@ body {
   margin: 0 auto; }
 
 .Form-fieldset {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center; }
@@ -254,7 +290,7 @@ body {
   box-sizing: border-box;
   line-height: 22px;
   font-family: 'Lato';
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 300;
   color: #34495e;
   letter-spacing: 0px;
@@ -313,6 +349,24 @@ body {
 .u-tSpace--xxxl {
   margin-top: 42px; }
 
+.u-bSpace {
+  margin-bottom: 2px; }
+
+.u-bSpace--m {
+  margin-bottom: 6px; }
+
+.u-bSpace--l {
+  margin-bottom: 10px; }
+
+.u-bSpace--xl {
+  margin-bottom: 14px; }
+
+.u-bSpace--xxl {
+  margin-bottom: 28px; }
+
+.u-tSpace--xxxl {
+  margin-bottom: 42px; }
+
 .u-rSpace {
   margin-right: 2px; }
 
@@ -334,10 +388,10 @@ body {
 .u-lSpace {
   margin-left: 2px; }
 
-.u-lSpace-m {
+.u-lSpace--m {
   margin-left: 6px; }
 
-.u-lSpace-l {
+.u-lSpace--l {
   margin-left: 10px; }
 
 .u-lSpace--xl {

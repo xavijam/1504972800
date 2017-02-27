@@ -11,6 +11,7 @@ $error-color: #e74c3c;
   margin: 0 auto;
 }
 .Form-fieldset {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +27,7 @@ $error-color: #e74c3c;
   box-sizing: border-box;
   line-height: 22px;
   font-family: 'Lato';
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 300;
   color: #34495e;
   letter-spacing: 0px;

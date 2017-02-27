@@ -11,16 +11,16 @@ module.exports = Backbone.View.extend({
 
   initialize: function () {
     this.listenTo(this.collection, 'add', this._renderAttendee);
-    // this.listenTo(this.collection, 'change', this._storeInfo);
   },
 
   render: function () {
-    this.collection.each(this._renderAttendee);
+    this.collection.each(this._renderAttendee.bind(this));
     return this;
   },
 
   _renderAttendee: function (mdl) {
     var attendeeView = new AttendeeItemView({
+      collection: this.collection,
       model: mdl
     });
     this.$el.append(attendeeView.render().el);

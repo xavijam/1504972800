@@ -5,6 +5,8 @@
 $primary-color: #1abc9c;
 $disabled-color: #bdc3c7;
 $success-color: #2ecc71;
+$alternative-color: #415B76;
+$error-color: #E74C3C;
 $border-radius: 6px;
 
 .Button {
@@ -24,7 +26,7 @@ $border-radius: 6px;
   &:hover,
   &:focus {
     cursor: pointer;
-    background: darken($primary-color, 1);
+    background: darken($primary-color, 5);
   }
 }
 .Button--disabled {
@@ -41,5 +43,22 @@ $border-radius: 6px;
   &:hover,
   &:focus  {
     cursor: default;
+  }
+}
+.Button--withIcon {
+  padding: 7px 12px;
+  background: $alternative-color;
+  color: white;
+  font-size: 14px;
+  &:hover,
+  &:focus  {
+    background: darken($alternative-color, 10);
+  }
+}
+.Button--withIcon.has-errors {
+  background: $error-color;
+  &:hover,
+  &:focus  {
+    background: darken($error-color, 10);
   }
 }

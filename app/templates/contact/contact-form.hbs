@@ -2,15 +2,20 @@
   <h4 class="Contact-blockTitle">{{ t 'contact.attendees' }}</h4>
 </div>
 <div class="Contact-block js-buses">
-  <h4 class="Contact-blockTitle">{{ t 'contact.bus-info' }}</h4>
+  <h4 class="Contact-blockTitle">
+    {{ t 'contact.bus-info' }}
+    <a href="#/{{ t 'transport-going' }}" class="Color Color--alternative u-lSpace--m">
+      <i class="fa fa-link"></i>
+    </a>
+  </h4>
   <div class="Form-fieldset">
     <div class="Form-field">
-      <select class="js-going Contact-input--large"></select>
+      <select class="js-going Contact-input--large" name="going"></select>
     </div>
   </div>
   <div class="Form-fieldset u-tSpace--m">
     <div class="Form-field">
-      <select class="js-return Contact-input--large"></select>
+      <select class="js-return Contact-input--large" name="return"></select>
     </div>
   </div>
 </div>

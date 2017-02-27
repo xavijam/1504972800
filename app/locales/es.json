@@ -2,8 +2,8 @@
   "date": "9 Septiembre 2017",
   "powered-by": "Patrocinado por:",
   "form": {
-    "email": "Tu email",
-    "phone": "Tu teléfono",
+    "email": "*Tu email",
+    "phone": "*Tu teléfono",
     "song": "Tu canción favorita para la boda",
     "questions": "Alguna pregunta?",
     "error": "Error",
@@ -141,6 +141,20 @@
     "attendees": "asistentes",
     "bus-info": "buses",
     "your-info": "detalles",
-    "other-contact": "O si lo prefieres, puedes llamarnos o escribirnos."
+    "placeholder-transport-going": "¿Necesitáis autobús de ida? Elige desde donde",
+    "placeholder-transport-return": "¿Necesitáis autobús de vuelta? Elige tu parada",
+    "we-dont-need": "No lo necesitamos",
+    "add-attendee": "Añadir asistente",
+    "other-contact": "O si lo prefieres, puedes llamarnos o escribirnos.",
+    "allergy": {
+      "placeholder": "Alergia/Otros",
+      "nothing": "Nada",
+      "nuts": "Frutos secos",
+      "lactose": "Lactosa",
+      "egg": "Huevo",
+      "vegan": "Vegano",
+      "celiac": "Celiaca/o",
+      "vegetarian": "Vegetariana/o"
+    }
   }
 }
