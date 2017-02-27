@@ -1903,9 +1903,7 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"form.song",{"name":"t","hash":{},"data":data}))
     + "\" />\n    </div>\n  </div>\n</div>\n<button type=\"submit\" class=\"Button Button--primary\">\n  "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"form.send",{"name":"t","hash":{},"data":data}))
-    + "\n</button>\n\n<div class=\"u-tSpace--xxxl\">\n  <p class=\"Slide-contentParagraph Text Color Color--dark Text-paragraph u-tSpace--xxxl\">"
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.other-contact",{"name":"t","hash":{},"data":data}))
-    + "</p>\n</div>";
+    + "\n</button>";
 },"useData":true});
 if (typeof define === 'function' && define.amd) {
   define([], function() {
