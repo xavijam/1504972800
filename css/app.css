@@ -64,7 +64,8 @@
 .TravelList-itemTitle {
   font-weight: bold;
   font-family: 'Lato';
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  line-height: 22px; }
 
 .TravelList-itemDesc {
   font-size: 14px;
@@ -110,7 +111,16 @@
 @media only screen and (min-width: 0) and (max-width: 600px) {
   .TravelList-map {
     width: 100%;
-    opacity: 0.5; } }
+    opacity: 0.5; }
+  .TravelList .l-box {
+    margin: 0 20px; } }
+
+@media only screen and (min-width: 0) and (max-width: 320px) {
+  .TravelList {
+    width: 300px;
+    margin: 0 auto; }
+  .TravelList .l-box {
+    margin: 10px; } }
 
 
 .Button {
@@ -142,6 +152,13 @@
   color: white; }
   .Button--success:hover, .Button--success:focus {
     cursor: default; }
+
+.Button--error {
+  background: #E74C3C;
+  color: white; }
+  .Button--error:hover, .Button--error:focus {
+    cursor: pointer;
+    background: #e43725; }
 
 .Button--withIcon {
   padding: 7px 12px;
@@ -221,6 +238,29 @@
     cursor: pointer;
     color: #e74c3c; }
 
+@media only screen and (min-width: 440px) and (max-width: 600px) {
+  .Contact {
+    width: 420px;
+    margin: 0 auto; } }
+
+@media only screen and (min-width: 0) and (max-width: 440px) {
+  .Contact {
+    width: 280px;
+    margin: 0 auto; }
+  .Contact-attendee {
+    flex-direction: column;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #CCC; }
+  .Contact-attendeeName {
+    margin-right: 0 !important; }
+  .Contact-attendeeAllergy {
+    margin-top: 5px;
+    width: 100% !important; }
+  .Contact-attendeeAllergy .select2-container--default .select2-selection--single,
+  .Contact-attendeeAllergy .select2-container {
+    width: 100% !important; } }
+
 
 html,
 body {
@@ -284,7 +324,7 @@ body {
   width: 100%; }
 
 .Form-input {
-  display: block;
+  display: inline-block;
   width: 100%;
   padding: 8px 12px;
   box-sizing: border-box;
@@ -298,6 +338,9 @@ body {
   border-radius: 6px;
   border: 2px solid #C4C4C4;
   resize: none; }
+
+.Form-input--m {
+  width: 195px; }
 
 .Form-input:focus {
   border-color: #1abc9c; }
@@ -563,9 +606,14 @@ body {
 .flickity-page-dots {
   position: fixed;
   display: flex;
-  bottom: 10px;
+  align-items: center;
+  justify-content: center;
   left: 50%;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
   transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.1);
   z-index: 10; }
 
 .dot {
@@ -577,20 +625,23 @@ body {
   border: none;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.1);
-  text-indent: -9999px;
+  text-indent: 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   outline: none; }
   .dot:hover {
     background: white;
-    border-color: white;
     cursor: pointer; }
 
+.dot:hover,
 .dot.is-selected {
   width: 15px;
   height: 15px;
-  margin-top: -2px;
+  margin-top: 0px;
+  margin: 0 1px;
   background: white;
   border-color: white;
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5); }
+  border: 1px solid rgba(0, 0, 0, 0.4); }
+  .dot:hover:hover,
   .dot.is-selected:hover {
     cursor: normal; }
 
@@ -636,7 +687,7 @@ body {
 
 .Slide-content {
   margin: auto;
-  padding: 100px 0;
+  padding: 50px 0;
   z-index: 1; }
 
 .Slide-content--centered {
@@ -666,7 +717,7 @@ body {
 
 @media only screen and (min-width: 0) and (max-width: 450px) {
   .Slide-contentParagraph {
-    max-width: 75%; } }
+    max-width: 85%; } }
 
 
 .Text {
@@ -718,7 +769,7 @@ body {
     opacity: 1;
     text-decoration: underline; }
 
-@media only screen and (min-width: 0) and (max-width: 450px) {
+@media only screen and (min-width: 320px) and (max-width: 450px) {
   .Text-title {
     font-size: 45px;
     font-weight: normal;
@@ -730,7 +781,21 @@ body {
     line-height: 35px; }
   .Text-paragraph {
     font-size: 16px;
-    line-height: 25px; } }
+    line-height: 22px; } }
+
+@media only screen and (min-width: 0) and (max-width: 320px) {
+  .Text-title {
+    font-size: 38px;
+    font-weight: normal;
+    line-height: 35px; }
+  .Text-subTitle {
+    font-size: 25px; }
+  .Text-highlight {
+    font-size: 20px;
+    line-height: 30px; }
+  .Text-paragraph {
+    font-size: 16px;
+    line-height: 22px; } }
 
 
 
