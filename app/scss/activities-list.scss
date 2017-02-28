@@ -113,13 +113,13 @@
     opacity: 0.75;
   }
 }
-@include screen(0, 600px) {
+@include screen(320px, 600px) {
   .TravelList-map {
     width: 100%;
     opacity: 0.5;
   }
-  .TravelList .l-box {
-    margin: 0 20px;
+  .TravelList {
+    width: calc(100% - 40px);
   }
 }
 @include screen(0, 320px) {
