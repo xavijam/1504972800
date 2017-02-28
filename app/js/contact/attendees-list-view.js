@@ -9,7 +9,8 @@ module.exports = Backbone.View.extend({
 
   tagName: 'ul',
 
-  initialize: function () {
+  initialize: function (opts) {
+    this.stateModel = opts.stateModel;
     this.listenTo(this.collection, 'add', this._renderAttendee);
   },
 
@@ -21,7 +22,8 @@ module.exports = Backbone.View.extend({
   _renderAttendee: function (mdl) {
     var attendeeView = new AttendeeItemView({
       collection: this.collection,
-      model: mdl
+      model: mdl,
+      stateModel: this.stateModel
     });
     this.$el.append(attendeeView.render().el);
   }

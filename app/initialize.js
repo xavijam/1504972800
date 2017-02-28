@@ -19,7 +19,7 @@ function init () {
     cellAlign: 'center',
     percentPosition: false,
     dragThreshold: 80,
-    prevNextButtons: true,
+    prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,
     contain: true,
@@ -138,7 +138,7 @@ function init () {
       Carousel: Carousel,
       template: require('templates/honeymoon.hbs'),
       index: 5,
-      background: '#FCFCFC',
+      background: '#FFF',
       translateKey: 'honeymoon'
     })
     .render().el
@@ -153,7 +153,7 @@ function init () {
       Carousel: Carousel,
       template: require('templates/contact/contact-slide.hbs'),
       index: 6,
-      background: '#FFF',
+      background: '#FAFAFA',
       translateKey: 'contact'
     })
     .render().el

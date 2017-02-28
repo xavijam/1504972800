@@ -1,9 +1,19 @@
-<div class="Form-fieldset">
+<div class="Form-fieldset Contact-attendee">
   <div class="Form-field Contact-attendeeName u-rSpace--m">
-    <input type="text" name="{{index}}-name" value="{{name}}" class="Form-input js-name" placeholder="{{ t 'contact.name' }}" >
+    <input type="text" name="{{index}}-name" value="{{name}}" class="Form-input js-name" placeholder="{{ t 'contact.name' }}" 
+
+      {{#ifCond state '==' 'loading' }}
+        disabled
+      {{/ifCond}}
+    >
   </div>
   <div class="Form-field Contact-attendeeAllergy">
-    <select class="js-allergy" name="{{index}}-allergy" data-placeholder="{{ t 'contact.allergy.placeholder' }}">
+    <select class="js-allergy" name="{{index}}-allergy" data-placeholder="{{ t 'contact.allergy.placeholder' }}" 
+
+      {{#ifCond state '==' 'loading' }}
+        disabled
+      {{/ifCond}}
+    >
       <option></option>
       <option>{{ t 'contact.allergy.nothing' }}</option>
       <option>{{ t 'contact.allergy.vegetarian' }}</option>

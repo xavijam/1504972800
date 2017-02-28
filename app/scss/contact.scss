@@ -1,3 +1,5 @@
+@import 'media-queries';
+
 // Contact slide stylesheet
 
 .Contact {
@@ -49,5 +51,36 @@
   &:hover {
     cursor: pointer;
     color: rgba(#E74C3C, 1);
+  }
+}
+
+@include screen(440px, 600px) {
+  .Contact {
+    width: 420px;
+    margin: 0 auto;
+  }
+}
+
+@include screen(0, 440px) {
+  .Contact {
+    width: 280px;
+    margin: 0 auto;
+  }
+  .Contact-attendee {
+    flex-direction: column;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #CCC;
+  }
+  .Contact-attendeeName {
+    margin-right: 0!important;
+  }
+  .Contact-attendeeAllergy {
+    margin-top: 5px;
+    width: 100%!important;
+  }
+  .Contact-attendeeAllergy .select2-container--default .select2-selection--single,
+  .Contact-attendeeAllergy .select2-container {
+    width: 100%!important;
   }
 }

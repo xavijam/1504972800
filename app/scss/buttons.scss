@@ -45,6 +45,15 @@ $border-radius: 6px;
     cursor: default;
   }
 }
+.Button--error {
+  background: $error-color;
+  color: white;
+  &:hover,
+  &:focus  {
+    cursor: pointer;
+    background: darken($error-color, 5);
+  }
+}
 .Button--withIcon {
   padding: 7px 12px;
   background: $alternative-color;

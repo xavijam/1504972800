@@ -69,6 +69,7 @@
   font-weight: bold;
   font-family: 'Lato';
   text-transform: uppercase;
+  line-height: 22px;
 }
 .TravelList-itemDesc {
   font-size: 14px;
@@ -116,5 +117,17 @@
   .TravelList-map {
     width: 100%;
     opacity: 0.5;
+  }
+  .TravelList .l-box {
+    margin: 0 20px;
+  }
+}
+@include screen(0, 320px) {
+  .TravelList {
+    width: 300px;
+    margin: 0 auto;
+  }
+  .TravelList .l-box {
+    margin: 10px;
   }
 }

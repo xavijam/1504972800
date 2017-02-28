@@ -446,10 +446,10 @@
   background-color: white;
   border: 1px solid transparent; }
 
-.select2-container--classic .select2-dropdown--above {
-  border-bottom: none; }
+.select2-dropdown--above {
+  border-bottom: none; margin-top: -5px; }
 
-.select2-container--classic .select2-dropdown--below {
+.select2-dropdown--below {
   border-top: none; }
 
 .select2-container--classic .select2-results > .select2-results__options {
@@ -493,7 +493,7 @@
     color: rgba(white, 0.85);
     text-align: center;
     font-size: 18px;
-    line-height: 20px; }
+    line-height: 22px; }
 .light-theme .select2-container--focus .select2-selection--single,
 .light-theme .select2-container--open .select2-selection--single{
   border-color: white;

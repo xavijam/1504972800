@@ -15,11 +15,12 @@ module.exports = Backbone.View.extend({
   events: {
     'change .js-allergy': '_onChange',
     'focusout .js-name': '_onChange',
-    'click .js-remove': 'remove'
+    'click .js-remove': '_onRemove'
   },
 
-  initialize: function () {
+  initialize: function (opts) {
     this._onChange = _.debounce(this._onChange, 500);
+    this.stateModel = opts.stateModel;
   },
 
   render: function () {
@@ -27,7 +28,8 @@ module.exports = Backbone.View.extend({
       template({
         index: this.collection.indexOf(this.model),
         name: this.model.get('name'),
-        allergy: this.model.get('allergy')
+        allergy: this.model.get('allergy'),
+        state: this.stateModel.get('state')
       })
     );
 
@@ -49,6 +51,11 @@ module.exports = Backbone.View.extend({
       name: this.$('.js-name').val(),
       allergy: this.$('.js-allergy').val()
     })
+  },
+
+  _onRemove: function () {
+    this.collection.remove(this.model);
+    this.remove();
   }
 
 });

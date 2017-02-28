@@ -1,3 +1,11 @@
-<button type="button" class="Button Button--withIcon js-addAttendee">
-  <i class="fa fa-plus u-rSpace--m"></i> {{ t 'contact.add-attendee' }}
-</button>
+{{#ifCond state '!=' 'loading' }}
+  <button type="button" class="Button Button--withIcon js-addAttendee">
+    <i class="fa fa-plus u-rSpace--m"></i> {{ t 'contact.add-attendee' }}
+  </button>
+{{/ifCond}}
+
+{{#ifCond state '==' 'loading' }}
+  <button type="button" class="Button Button--withIcon Button--disabled">
+    <i class="fa fa-plus u-rSpace--m"></i> {{ t 'contact.add-attendee' }}
+  </button>
+{{/ifCond}}

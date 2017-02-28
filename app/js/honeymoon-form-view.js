@@ -70,7 +70,7 @@ module.exports = Backbone.View.extend({
         }.bind(this),
         error: function () {
           this.model.set('state', 'idle');
-        }
+        }.bind(this)
       });
     }
   }

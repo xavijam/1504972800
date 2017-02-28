@@ -21,7 +21,7 @@ $error-color: #e74c3c;
   width: 100%;
 }
 .Form-input {
-  display: block;
+  display: inline-block;
   width: 100%;
   padding: 8px 12px;
   box-sizing: border-box;
@@ -35,6 +35,9 @@ $error-color: #e74c3c;
   border-radius: $border-radius;
   border: 2px solid $input-main-color;
   resize: none;
+}
+.Form-input--m {
+  width: 195px;
 }
 .Form-input:focus {
   border-color: $input-main-focus-color;

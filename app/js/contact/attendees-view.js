@@ -12,15 +12,24 @@ module.exports = Backbone.View.extend({
     'click .js-addAttendee': '_addAttendee'
   },
 
+  initialize: function (opts) {
+    this.stateModel = opts.stateModel;
+  },
+
   render: function () {
-    this.$el.html(template());
+    this.$el.html(
+      template({
+        state: this.stateModel.get('state')
+      })
+    );
     this._initViews();
     return this;
   },
 
   _initViews: function () {
     var attendeesListView = new AttendeesListView({
-      collection: this.collection
+      collection: this.collection,
+      stateModel: this.stateModel
     });
     this.$el.prepend(attendeesListView.render().el);
   },
