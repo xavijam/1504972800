@@ -598,6 +598,46 @@ body {
     font-size: 12px; } }
 
 
+.Navigation-menu {
+  position: absolute;
+  right: 8px;
+  top: 8px; }
+
+.Navigation-menuButton {
+  background: none;
+  border: none;
+  outline: none;
+  color: rgba(0, 0, 0, 0.5); }
+  .Navigation-menuButton:hover {
+    color: rgba(0, 0, 0, 0.8); }
+
+.Navigation-menuDropdown {
+  position: absolute;
+  display: none;
+  bottom: 30px;
+  right: -8px;
+  width: 120px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+
+.Navigation-menuDropdown.is-visible {
+  display: block; }
+
+.Navigation-menuDropdownItem {
+  padding: 3px 0;
+  font-family: 'Lato';
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  line-height: 18px;
+  color: rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  text-transform: capitalize; }
+  .Navigation-menuDropdownItem:hover {
+    color: rgba(0, 0, 0, 0.8);
+    text-decoration: underline; }
+
 .flickity-page-dots {
   position: fixed;
   display: flex;
@@ -608,7 +648,7 @@ body {
   width: 100%;
   padding: 10px 0;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.2);
   z-index: 10; }
 
 .dot {

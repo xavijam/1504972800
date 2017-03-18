@@ -159,6 +159,7 @@ var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
 var BackgroundMapSlideView = require('js/background-map-slide-view');
 var ContactView = require('js/contact/contact-view');
+var NavigationMenuView = require('js/navigation-menu-view');
 require('js/handlebars-helpers');
 var isMobile = require('ismobilejs');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
@@ -171,7 +172,7 @@ function init() {
   var Carousel = new Flickity('.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: 50,
+    dragThreshold: 80,
     prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,
@@ -292,6 +293,12 @@ function init() {
   items.add({
     key: Handlebars.helpers.t('contact.key')
   });
+
+  // Add navigation menu
+  var menuView = new NavigationMenuView({
+    collection: items
+  });
+  $('.flickity-page-dots').append(menuView.render().el);
 
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
@@ -999,10 +1006,32 @@ var language = navigator.language;
 var locale = 'ES';
 var phrases = ES;
 
-if (!language.toLowerCase().match(/es/g)) {
+function getParameterByName(name, url) {
+  if (!url) {
+    url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+  var results = regex.exec(url);
+  if (!results) {
+    return null;
+  }
+  if (!results[2]) {
+    return '';
+  }
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+var paramLanguage = getParameterByName('lang');
+if (paramLanguage === 'EN' || paramLanguage === 'ES') {
+  locale = paramLanguage;
+  phrases = paramLanguage === 'EN' ? EN : ES;
+} else if (!language.toLowerCase().match(/es/g)) {
   locale = 'EN';
   phrases = EN;
 }
+
+global.locale = locale;
 
 var Polyglot = require('node-polyglot');
 var polyglot = new Polyglot({
@@ -1125,6 +1154,91 @@ module.exports = Backbone.View.extend({
           this.model.set('state', 'idle');
         }.bind(this)
       });
+    }
+  }
+
+});
+
+});
+
+require.register("js/navigation-menu-view.js", function(exports, require, module) {
+'use strict';
+
+var $ = require('jquery');
+var Backbone = require('backbone');
+
+/**
+ *  Menu for changing slides or language
+ */
+
+module.exports = Backbone.View.extend({
+
+  className: 'Navigation-menu',
+
+  events: {
+    'click .js-button': '_onButtonClicked'
+  },
+
+  initialize: function initialize() {
+    this.model = new Backbone.Model({
+      visible: false
+    });
+    this._checkDocumentClick = this._checkDocumentClick.bind(this);
+    this._initBinds();
+  },
+
+  render: function render() {
+    var $button = $('<button>').addClass('Navigation-menuButton js-button');
+    $button.append($('<i>').addClass('fa fa-bars'));
+    this.$el.append($button);
+
+    this.$el.append(this._createMenu());
+
+    return this;
+  },
+
+  _initBinds: function _initBinds() {
+    this.listenTo(this.model, 'change:visible', function (model, isVisible) {
+      isVisible ? this._showMenu() : this._hideMenu();
+    });
+  },
+
+  _onButtonClicked: function _onButtonClicked(ev) {
+    this.model.set('visible', !this.model.get('visible'));
+  },
+
+  _createMenu: function _createMenu() {
+    var $menu = $('<ul>').addClass('Navigation-menuDropdown js-menu');
+    this.collection.each(function (item) {
+      $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html(item.get('key')).attr('href', '#/' + item.get('key'))));
+    });
+
+    // Add other language
+    var locale = global.locale === 'ES' ? 'EN' : 'ES';
+
+    $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html('<i class="fa fa-globe"></i> ' + locale).attr('href', '?lang=' + locale)));
+
+    return $menu;
+  },
+
+  _getMenu: function _getMenu() {
+    return this.$('.js-menu');
+  },
+
+  _showMenu: function _showMenu() {
+    this._getMenu().addClass('is-visible');
+    $(document).on('click', this._checkDocumentClick);
+  },
+
+  _hideMenu: function _hideMenu() {
+    this._getMenu().removeClass('is-visible');
+    $(document).off('click', this._checkDocumentClick);
+  },
+
+  _checkDocumentClick: function _checkDocumentClick(ev) {
+    var $target = $(ev.target);
+    if (!$target.closest('.js-menu').length && !$target.closest('.js-button').length) {
+      this.model.set('visible', false);
     }
   }
 
