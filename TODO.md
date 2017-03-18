@@ -17,16 +17,18 @@ Pending things
 - [x] Add more activities in travel slide.
 - [x] Honeymoon form.
 - [x] Local Storage.
+- [x] Create contact slide.
+- [x] Review dots in mobile.
+
+- [x] Create menu
 - [ ] Review texts in spanish.
 - [ ] Review texts in english.
-- [ ] Create contact slide.
-
 - [ ] Different animations for each slide.
   - https://codepen.io/TomMcPadden/pen/yAblG
   - http://codepen.io/ItsJonQ/pen/yvfDF/
   - http://takentech.com/flyaway/
 - [ ] Notes in each slide (links, notes, etc...).
-- [ ] Review dots in mobile.
+
 
 - [ ] Check deploy script, with --production flag.
 - [ ] Deploy web.

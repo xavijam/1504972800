@@ -6,6 +6,7 @@ var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
 var BackgroundMapSlideView = require('js/background-map-slide-view');
 var ContactView = require('js/contact/contact-view');
+var NavigationMenuView = require('js/navigation-menu-view');
 require('js/handlebars-helpers');
 var isMobile = require('ismobilejs');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
@@ -18,7 +19,7 @@ function init () {
   var Carousel = new Flickity( '.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: 50,
+    dragThreshold: 80,
     prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,
@@ -161,6 +162,13 @@ function init () {
   items.add({
     key: Handlebars.helpers.t('contact.key')
   });
+
+  // Add navigation menu
+  var menuView = new NavigationMenuView({
+    collection: items
+  });
+  $('.flickity-page-dots').append(menuView.render().el);
+  
 
   // Initiate the router
   var AppRouter = Backbone.Router.extend({

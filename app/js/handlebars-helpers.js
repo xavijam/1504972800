@@ -29,6 +29,8 @@ if (paramLanguage === 'EN' || paramLanguage === 'ES') {
   phrases = EN;
 }
 
+global.locale = locale;
+
 var Polyglot = require('node-polyglot');
 var polyglot = new Polyglot({
   locale: locale,
