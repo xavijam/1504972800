@@ -11,7 +11,7 @@ var ACTION_URL = 'https://api.formbucket.com/f/buk_StZs0p2Ec3GvoJEgFuHMd8sS';
 module.exports = Backbone.View.extend({
 
   tagName: 'form',
-  className: 'Form',
+  className: 'Form u-tSpace--xxl',
 
   events: {
     'submit': '_onSubmit',

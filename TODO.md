@@ -29,6 +29,5 @@ Pending things
   - http://takentech.com/flyaway/
 - [ ] Notes in each slide (links, notes, etc...).
 
-
 - [ ] Check deploy script, with --production flag.
 - [ ] Deploy web.
