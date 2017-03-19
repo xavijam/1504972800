@@ -201,7 +201,7 @@ function init() {
     template: require('templates/transport-going.hbs'),
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
-    index: 0,
+    index: 1,
     background: '#6C818E',
     translateKey: 'transport-going',
     addDescription: true,
@@ -216,7 +216,7 @@ function init() {
   Carousel.append(new DefaultSlideView({
     Carousel: Carousel,
     template: require('templates/church.hbs'),
-    index: 1,
+    index: 2,
     background: '#75A068',
     translateKey: 'church'
   }).render().el);
@@ -228,7 +228,7 @@ function init() {
   Carousel.append(new DefaultSlideView({
     Carousel: Carousel,
     template: require('templates/banquet.hbs'),
-    index: 2,
+    index: 3,
     background: '#E3AA45',
     translateKey: 'banquet'
   }).render().el);
@@ -242,7 +242,7 @@ function init() {
     template: require('templates/transport-return.hbs'),
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
-    index: 3,
+    index: 4,
     background: '#DF8075',
     addDescription: true,
     selectPlaceholder: Handlebars.helpers.t('transport-return.placeholder'),
@@ -259,7 +259,7 @@ function init() {
     template: require('templates/accomodation.hbs'),
     selectionItemTemplate: require('./templates/accomodation-options.hbs'),
     selectionItemListClassname: 'List--vertical',
-    index: 4,
+    index: 5,
     background: '#60A7A4',
     translateKey: 'accomodation',
     addDescription: false,
@@ -274,7 +274,7 @@ function init() {
   Carousel.append(new BackgroundMapSlideView({
     Carousel: Carousel,
     template: require('templates/honeymoon.hbs'),
-    index: 5,
+    index: 6,
     background: '#FFF',
     translateKey: 'honeymoon'
   }).render().el);
@@ -286,7 +286,7 @@ function init() {
   Carousel.append(new ContactView({
     Carousel: Carousel,
     template: require('templates/contact/contact-slide.hbs'),
-    index: 6,
+    index: 7,
     background: '#DDD',
     translateKey: 'contact'
   }).render().el);
@@ -298,13 +298,13 @@ function init() {
   var menuView = new NavigationMenuView({
     collection: items
   });
-  $('body').append(menuView.render().el);
+  $('.js-carousel').append(menuView.render().el);
 
   Carousel.$element.on('select.flickity', function () {
     var currentElement = Carousel.selectedCell.element;
-    var key = $(currentElement).data('key');
+    var index = $(currentElement).data('index');
     document.title = DEFAULT_TITLE + ' · ' + $(currentElement).data('title');
-    $('.flickity-page-dots, .Navigation-menu').toggleClass('is-light', key === 'honeymoon' || key === 'contact');
+    $('.flickity-page-dots, .js-appMenu').toggleClass('is-light', index === 6 || index === 7);
   });
 
   // Initiate the router
@@ -1178,7 +1178,7 @@ var Backbone = require('backbone');
 
 module.exports = Backbone.View.extend({
 
-  className: 'Navigation-menu',
+  className: 'Navigation-menu js-appMenu',
 
   events: {
     'click .js-button': '_onButtonClicked'
