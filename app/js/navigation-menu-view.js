@@ -7,7 +7,7 @@ var Backbone = require('backbone');
 
 module.exports = Backbone.View.extend({
 
-  className: 'Navigation-menu',
+  className: 'Navigation-menu js-appMenu',
 
   events: {
     'click .js-button': '_onButtonClicked'
