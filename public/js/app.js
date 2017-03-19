@@ -1473,7 +1473,7 @@ module.exports = [{
   title: 'honeymoon.items.coromandel.title',
   desc: 'honeymoon.items.coromandel.desc',
   cost: '~125',
-  imageURL: 'http://farm1.nzstatic.com/_proxy/imageproxy_1y/serve/kayaks-land-at-cathedral-cove.webp?height=530&outputformat=webp&quality=80&source=2422790&transformationratio=1.3&transformationsystem=autoboxfit&width=940&securitytoken=77FEBA5D0BC1F5DFACE473A639AD9EC1',
+  imageURL: 'http://www.backpackerguide.nz/wp-content/uploads/2015/04/2cJVDjo.jpg',
   wikipediaURL: 'honeymoon.items.franz-josef.wikipedia',
   itemURL: 'honeymoon.items.coromandel.url'
 }, {
@@ -1757,26 +1757,26 @@ module.exports = {
     "key": "transporte-ida",
     "title": "Transporte",
     "sub-title": "ida",
-    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Tenemos 2 rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:",
+    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Si vas en coche no hay problema, pero sino tenemos dos rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:",
     "placeholder": "Selecciona un lugar"
   },
   "church": {
     "key": "iglesia",
     "title": "Iglesia",
-    "desc": "Nuestra primera parada será para disfrutar de la ceremonia, que tendrá lugar en la <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Parroquia Santísimo Corpus Christi</a> a las 18 horas. Esta se encuentra en <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>.",
+    "desc": "Primera parada, la ceremonia. Tendrá lugar en la <a class='Color Color--link' href='http://corpuschristi.archimadrid.es/' target='_blank'>Parroquia Santísimo Corpus Christi</a> a las <strong>18 horas</strong>. Esta se encuentra en <a class='Color Color--link' href='https://goo.gl/UlFTUn' target='_blank'>Camino de Perales 4, Las Rozas, Madrid</a>.<br/><br/>¡No lleguéis tarde que Laura es demasiado puntual!",
     "comment": "¡Vivan los novios!"
   },
   "banquet": {
     "key": "banquete",
     "title": "Banquete",
-    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.",
+    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>. <br/><br/>Tened en cuenta que los autobuses os llevarán también a la finca.",
     "comment": "¡Qué se besen!"
   },
   "transport-return": {
     "key": "transporte-vuelta",
     "title": "Transporte",
     "sub-title": "vuelta",
-    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00, a las 3:00 y al final de la fiesta.  Como en la ida, dispondréis de 2 rutas que pasan por varios sitios, busca tu punto de llegada más cercano:",
+    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00 (un rato después de empezar la fiesta), a las 3:00 y al final de la fiesta. Como en la ida, dispondréis de dos rutas que pasan por varios sitios, busca tu punto de llegada más cercano:",
     "placeholder": "Selecciona un lugar"
   },
   "accomodation": {

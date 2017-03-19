@@ -13,7 +13,7 @@ module.exports = [
     title: 'honeymoon.items.coromandel.title',
     desc: 'honeymoon.items.coromandel.desc',
     cost: '~125',
-    imageURL: 'http://farm1.nzstatic.com/_proxy/imageproxy_1y/serve/kayaks-land-at-cathedral-cove.webp?height=530&outputformat=webp&quality=80&source=2422790&transformationratio=1.3&transformationsystem=autoboxfit&width=940&securitytoken=77FEBA5D0BC1F5DFACE473A639AD9EC1',
+    imageURL: 'http://www.backpackerguide.nz/wp-content/uploads/2015/04/2cJVDjo.jpg',
     wikipediaURL: 'honeymoon.items.franz-josef.wikipedia',
     itemURL: 'honeymoon.items.coromandel.url'
   },
