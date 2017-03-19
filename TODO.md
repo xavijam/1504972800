@@ -21,7 +21,7 @@ Pending things
 - [x] Review dots in mobile.
 
 - [x] Create menu
-- [ ] Review texts in spanish.
+- [x] Review texts in spanish.
 - [ ] Review texts in english.
 - [ ] Different animations for each slide.
   - https://codepen.io/TomMcPadden/pen/yAblG

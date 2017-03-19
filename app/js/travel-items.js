@@ -113,7 +113,7 @@ module.exports = [
     desc: 'honeymoon.items.auckland.desc',
     cost: '~125',
     wikipediaURL: 'honeymoon.items.auckland.wikipedia',
-    imageURL: 'https://www.skycityauckland.co.nz/media/146089/TheSugarClub_launch_tile_800x400.jpg',
+    imageURL: 'http://static.thousandwonders.net/Sky.Tower.original.33603.jpg',
     itemURL: 'honeymoon.items.auckland.url'
   },
   {
@@ -121,8 +121,6 @@ module.exports = [
     title: 'honeymoon.items.petrol.title',
     desc: 'honeymoon.items.petrol.desc',
     cost: '~550',
-    wikipediaURL: 'honeymoon.items.petrol.wikipedia',
-    imageURL: 'https://resources.stuff.co.nz/content/dam/images/1/8/u/j/e/h/image.related.StuffLandscapeSixteenByNine.620x349.1b43sz.png/1461120757787.jpg',
-    itemURL: 'honeymoon.items.petrol.url'
+    imageURL: 'https://resources.stuff.co.nz/content/dam/images/1/8/u/j/e/h/image.related.StuffLandscapeSixteenByNine.620x349.1b43sz.png/1461120757787.jpg'
   }
 ];

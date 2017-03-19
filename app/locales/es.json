@@ -52,7 +52,7 @@
   "honeymoon": {
     "key": "viaje",
     "title": "Viaje",
-    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta?. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría vivir en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
+    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/>Hemos hecho un posible recorrido, échale un vistazo <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>aquí</a>. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
     "expense": "gasto",
     "leisure": "ocio",
     "send": "Enviar",
@@ -62,88 +62,99 @@
     "email-placeholder": "Añade tu email",
     "items": {
       "renting": {
-        "title": "Alquiler de una caravana",
+        "title": "🚐 · Alquiler de una caravana",
         "desc": "Nuestra idea es recorrer todo el país durante 2 semanas, así que habíamos pensado en una caravana.",
         "url": "https://booking.mightycampers.co.nz/search?cc=nz&brand=ybm&ac=&sc=rv&vtype=rv&pc=&na=2&nc=0&cr=ES&pb=CHC&pd=12&pm=09&py=2017&pt=10:00&db=AKL&dd=26&dm=09&dy=2017&dt=14:00&vh=nzavy.2Y&pv=1.0&promoCode="
       },
       "coromandel": {
-        "title": "Kayak reserva Coromandel",
-        "desc": "Hemos hecho kayak en multitud de sitios, ¿por qué no en Oceanía y en la reserva de Coromandel?.",
+        "title": "🚤 · Kayak reserva Coromandel",
+        "desc": "Hemos hecho kayak en multitud de sitios, ¿por qué no en Oceanía y en la reserva de Coromandel?",
         "url": "http://www.thecoromandel.com/activities/water/kayaking/cathedral-cove-kayak-tours",
         "wikipedia": "https://es.wikipedia.org/wiki/Coromandel_Peninsula"
       },
       "franz-josef": {
-        "title": "Glaciar Franz Josef",
+        "title": "⛰ · Glaciar Franz Josef",
         "desc": "Visita obligada a uno de los glaciares más impresionantes de Nueva Zelanda, Franz Josef.",
         "url": "http://www.franzjosefglacier.com/",
         "wikipedia": "https://es.wikipedia.org/wiki/Franz_Josef_Glacier"
       },
       "ferry": {
-        "title": "Ferry entre islas",
+        "title": "⛴ · Ferry entre islas",
         "desc": "Si cogemos un coche o una caravana, necesitaremos cruzar a la otra isla mediante un ferry.",
         "url": "https://www.interislander.co.nz/",
-        "wikipedia": "https://es.wikipedia.org/wiki/Interislander"
+        "wikipedia": "https://en.wikipedia.org/wiki/Interislander"
       },
       "hobbiton": {
-        "title": "Hobbiton",
+        "title": "🎬 · Hobbiton",
         "desc": "¿Sabes que el Hobbit y el Señor de los Anillos se rodó en Nueva Zelanda? ¡A visitarlo!",
         "url": "http://www.hobbitontours.com/",
         "wikipedia": "https://es.wikipedia.org/wiki/Hobbiton_Movie_Set"
       },
       "milford-sound": {
-        "title": "Crucero Milford Sound",
+        "title": "🛳 · Crucero Milford Sound",
         "desc": "Un crucero corto a través del fiordo de la reserva marina de Milford Sound.",
         "url": "http://www.cruisemilfordnz.com/",
         "wikipedia": "https://es.wikipedia.org/wiki/Milford_Sound"
       },
       "abel-tasman": {
-        "title": "Visita a Abel Tasman",
-        "desc": "Hacer kayak o una caminata a través del parque nacional de Abel Tasman.",
+        "title": "🏞 · Visita a Abel Tasman",
+        "desc": "Recorrido a través del parque nacional de Abel Tasman.",
         "url": "https://www.abeltasman.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Abel_Tasman_National_Park"
       },
       "maori": {
-        "title": "Cena Maorí",
-        "desc": "Probar la comida tradicional Maorí en Rotorua, cocinada al modo Hãngi.",
+        "title": "🍲 · Cena Maorí",
+        "desc": "Habíamos pensado en probar la comida tradicional Maorí en Rotorua, cocinada al modo Hãngi.",
         "url": "https://www.tamakimaorivillage.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Rotorua"
       },
       "campervan-park": {
-        "title": "Parque para caravanas",
-        "desc": "No está permitido aparcar la caravana en cualquier lugar para dormir, así que necesitaremos elegir un camping o un parque para caravanas cada día.",
+        "title": "⛺ · Parque para caravanas️",
+        "desc": "No está permitido aparcar en cualquier lugar para dormir, así que tendremos que elegir un parque para caravanas cada día.",
         "url": "http://www.holidayparks.co.nz/find-a-park?region=All&search=&field_star_rating_value=All&group=All",
         "wikipedia": "https://es.wikipedia.org/wiki/Camping_in_New_Zealand"
       },
       "oamaru": {
-        "title": "Visitar pingüinos",
-        "desc": "Nos encantan los pingüinos y nos gustaría visitarlos en Oamaru, y posiblemente adoptar uno. Tu también puedes, ¡mira la web!.",
+        "title": "🐧 · Visitar pingüinos",
+        "desc": "Nos encantan los pingüinos y nos gustaría visitarlos en Oamaru, y posiblemente adoptar uno. Tu también puedes, ¡mira la web!",
         "url": "http://www.penguins.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Oamaru"
       },
       "kaikoura": {
-        "title": "Ballenas en Kaikorua",
+        "title": "🐳 · Ballenas en Kaikorua",
         "desc": "No podemos perder la oportunidad de ver ballenas nadando en las frías aguas de Kaikorua.",
         "url": "http://www.whalewatch.co.nz/",
         "wikipedia": "https://es.wikipedia.org/wiki/Kaikoura"
       },
       "waitomo": {
-        "title": "Luciernagas de Waitomo",
+        "title": "🐛 · Luciernagas de Waitomo",
         "desc": "Hay varias cuevas de luciernagas en Nueva Zelanda, pero estas son las más famosas.",
         "url": "http://www.waitomo.com/Waitomo-Glowworm-Caves/Pages/default.aspx",
         "wikipedia": "https://es.wikipedia.org/wiki/Waitomo_Glowworm_Caves"
+      },
+      "auckland": {
+        "title": "🌆 · Cena Auckland",
+        "desc": "Cena para dos en el edificio con las vistas más increibles de Auckland.",
+        "url": "https://www.skycityauckland.co.nz/attractions/sky-tower/",
+        "wikipedia": "https://es.wikipedia.org/wiki/Sky_Tower"
+      },
+      "petrol": {
+        "title": "⛽️ · Gasolina",
+        "desc": "Según nuestros planes, vamos a recorrer alrededor de 2.600km en la isla sur y 900km en la isla norte."
       }
     }
   },
   "contact": {
     "key": "contacto",
     "title": "Contacto",
-    "desc": "Este es el lugar para confirmar tu asistencia. Añade tantos asistentes como quieras, especificando el nombre y si el o ella tiene algún tipo de alergía o es vegetariana/o.",
+    "desc": "¿Vienes? Añade cada asistente, especificando el nombre y si el/ella tiene algún tipo de alergía o es vegetariana/o.",
     "attendees": "asistentes",
     "bus-info": "buses",
     "your-info": "detalles",
     "placeholder-transport-going": "¿Necesitáis autobús de ida? Elige desde donde",
     "placeholder-transport-return": "¿Necesitáis autobús de vuelta? Elige tu parada",
     "we-dont-need": "No lo necesitamos",
+    "name": "Nombre",
     "add-attendee": "Añadir asistente",
     "other-contact": "O si lo prefieres, puedes llamarnos o escribirnos.",
     "allergy": {
