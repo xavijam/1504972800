@@ -304,6 +304,7 @@ function init() {
     var currentElement = Carousel.selectedCell.element;
     var index = $(currentElement).data('index');
     document.title = DEFAULT_TITLE + ' · ' + $(currentElement).data('title');
+    $('.js-appMenu .Navigation-menuDropdown').removeClass('slide-0 slide-1 slide-2 slide-3 slide-4 slide-5').addClass('slide-' + index);
     $('.flickity-page-dots, .js-appMenu').toggleClass('is-light', index === 6 || index === 7);
   });
 
