@@ -189,6 +189,10 @@
 .Color--alternative {
   color: #34495e; }
 
+.Color--linkAlternative {
+  color: inherit;
+  text-decoration: underline; }
+
 
 .Contact {
   display: flex;
