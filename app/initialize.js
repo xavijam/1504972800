@@ -69,7 +69,7 @@ function init () {
       Carousel: Carousel,
       template: require('templates/church.hbs'),
       index: 1,
-      background: '#905E81',
+      background: '#75A068',
       translateKey: 'church'
     })
     .render().el
@@ -121,7 +121,7 @@ function init () {
       selectionItemTemplate: require('./templates/accomodation-options.hbs'),
       selectionItemListClassname: 'List--vertical',
       index: 4,
-      background: '#767676',
+      background: '#60A7A4',
       translateKey: 'accomodation',
       addDescription: false,
       selectPlaceholder: Handlebars.helpers.t('accomodation.placeholder'),
@@ -154,7 +154,7 @@ function init () {
       Carousel: Carousel,
       template: require('templates/contact/contact-slide.hbs'),
       index: 6,
-      background: '#FAFAFA',
+      background: '#DDD',
       translateKey: 'contact'
     })
     .render().el
@@ -167,8 +167,14 @@ function init () {
   var menuView = new NavigationMenuView({
     collection: items
   });
-  $('.flickity-page-dots').append(menuView.render().el);
-  
+  $('body').append(menuView.render().el);
+
+  Carousel.$element.on('select.flickity', function () {
+    var currentElement = Carousel.selectedCell.element;
+    var key = $(currentElement).data('key');
+    document.title = DEFAULT_TITLE + ' · ' + $(currentElement).data('title');
+    $('.flickity-page-dots, .Navigation-menu').toggleClass('is-light', key === 'honeymoon' || key === 'contact');
+  });
 
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
@@ -197,7 +203,5 @@ function init () {
     var currentElement = Carousel.selectedCell.element;
     var key = $(currentElement).data('key');
     router.navigate('#/' + key, { trigger: false });
-
-    document.title = DEFAULT_TITLE + ' · ' + $(currentElement).data('title');
   });
 }

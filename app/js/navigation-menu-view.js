@@ -27,9 +27,7 @@ module.exports = Backbone.View.extend({
       $('<i>').addClass('fa fa-bars')
     );
     this.$el.append($button);
-
     this.$el.append(this._createMenu());
-
     return this;
   },
 
@@ -39,7 +37,7 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  _onButtonClicked: function (ev) {
+  _onButtonClicked: function () {
     this.model.set('visible', !this.model.get('visible'));
   },
 
