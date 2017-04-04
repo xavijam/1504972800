@@ -172,7 +172,10 @@ function init() {
   var Carousel = new Flickity('.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: 80,
+    dragThreshold: {
+      x: 80,
+      y: 0
+    },
     prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,
@@ -1628,82 +1631,92 @@ module.exports = {
   "honeymoon": {
     "key": "honeymoon",
     "title": "Honeymoon",
-    "desc": "This plane bound for New Zealand!, and we would like visit several places. We have our flight tickets and backpacks, and we want you to help us in our route.<br/><br/> Below you will find a big list of several activities we would like to live in this country, It will be the first time we will visit it (and we feel it will be the last one, it is Spain's antipodes!). </br></br> If you are interested in help us with any of them, just add your email after the list and we will answer you with the instructions, easy peasy.",
+    "desc": "We go to New Zealand! And we would like to visit several point of interests. We have the flight tickets and two backpacks, would you like to help us in our route? <br/>We have made a possible route, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>take a look</a>. <br/><br/>Below you will find a list with activities we would like to enjoy in this country, it will be the first time we visit it (and we think it will be the last one, it is the antipodes of Spain!). </br></br> If you are interested in helping us with any of them, just add and send your email after the list. We will answer you with the instructions to follow.",
     "expense": "expense",
     "leisure": "leisure",
     "disclaimer": "Choose the option(s) you want and help with what you consider, it is not needed to pay the whole activity or expense.",
     "email-placeholder": "Add your email",
     "items": {
       "renting": {
-        "title": "Campervan renting",
+        "title": "🚐 · Campervan renting",
         "desc": "We would like to go over the whole country (both islands), so we need a transport.",
         "url": "https://booking.mightycampers.co.nz/search?cc=nz&brand=ybm&ac=&sc=rv&vtype=rv&pc=&na=2&nc=0&cr=ES&pb=CHC&pd=12&pm=09&py=2017&pt=10:00&db=AKL&dd=26&dm=09&dy=2017&dt=14:00&vh=nzavy.2Y&pv=1.0&promoCode="
       },
       "coromandel": {
-        "title": "Kayak in Coromandel reserve",
+        "title": "🚤 · Kayak in Coromandel reserve",
         "desc": "Enjoying practicing kayak in the Coromandel Marine Reserve.",
         "url": "http://www.thecoromandel.com/activities/water/kayaking/cathedral-cove-kayak-tours",
         "wikipedia": "https://en.wikipedia.org/wiki/Coromandel_Peninsula"
       },
       "franz-josef": {
-        "title": "Franz Josef Glaciar",
+        "title": "⛰ · Franz Josef Glaciar",
         "desc": "Must visit at one of the amazing New Zealand glaciars.",
         "url": "http://www.franzjosefglacier.com/",
         "wikipedia": "https://en.wikipedia.org/wiki/Franz_Josef_Glacier"
       },
       "ferry": {
-        "title": "Ferry between the two islands",
+        "title": "⛴ · Ferry between the two islands",
         "desc": "We will need to take a ferry in order to cross the country.",
         "url": "https://www.interislander.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Interislander"
       },
       "hobbiton": {
-        "title": "Hobbiton visit",
+        "title": "🎬 · Hobbiton visit",
         "desc": "Do you know where Hobbit or Lord of the Rings was filmed? There we want to go :D.",
         "url": "http://www.hobbitontours.com/",
         "wikipedia": "https://en.wikipedia.org/wiki/Hobbiton_Movie_Set"
       },
       "milford-sound": {
-        "title": "Milford Sound cruise",
+        "title": "🛳 · Milford Sound cruise",
         "desc": "Cruise over the Milford Sound fiord waters.",
         "url": "http://www.cruisemilfordnz.com/",
         "wikipedia": "https://en.wikipedia.org/wiki/Milford_Sound"
       },
       "abel-tasman": {
-        "title": "Abel Tasman visit",
+        "title": "🏞 · Abel Tasman visit",
         "desc": "Kayak or walk through the Abel Tasman National Park.",
         "url": "https://www.abeltasman.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Abel_Tasman_National_Park"
       },
       "maori": {
-        "title": "Maorí dinner",
+        "title": "🍲 · Maorí dinner",
         "desc": "Enjoying a traditional Maorí food at Rotorua, cooked in a Hãngi way.",
         "url": "https://www.tamakimaorivillage.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Rotorua"
       },
       "campervan-park": {
-        "title": "Campervan park",
+        "title": "⛺ · Campervan park",
         "desc": "It is not allowed to park the campervan wherever you want for sleeping, so we need to choose a campervan-park or camping for each night.",
         "url": "http://www.holidayparks.co.nz/find-a-park?region=All&search=&field_star_rating_value=All&group=All",
         "wikipedia": "https://en.wikipedia.org/wiki/Camping_in_New_Zealand"
       },
       "oamaru": {
-        "title": "Penguins sightseeing",
+        "title": "🐧 · Penguins sightseeing",
         "desc": "We really love penguins, and we would like to visit them in Oamaru and adopt one. Check the web!",
         "url": "http://www.penguins.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Oamaru"
       },
       "kaikoura": {
-        "title": "Whales in Kaikorua",
+        "title": "🐳 · Whales in Kaikorua",
         "desc": "We can't miss the oportunity to see the whales swimming in the Kaikorua waters.",
         "url": "http://www.whalewatch.co.nz/",
         "wikipedia": "https://en.wikipedia.org/wiki/Kaikoura"
       },
       "waitomo": {
-        "title": "Waitomo glowworm caves",
+        "title": "🐛 · Waitomo glowworm caves",
         "desc": "There are several glowworm caves in New Zealand, but this is the most famous one.",
         "url": "http://www.waitomo.com/Waitomo-Glowworm-Caves/Pages/default.aspx",
         "wikipedia": "https://en.wikipedia.org/wiki/Waitomo_Glowworm_Caves"
+      },
+      "auckland": {
+        "title": "🌆 · Dinner Auckland",
+        "desc": "Dinner for two in a skyscrapper with the best views in Auckland.",
+        "url": "https://www.skycityauckland.co.nz/attractions/sky-tower/",
+        "wikipedia": "https://es.wikipedia.org/wiki/Sky_Tower"
+      },
+      "petrol": {
+        "title": "⛽️ · Petrol",
+        "desc": "According to our plans, we will trail around 2,600km in the south island and 900km in the north island."
       }
     }
   },
@@ -1776,20 +1789,19 @@ module.exports = {
     "key": "transporte-vuelta",
     "title": "Transporte",
     "sub-title": "vuelta",
-    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00 (un rato después de empezar la fiesta), a las 3:00 y al final de la fiesta. Como en la ida, dispondréis de dos rutas que pasan por varios sitios, busca tu punto de llegada más cercano:",
+    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00 (un rato después de empezar el baile), a las 3:00 y al finalizar.<br/><br/>Como en la ida, dispondréis de una ruta de autobús que pasará por varios lugares, busca tu punto de llegada más cercano:",
     "placeholder": "Selecciona un lugar"
   },
   "accomodation": {
     "key": "hoteles",
     "title": "Hoteles",
-    "sub-title": "vuelta",
     "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:",
     "placeholder": "Selecciona una ciudad"
   },
   "honeymoon": {
     "key": "viaje",
     "title": "Viaje",
-    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/>Hemos hecho un posible recorrido, échale un vistazo <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>aquí</a>. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
+    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/>Hemos hecho un posible recorrido, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>échale un vistazo</a>. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
     "expense": "gasto",
     "leisure": "ocio",
     "send": "Enviar",

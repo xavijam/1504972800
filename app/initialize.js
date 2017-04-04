@@ -19,7 +19,10 @@ function init () {
   var Carousel = new Flickity( '.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: 80,
+    dragThreshold: {
+      x: 80,
+      y: 0
+    },
     prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,

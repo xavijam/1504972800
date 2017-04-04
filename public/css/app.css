@@ -603,7 +603,7 @@ body {
 
 
 .Navigation-menu {
-  position: absolute;
+  position: fixed;
   right: 0;
   bottom: 0;
   width: 37px;

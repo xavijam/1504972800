@@ -39,20 +39,19 @@
     "key": "transporte-vuelta",
     "title": "Transporte",
     "sub-title": "vuelta",
-    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00 (un rato después de empezar la fiesta), a las 3:00 y al final de la fiesta. Como en la ida, dispondréis de dos rutas que pasan por varios sitios, busca tu punto de llegada más cercano:",
+    "desc": "La fiesta acabará entre las 5 y las 6 de la mañana. Pondremos autobuses a la 1:00 (un rato después de empezar el baile), a las 3:00 y al finalizar.<br/><br/>Como en la ida, dispondréis de una ruta de autobús que pasará por varios lugares, busca tu punto de llegada más cercano:",
     "placeholder": "Selecciona un lugar"
   },
   "accomodation": {
     "key": "hoteles",
     "title": "Hoteles",
-    "sub-title": "vuelta",
     "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:",
     "placeholder": "Selecciona una ciudad"
   },
   "honeymoon": {
     "key": "viaje",
     "title": "Viaje",
-    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/>Hemos hecho un posible recorrido, échale un vistazo <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>aquí</a>. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
+    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/>Hemos hecho un posible recorrido, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>échale un vistazo</a>. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
     "expense": "gasto",
     "leisure": "ocio",
     "send": "Enviar",
