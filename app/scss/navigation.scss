@@ -3,9 +3,9 @@
 // Navigation styles, taken from flickity
 
 .Navigation-menu {
-  position: fixed;
+  position: absolute;
   right: 0;
-  bottom: 0;
+  top: 0;
   width: 37px;
   height: 37px;
   z-index: 11;
@@ -27,35 +27,16 @@
 }
 .Navigation-menuDropdown {
   position: absolute;
-  display: none;
-  bottom: 37px;
-  right: 0px;
-  width: 115px;
-  padding: 6px 15px;
-  background: #799796;
+  display: block;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+  padding: 20px;
+  margin-right: -240px;
+  background: #333;
   border-bottom: 1px solid rgba(black, 0.1);
   text-align: left;
-}
-.Navigation-menuDropdown.slide-0 {
-  background: #799796;
-}
-.Navigation-menuDropdown.slide-1 {
-  background: #566772; 
-}
-.Navigation-menuDropdown.slide-2 {
-  background: #5E8053;
-}
-.Navigation-menuDropdown.slide-3 {
-  background: #B68837;
-}
-.Navigation-menuDropdown.slide-4 {
-  background: #B2665E;
-}
-.Navigation-menuDropdown.slide-5 {
-  background: #4D8683;
-}
-.Navigation-menuDropdown.is-visible {
-  display: block;
 }
 .Navigation-menuDropdownItem {
   display: block;
@@ -74,79 +55,79 @@
   }
 }
 
-.flickity-page-dots {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  left: 50%;
-  bottom: 0;
-  width: 100%;
-  padding: 10px 0;
-  transform: translateX(-50%);
-  background: rgba(black, 0.2);
-  z-index: 10;
-}
-.dot {
-  position: relative;
-  width: 11px;
-  height: 11px;
-  margin: 0 3px;
-  padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: rgba(#000, 0.1);
-  text-indent: 0;
-  border: 1px solid rgba(black, 0.2);
-  outline: none;
-  &:hover {
-    background: white;
-    cursor: pointer;
-  }
-}
-.dot:hover,
-.dot.is-selected {
-  width: 15px;
-  height: 15px;
-  margin-top: 0px;
-  margin: 0 1px;
-  background: white;
-  border-color: white;
-  border: 1px solid rgba(black, 0.4);
-  &:hover {
-    cursor: normal;
-  }
-}
+// .flickity-page-dots {
+//   position: fixed;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   left: 50%;
+//   bottom: 0;
+//   width: 100%;
+//   padding: 10px 0;
+//   transform: translateX(-50%);
+//   background: rgba(black, 0.2);
+//   z-index: 10;
+// }
+// .dot {
+//   position: relative;
+//   width: 11px;
+//   height: 11px;
+//   margin: 0 3px;
+//   padding: 0;
+//   border: none;
+//   border-radius: 8px;
+//   background: rgba(#000, 0.1);
+//   text-indent: 0;
+//   border: 1px solid rgba(black, 0.2);
+//   outline: none;
+//   &:hover {
+//     background: white;
+//     cursor: pointer;
+//   }
+// }
+// .dot:hover,
+// .dot.is-selected {
+//   width: 15px;
+//   height: 15px;
+//   margin-top: 0px;
+//   margin: 0 1px;
+//   background: white;
+//   border-color: white;
+//   border: 1px solid rgba(black, 0.4);
+//   &:hover {
+//     cursor: normal;
+//   }
+// }
 
-.Navigation-menu.is-light {
-  .Navigation-menuDropdown {
-    background: rgba(white, 0.9);
-    border-bottom: none;
-    border-left: 1px solid rgba(black, 0.1);
-    border-top: 1px solid rgba(black, 0.1);
-  }
-  .Navigation-menuDropdownItem {
-    color: rgba(black, 0.6);
-  }
-}
-.flickity-page-dots.is-light {
-  background: rgba(white, 0.9);
-  border-top: 1px solid rgba(black, 0.1);
-}
+// .Navigation-menu.is-light {
+//   .Navigation-menuDropdown {
+//     background: rgba(white, 0.9);
+//     border-bottom: none;
+//     border-left: 1px solid rgba(black, 0.1);
+//     border-top: 1px solid rgba(black, 0.1);
+//   }
+//   .Navigation-menuDropdownItem {
+//     color: rgba(black, 0.6);
+//   }
+// }
+// .flickity-page-dots.is-light {
+//   background: rgba(white, 0.9);
+//   border-top: 1px solid rgba(black, 0.1);
+// }
 
-@mixin mobile-content() {
-  .flickity-page-dots {
-    align-items: center;
-    justify-content: center;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0;
-  }
-}
+// @mixin mobile-content() {
+//   .flickity-page-dots {
+//     align-items: center;
+//     justify-content: center;
+//     bottom: 0;
+//     width: 100%;
+//     padding: 10px 0;
+//   }
+// }
 
-@include screen(0, 450px) {
-  @include mobile-content();
-}
-@include screen-height(320px, 480px) {
-  @include mobile-content();
-}
+// @include screen(0, 450px) {
+//   @include mobile-content();
+// }
+// @include screen-height(320px, 480px) {
+//   @include mobile-content();
+// }

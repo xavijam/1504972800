@@ -33,22 +33,9 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-  _initBinds: function () {
-    this.Carousel.$element.on('select.flickity', this._checkCurrentSlide.bind(this));
-  },
+  _initBinds: function () {},
 
-  _startAnimation: function () {
-    
-  },
-
-  _checkCurrentSlide: function () {
-    var currentElement = this.Carousel.selectedCell.element;
-    var elementIndex = $(currentElement).data('index');
-
-    if (elementIndex === this.options.index) {
-      setTimeout(this._startAnimation.bind(this), 2000);
-    }
-  },
+  _startAnimation: function () {},
 
   _initViews: function () {}
 

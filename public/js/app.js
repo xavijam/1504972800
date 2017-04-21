@@ -154,53 +154,27 @@ require.register("initialize.js", function(exports, require, module) {
 var $ = require('jquery');
 var Backbone = require('backbone');
 window.jQuery = $;
-var Flickity = require('flickity');
 var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
 var BackgroundMapSlideView = require('js/background-map-slide-view');
 var ContactView = require('js/contact/contact-view');
 var NavigationMenuView = require('js/navigation-menu-view');
 require('js/handlebars-helpers');
-var isMobile = require('ismobilejs');
 var DEFAULT_TITLE = 'Javi ❥ Lau';
 
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  var initialization = true;
+  var $slide = $('.js-carousel');
 
-  var Carousel = new Flickity('.js-carousel', {
-    cellAlign: 'center',
-    percentPosition: false,
-    dragThreshold: {
-      x: 80,
-      y: 0
-    },
-    prevNextButtons: !isMobile.any,
-    pageDots: true,
-    setGallerySize: false,
-    contain: true,
-    wrapAround: true
-  });
-
-  // Add slides
-  var items = new Backbone.Collection();
-
-  // Home
-  Carousel.append(new DefaultSlideView({
-    Carousel: Carousel,
+  var homeSlide = new DefaultSlideView({
     template: require('templates/home.hbs'),
     index: 0,
     background: '#97BDBB',
     translateKey: 'home'
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('home.key')
   });
 
-  // Transport going
-  Carousel.append(new SelectionSlideView({
-    Carousel: Carousel,
+  var transportGoingSlide = new SelectionSlideView({
     template: require('templates/transport-going.hbs'),
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
@@ -210,38 +184,23 @@ function init() {
     addDescription: true,
     selectPlaceholder: Handlebars.helpers.t('transport-going.placeholder'),
     selectionItems: require('js/transport-going-routes')
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('transport-going.key')
   });
 
-  // Church
-  Carousel.append(new DefaultSlideView({
-    Carousel: Carousel,
+  var churchSlide = new DefaultSlideView({
     template: require('templates/church.hbs'),
     index: 2,
     background: '#75A068',
     translateKey: 'church'
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('church.key')
   });
 
-  // Banquet
-  Carousel.append(new DefaultSlideView({
-    Carousel: Carousel,
+  var banquetSlide = new DefaultSlideView({
     template: require('templates/banquet.hbs'),
     index: 3,
     background: '#E3AA45',
     translateKey: 'banquet'
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('banquet.key')
   });
 
-  // Transport return
-  Carousel.append(new SelectionSlideView({
-    Carousel: Carousel,
+  var transportReturnSlide = new SelectionSlideView({
     template: require('templates/transport-return.hbs'),
     selectionItemTemplate: require('./templates/route-options.hbs'),
     selectionItemListClassname: 'List--horizontal',
@@ -251,14 +210,9 @@ function init() {
     selectPlaceholder: Handlebars.helpers.t('transport-return.placeholder'),
     translateKey: 'transport-return',
     selectionItems: require('js/transport-return-routes')
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('transport-return.key')
   });
 
-  // Accomodation
-  Carousel.append(new SelectionSlideView({
-    Carousel: Carousel,
+  var accomodationSlide = new SelectionSlideView({
     template: require('templates/accomodation.hbs'),
     selectionItemTemplate: require('./templates/accomodation-options.hbs'),
     selectionItemListClassname: 'List--vertical',
@@ -268,77 +222,81 @@ function init() {
     addDescription: false,
     selectPlaceholder: Handlebars.helpers.t('accomodation.placeholder'),
     selectionItems: require('js/accomodation-options')
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('accomodation.key')
   });
 
-  // Honeymoon
-  Carousel.append(new BackgroundMapSlideView({
-    Carousel: Carousel,
+  var honeymoonSlide = new BackgroundMapSlideView({
     template: require('templates/honeymoon.hbs'),
     index: 6,
     background: '#FFF',
     translateKey: 'honeymoon'
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('honeymoon.key')
   });
 
-  // Contact
-  Carousel.append(new ContactView({
-    Carousel: Carousel,
+  var confirmationSlide = new ContactView({
     template: require('templates/contact/contact-slide.hbs'),
     index: 7,
     background: '#DDD',
     translateKey: 'contact'
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('contact.key')
   });
+
+  var slides = new Backbone.Collection([{ key: Handlebars.helpers.t('home.key') }, { key: Handlebars.helpers.t('transport-going.key') }, { key: Handlebars.helpers.t('church.key') }, { key: Handlebars.helpers.t('banquet.key') }, { key: Handlebars.helpers.t('transport-return.key') }, { key: Handlebars.helpers.t('accomodation.key') }, { key: Handlebars.helpers.t('honeymoon.key') }, { key: Handlebars.helpers.t('contact.key') }]);
 
   // Add navigation menu
   var menuView = new NavigationMenuView({
-    collection: items
+    $canvas: $('.js-canvas'),
+    collection: slides
   });
-  $('.js-carousel').append(menuView.render().el);
+  $('.js-canvas').append(menuView.render().el);
 
-  Carousel.$element.on('select.flickity', function () {
-    var currentElement = Carousel.selectedCell.element;
-    var index = $(currentElement).data('index');
-    document.title = DEFAULT_TITLE + ' · ' + $(currentElement).data('title');
-    $('.js-appMenu .Navigation-menuDropdown').removeClass('slide-0 slide-1 slide-2 slide-3 slide-4 slide-5').addClass('slide-' + index);
-    $('.flickity-page-dots, .js-appMenu').toggleClass('is-light', index === 6 || index === 7);
-  });
-
-  // Initiate the router
   var AppRouter = Backbone.Router.extend({
     routes: {
-      "*actions": "defaultRoute"
+      'transport-going': '_transportGoingRoute',
+      'transporte-ida': '_transportGoingRoute',
+      'church': '_churchRoute',
+      'iglesia': '_churchRoute',
+      'banquet': '_banquetRoute',
+      'banquete': '_banquetRoute',
+      'accomodation': '_accomodationRoute',
+      'hoteles': '_accomodationRoute',
+      'transport-return': '_transportReturnRoute',
+      'transporte-vuelta': '_transportReturnRoute',
+      'viaje': '_honeymoonRoute',
+      'honeymoon': '_honeymoonRoute',
+      'confirmacion': '_confirmationRoute',
+      'confirmation': '_confirmationRoute',
+      '*defaultRoute': '_homeRoute'
+    },
+
+    _homeRoute: function _homeRoute() {
+      this._renderView(homeSlide);
+    },
+    _churchRoute: function _churchRoute() {
+      this._renderView(churchSlide);
+    },
+    _banquetRoute: function _banquetRoute() {
+      this._renderView(banquetSlide);
+    },
+    _accomodationRoute: function _accomodationRoute() {
+      this._renderView(accomodationSlide);
+    },
+    _transportGoingRoute: function _transportGoingRoute() {
+      this._renderView(transportGoingSlide);
+    },
+    _transportReturnRoute: function _transportReturnRoute() {
+      this._renderView(transportReturnSlide);
+    },
+    _honeymoonRoute: function _honeymoonRoute() {
+      this._renderView(honeymoonSlide);
+    },
+    _confirmationRoute: function _confirmationRoute() {
+      this._renderView(confirmationSlide);
+    },
+    _renderView: function _renderView(view) {
+      $slide.html(view.render().el);
     }
   });
+
   var router = new AppRouter();
-
-  router.on('route:defaultRoute', function (action) {
-    var item = items.findWhere({ key: action });
-    var itemIndex = items.indexOf(item);
-
-    if (itemIndex >= 0) {
-      if (Carousel) {
-        Carousel.select(itemIndex, false, initialization);
-      }
-    }
-
-    initialization = false;
-  });
-
-  Backbone.history.start();
-
-  Carousel.$element.on('select.flickity', function () {
-    var currentElement = Carousel.selectedCell.element;
-    var key = $(currentElement).data('key');
-    router.navigate('#/' + key, { trigger: false });
-  });
+  Backbone.history.start({ pushState: true });
 }
 
 });
@@ -408,7 +366,7 @@ var $ = require('jquery');
 var DefaultSlideView = require('./default-slide-view');
 var TravelItems = require('./travel-items.js');
 var HoneymoonFormView = require('./honeymoon-form-view');
-var QUERY_TEMPLATE = _.template('http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=<%= q %>');
+var QUERY_TEMPLATE = _.template('http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM <%= tableName %>');
 
 module.exports = DefaultSlideView.extend({
 
@@ -430,7 +388,7 @@ module.exports = DefaultSlideView.extend({
     this.$el.css('background-color', this.options.background);
 
     this._initViews();
-    setTimeout(this._initMap.bind(this), 0);
+    // setTimeout(this._initMap.bind(this), 0);
 
     return this;
   },
@@ -448,28 +406,28 @@ module.exports = DefaultSlideView.extend({
     }).setView([-40.823163, 171.595703], 6);
 
     var polygonStyle = {
-      "color": "#E6E6E6",
-      "weight": 1,
-      "opacity": 0.65
+      color: '#E6E6E6',
+      weight: 1,
+      opacity: 0.65
     };
 
     var markerStyle = {
       radius: 4,
-      fillColor: "#DF685C",
-      color: "#FFFFFF",
+      fillColor: '#DF685C',
+      color: '#FFFFFF',
       weight: 2,
       opacity: 1,
       fillOpacity: 1
     };
 
     var lineStyle = {
-      color: "#314c96",
+      color: '#314c96',
       weight: 2,
       opacity: 0.3
     };
 
     var loadPoints = function loadPoints() {
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM pois_nueva_zelanda' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'pois_nueva_zelanda' }), function (data) {
         L.geoJson(data, {
           pointToLayer: function pointToLayer(feature, latlng) {
             return L.circleMarker(latlng, markerStyle);
@@ -479,14 +437,14 @@ module.exports = DefaultSlideView.extend({
       });
     };
 
-    $.getJSON(QUERY_TEMPLATE({ q: "SELECT the_geom FROM oceania_adm0 where iso_alpha3='NZL'" }), function (data) {
+    $.getJSON(QUERY_TEMPLATE({ tableName: "oceania where iso_alpha3='NZL'" }), function (data) {
       L.geoJson(data, {
         style: polygonStyle
       }).addTo(map);
 
       var onLineLoaded = _.after(3, loadPoints);
 
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_taupo_a_blue_pools_walk' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_taupo_a_blue_pools_walk' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -494,7 +452,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_sky_tower_a_taupo' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_sky_tower_a_taupo' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -502,7 +460,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_blue_pools_walk_a_kaikoura' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_blue_pools_walk_a_kaikoura' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -969,20 +927,9 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-  _initBinds: function _initBinds() {
-    this.Carousel.$element.on('select.flickity', this._checkCurrentSlide.bind(this));
-  },
+  _initBinds: function _initBinds() {},
 
   _startAnimation: function _startAnimation() {},
-
-  _checkCurrentSlide: function _checkCurrentSlide() {
-    var currentElement = this.Carousel.selectedCell.element;
-    var elementIndex = $(currentElement).data('index');
-
-    if (elementIndex === this.options.index) {
-      setTimeout(this._startAnimation.bind(this), 2000);
-    }
-  },
 
   _initViews: function _initViews() {}
 
@@ -1206,7 +1153,8 @@ module.exports = Backbone.View.extend({
     'click .js-button': '_onButtonClicked'
   },
 
-  initialize: function initialize() {
+  initialize: function initialize(opts) {
+    this._$canvas = opts.$canvas;
     this.model = new Backbone.Model({
       visible: false
     });
@@ -1218,7 +1166,7 @@ module.exports = Backbone.View.extend({
     var $button = $('<button>').addClass('Navigation-menuButton js-button');
     $button.append($('<i>').addClass('fa fa-bars'));
     this.$el.append($button);
-    this.$el.append(this._createMenu());
+    this._$canvas.append(this._createMenu());
     return this;
   },
 
@@ -1235,7 +1183,7 @@ module.exports = Backbone.View.extend({
   _createMenu: function _createMenu() {
     var $menu = $('<ul>').addClass('Navigation-menuDropdown js-menu');
     this.collection.each(function (item) {
-      $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html(item.get('key')).attr('href', '#/' + item.get('key'))));
+      $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html(item.get('key')).attr('href', '/' + item.get('key'))));
     });
 
     // Add other language
@@ -1246,17 +1194,17 @@ module.exports = Backbone.View.extend({
     return $menu;
   },
 
-  _getMenu: function _getMenu() {
-    return this.$('.js-menu');
+  _getCanvas: function _getCanvas() {
+    return this._$canvas;
   },
 
   _showMenu: function _showMenu() {
-    this._getMenu().addClass('is-visible');
+    this._getCanvas().addClass('is-menu-visible');
     $(document).on('click', this._checkDocumentClick);
   },
 
   _hideMenu: function _hideMenu() {
-    this._getMenu().removeClass('is-visible');
+    this._getCanvas().removeClass('is-menu-visible');
     $(document).off('click', this._checkDocumentClick);
   },
 
@@ -1630,7 +1578,7 @@ module.exports = {
   "banquet": {
     "key": "banquet",
     "title": "Banquet",
-    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.",
+    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.<br/><br/>*Take into account the bus will bring you to the land.",
     "comment": "Kiss each other!"
   },
   "transport-return": {
@@ -1649,7 +1597,7 @@ module.exports = {
   "honeymoon": {
     "key": "honeymoon",
     "title": "Honeymoon",
-    "desc": "We go to New Zealand! And we would like to visit several point of interests. We have the flight tickets and two backpacks, would you like to help us in our route? <br/>We have made a possible route, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>take a look</a>. <br/><br/>Below you will find a list with activities we would like to enjoy in this country, it will be the first time we visit it (and we think it will be the last one, it is the antipodes of Spain!). </br></br> If you are interested in helping us with any of them, just add and send your email after the list. We will answer you with the instructions to follow.",
+    "desc": "We go to New Zealand! And we would like to visit several point of interests. We have the flight tickets and two backpacks, would you like to help us in our route? <br/><br/>Below you will find a list with activities we would like to enjoy in this country, it will be the first time we visit it (and we think it will be the last one, it is the antipodes of Spain!). </br></br> If you are interested in helping us with any of them, just add and send your email after the list. We will answer you with the instructions to follow. <br/><br/>*We have made a possible route, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>take a look</a>.",
     "expense": "expense",
     "leisure": "leisure",
     "disclaimer": "Choose the option(s) you want and help with what you consider, it is not needed to pay the whole activity or expense.",
@@ -1739,9 +1687,9 @@ module.exports = {
     }
   },
   "contact": {
-    "key": "contact",
-    "title": "Contact",
-    "desc": "This is the perfect place for confirming your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
+    "key": "confirmation",
+    "title": "Confirmation",
+    "desc": "Time to confirm your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
     "attendees": "attendees",
     "bus-info": "buses",
     "your-info": "details",
@@ -1800,7 +1748,7 @@ module.exports = {
   "banquet": {
     "key": "banquete",
     "title": "Banquete",
-    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>. <br/><br/>Tened en cuenta que los autobuses os llevarán también a la finca.",
+    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>. <br/><br/>*Tened en cuenta que los autobuses os llevarán también a la finca.",
     "comment": "¡Qué se besen!"
   },
   "transport-return": {
@@ -1819,7 +1767,7 @@ module.exports = {
   "honeymoon": {
     "key": "viaje",
     "title": "Viaje",
-    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/>Hemos hecho un posible recorrido, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>échale un vistazo</a>. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
+    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir. <br/><br/>*Hemos pensado en un posible recorrido, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>échale un vistazo</a>.",
     "expense": "gasto",
     "leisure": "ocio",
     "send": "Enviar",
@@ -1912,8 +1860,8 @@ module.exports = {
     }
   },
   "contact": {
-    "key": "contacto",
-    "title": "Contacto",
+    "key": "confirmacion",
+    "title": "Confirmación",
     "desc": "¿Vienes? Añade cada asistente, especificando el nombre y si el/ella tiene algún tipo de alergía o es vegetariana/o.",
     "attendees": "asistentes",
     "bus-info": "buses",
@@ -2148,8 +2096,8 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.attendees",{"name":"t","hash":{},"data":data}))
     + "</h4>\n</div>\n<div class=\"Contact-block js-buses\">\n  <h4 class=\"Contact-blockTitle\">\n    "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.bus-info",{"name":"t","hash":{},"data":data}))
-    + "\n    <a href=\"#/"
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going",{"name":"t","hash":{},"data":data}))
+    + "\n    <a href=\"/"
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.key",{"name":"t","hash":{},"data":data}))
     + "\" class=\"Color Color--alternative u-lSpace--m\">\n      <i class=\"fa fa-link\"></i>\n    </a>\n  </h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field\">\n      <select class=\"js-going Contact-input--large\" name=\"going\" \n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.state : depth0),"==","loading",{"name":"ifCond","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "      ></select>\n    </div>\n  </div>\n  <div class=\"Form-fieldset u-tSpace--m\">\n    <div class=\"Form-field\">\n      <select class=\"js-return Contact-input--large\" name=\"return\"\n"

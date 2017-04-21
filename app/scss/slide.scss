@@ -53,6 +53,7 @@
 .Slide-content--centered .Slide-contentParagraph {
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 }
 
 @include screen(0, 450px) {

@@ -13,7 +13,8 @@ module.exports = Backbone.View.extend({
     'click .js-button': '_onButtonClicked'
   },
 
-  initialize: function () {
+  initialize: function (opts) {
+    this._$canvas = opts.$canvas;
     this.model = new Backbone.Model({
       visible: false
     });
@@ -27,7 +28,7 @@ module.exports = Backbone.View.extend({
       $('<i>').addClass('fa fa-bars')
     );
     this.$el.append($button);
-    this.$el.append(this._createMenu());
+    this._$canvas.append(this._createMenu());
     return this;
   },
 
@@ -50,7 +51,7 @@ module.exports = Backbone.View.extend({
             $('<a>')
               .addClass('Navigation-menuDropdownItem')
               .html(item.get('key'))
-              .attr('href', '#/' + item.get('key'))
+              .attr('href', '/' + item.get('key'))
         )
       );
     });
@@ -71,17 +72,17 @@ module.exports = Backbone.View.extend({
     return $menu;
   },
 
-  _getMenu: function () {
-    return this.$('.js-menu');
+  _getCanvas: function () {
+    return this._$canvas;
   },
 
   _showMenu: function () {
-    this._getMenu().addClass('is-visible');
+    this._getCanvas().addClass('is-menu-visible');
     $(document).on('click', this._checkDocumentClick);
   },
 
   _hideMenu: function () {
-    this._getMenu().removeClass('is-visible');
+    this._getCanvas().removeClass('is-menu-visible');
     $(document).off('click', this._checkDocumentClick);
   },
 
