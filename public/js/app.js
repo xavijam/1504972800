@@ -172,10 +172,7 @@ function init() {
   var Carousel = new Flickity('.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: {
-      x: 80,
-      y: 0
-    },
+    dragThreshold: 60,
     prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,
@@ -314,24 +311,22 @@ function init() {
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
     routes: {
-      "*actions": "defaultRoute"
-    }
-  });
-  var router = new AppRouter();
+      "*path": "defaultRoute"
+    },
 
-  router.on('route:defaultRoute', function (action) {
-    var item = items.findWhere({ key: action });
-    var itemIndex = items.indexOf(item);
+    defaultRoute: function defaultRoute(action) {
+      var item = items.findWhere({ key: action });
+      var itemIndex = items.indexOf(item);
 
-    if (itemIndex >= 0) {
-      if (Carousel) {
-        Carousel.select(itemIndex, false, initialization);
+      if (itemIndex >= 0) {
+        if (Carousel) {
+          Carousel.select(itemIndex, false, initialization);
+        }
       }
     }
-
-    initialization = false;
   });
 
+  var router = new AppRouter();
   Backbone.history.start();
 
   Carousel.$element.on('select.flickity', function () {
@@ -408,7 +403,7 @@ var $ = require('jquery');
 var DefaultSlideView = require('./default-slide-view');
 var TravelItems = require('./travel-items.js');
 var HoneymoonFormView = require('./honeymoon-form-view');
-var QUERY_TEMPLATE = _.template('http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=<%= q %>');
+var QUERY_TEMPLATE = _.template('http://xavijam.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom FROM <%= tableName %>');
 
 module.exports = DefaultSlideView.extend({
 
@@ -448,28 +443,28 @@ module.exports = DefaultSlideView.extend({
     }).setView([-40.823163, 171.595703], 6);
 
     var polygonStyle = {
-      "color": "#E6E6E6",
-      "weight": 1,
-      "opacity": 0.65
+      color: '#E6E6E6',
+      weight: 1,
+      opacity: 0.65
     };
 
     var markerStyle = {
       radius: 4,
-      fillColor: "#DF685C",
-      color: "#FFFFFF",
+      fillColor: '#DF685C',
+      color: '#FFFFFF',
       weight: 2,
       opacity: 1,
       fillOpacity: 1
     };
 
     var lineStyle = {
-      color: "#314c96",
+      color: '#314c96',
       weight: 2,
       opacity: 0.3
     };
 
     var loadPoints = function loadPoints() {
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM pois_nueva_zelanda' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'pois_nueva_zelanda' }), function (data) {
         L.geoJson(data, {
           pointToLayer: function pointToLayer(feature, latlng) {
             return L.circleMarker(latlng, markerStyle);
@@ -479,14 +474,14 @@ module.exports = DefaultSlideView.extend({
       });
     };
 
-    $.getJSON(QUERY_TEMPLATE({ q: "SELECT the_geom FROM oceania_adm0 where iso_alpha3='NZL'" }), function (data) {
+    $.getJSON(QUERY_TEMPLATE({ tableName: "oceania where iso_alpha3='NZL'" }), function (data) {
       L.geoJson(data, {
         style: polygonStyle
       }).addTo(map);
 
       var onLineLoaded = _.after(3, loadPoints);
 
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_taupo_a_blue_pools_walk' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_taupo_a_blue_pools_walk' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -494,7 +489,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_sky_tower_a_taupo' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_sky_tower_a_taupo' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -502,7 +497,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-      $.getJSON(QUERY_TEMPLATE({ q: 'SELECT the_geom FROM indicaciones_de_blue_pools_walk_a_kaikoura' }), function (data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_blue_pools_walk_a_kaikoura' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -1233,15 +1228,16 @@ module.exports = Backbone.View.extend({
   },
 
   _createMenu: function _createMenu() {
+    // Add other language
+    var locale = global.locale === 'ES' ? 'EN' : 'ES';
+    var localeParam = '?lang=' + locale;
+
     var $menu = $('<ul>').addClass('Navigation-menuDropdown js-menu');
     this.collection.each(function (item) {
       $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html(item.get('key')).attr('href', '#/' + item.get('key'))));
     });
 
-    // Add other language
-    var locale = global.locale === 'ES' ? 'EN' : 'ES';
-
-    $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html('<i class="fa fa-globe"></i> ' + locale).attr('href', '?lang=' + locale)));
+    $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html('<i class="fa fa-globe"></i> ' + locale).attr('href', localeParam)));
 
     return $menu;
   },
@@ -1630,7 +1626,7 @@ module.exports = {
   "banquet": {
     "key": "banquet",
     "title": "Banquet",
-    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.",
+    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.<br/><br/>*Take into account the bus will bring you to the land.",
     "comment": "Kiss each other!"
   },
   "transport-return": {
@@ -1649,7 +1645,7 @@ module.exports = {
   "honeymoon": {
     "key": "honeymoon",
     "title": "Honeymoon",
-    "desc": "We go to New Zealand! And we would like to visit several point of interests. We have the flight tickets and two backpacks, would you like to help us in our route? <br/>We have made a possible route, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>take a look</a>. <br/><br/>Below you will find a list with activities we would like to enjoy in this country, it will be the first time we visit it (and we think it will be the last one, it is the antipodes of Spain!). </br></br> If you are interested in helping us with any of them, just add and send your email after the list. We will answer you with the instructions to follow.",
+    "desc": "We go to New Zealand! And we would like to visit several point of interests. We have the flight tickets and two backpacks, would you like to help us in our route? <br/><br/>Below you will find a list with activities we would like to enjoy in this country, it will be the first time we visit it (and we think it will be the last one, it is the antipodes of Spain!). </br></br> If you are interested in helping us with any of them, just add and send your email after the list. We will answer you with the instructions to follow. <br/><br/>*We have made a possible route, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>take a look</a>.",
     "expense": "expense",
     "leisure": "leisure",
     "disclaimer": "Choose the option(s) you want and help with what you consider, it is not needed to pay the whole activity or expense.",
@@ -1739,9 +1735,9 @@ module.exports = {
     }
   },
   "contact": {
-    "key": "contact",
-    "title": "Contact",
-    "desc": "This is the perfect place for confirming your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
+    "key": "confirmation",
+    "title": "Confirmation",
+    "desc": "Time to confirm your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
     "attendees": "attendees",
     "bus-info": "buses",
     "your-info": "details",
@@ -1800,7 +1796,7 @@ module.exports = {
   "banquet": {
     "key": "banquete",
     "title": "Banquete",
-    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>. <br/><br/>Tened en cuenta que los autobuses os llevarán también a la finca.",
+    "desc": "Después disfrutaremos de buena música, comida y bebida en <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. Esta finca se encuentra en la <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>. <br/><br/>*Tened en cuenta que los autobuses os llevarán también a la finca.",
     "comment": "¡Qué se besen!"
   },
   "transport-return": {
@@ -1819,7 +1815,7 @@ module.exports = {
   "honeymoon": {
     "key": "viaje",
     "title": "Viaje",
-    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/>Hemos hecho un posible recorrido, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>échale un vistazo</a>. <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir.",
+    "desc": "Nos vamos a Nueva Zelanda y queremos visitar muchos lugares. Tenemos los billetes de avión y las mochilas, ¿nos ayudáis a elegir nustra ruta? <br/><br/>Aquí debajo encontrarás un listado de actividades que nos encantaría hacer en este páis, ya que será la primera vez que lo visitemos (y creemos que la última, ¡son las antípodas de España!). </br></br> Si estás interesado en ayudarnos con alguna/s de ellas, simplemente añade y envía tu email después de la lista y te contestaremos con las instrucciones a seguir. <br/><br/>*Hemos pensado en un posible recorrido, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>échale un vistazo</a>.",
     "expense": "gasto",
     "leisure": "ocio",
     "send": "Enviar",
@@ -1912,8 +1908,8 @@ module.exports = {
     }
   },
   "contact": {
-    "key": "contacto",
-    "title": "Contacto",
+    "key": "confirmacion",
+    "title": "Confirmación",
     "desc": "¿Vienes? Añade cada asistente, especificando el nombre y si el/ella tiene algún tipo de alergía o es vegetariana/o.",
     "attendees": "asistentes",
     "bus-info": "buses",
@@ -2149,7 +2145,7 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
     + "</h4>\n</div>\n<div class=\"Contact-block js-buses\">\n  <h4 class=\"Contact-blockTitle\">\n    "
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.bus-info",{"name":"t","hash":{},"data":data}))
     + "\n    <a href=\"#/"
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going",{"name":"t","hash":{},"data":data}))
+    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.key",{"name":"t","hash":{},"data":data}))
     + "\" class=\"Color Color--alternative u-lSpace--m\">\n      <i class=\"fa fa-link\"></i>\n    </a>\n  </h4>\n  <div class=\"Form-fieldset\">\n    <div class=\"Form-field\">\n      <select class=\"js-going Contact-input--large\" name=\"going\" \n"
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.state : depth0),"==","loading",{"name":"ifCond","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "      ></select>\n    </div>\n  </div>\n  <div class=\"Form-fieldset u-tSpace--m\">\n    <div class=\"Form-field\">\n      <select class=\"js-return Contact-input--large\" name=\"return\"\n"
@@ -2225,7 +2221,7 @@ var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":funct
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"home.title",{"name":"t","hash":{},"data":data}))
     + "\"/>\n  <h1 class=\"Color Text-title\">JAVIER + LAURA</h1>\n  <h2 class=\"content-item Color--main Text-highlight u-tSpace--xl\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"date",{"name":"t","hash":{},"data":data}))
-    + "</h2>\n  <a href=\"#/"
+    + "</h2>\n  <a href=\"/"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"transport-going.key",{"name":"t","hash":{},"data":data}))
     + "\" class=\"content-item Text Color Text-paragraph Text-link u-tSpace--xl\">"
     + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"home.desc",{"name":"t","hash":{},"data":data}))

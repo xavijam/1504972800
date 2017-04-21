@@ -32,7 +32,7 @@
   "banquet": {
     "key": "banquet",
     "title": "Banquet",
-    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.",
+    "desc": "Afterwards we will enjoy good music, food and drinks at <a class='Color Color--link' href='https://goo.gl/Dt6WXG' target='_blank'>Los Arcos de Fuentepizarro</a>. This property is located in <a href='https://goo.gl/SnPMNI' class='Color Color--link' target='_blank'>Ctra Guadarrama al Escorial, km 3.400, San Lorenzo del Escorial, Madrid</a>.<br/><br/>*Take into account the bus will bring you to the land.",
     "comment": "Kiss each other!"
   },
   "transport-return": {
@@ -51,7 +51,7 @@
   "honeymoon": {
     "key": "honeymoon",
     "title": "Honeymoon",
-    "desc": "We go to New Zealand! And we would like to visit several point of interests. We have the flight tickets and two backpacks, would you like to help us in our route? <br/>We have made a possible route, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>take a look</a>. <br/><br/>Below you will find a list with activities we would like to enjoy in this country, it will be the first time we visit it (and we think it will be the last one, it is the antipodes of Spain!). </br></br> If you are interested in helping us with any of them, just add and send your email after the list. We will answer you with the instructions to follow.",
+    "desc": "We go to New Zealand! And we would like to visit several point of interests. We have the flight tickets and two backpacks, would you like to help us in our route? <br/><br/>Below you will find a list with activities we would like to enjoy in this country, it will be the first time we visit it (and we think it will be the last one, it is the antipodes of Spain!). </br></br> If you are interested in helping us with any of them, just add and send your email after the list. We will answer you with the instructions to follow. <br/><br/>*We have made a possible route, <a class='Color Color--linkAlternative' href='https://team.carto.com/u/xavijam/builder/93f4baea-9ec3-11e6-b132-0ef24382571b/embed' target='_blank'>take a look</a>.",
     "expense": "expense",
     "leisure": "leisure",
     "disclaimer": "Choose the option(s) you want and help with what you consider, it is not needed to pay the whole activity or expense.",
@@ -141,9 +141,9 @@
     }
   },
   "contact": {
-    "key": "contact",
-    "title": "Contact",
-    "desc": "This is the perfect place for confirming your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
+    "key": "confirmation",
+    "title": "Confirmation",
+    "desc": "Time to confirm your attendance. Just add as many attendees as you want, specifying the name and if he/she has an allergy or is vegetarian.",
     "attendees": "attendees",
     "bus-info": "buses",
     "your-info": "details",

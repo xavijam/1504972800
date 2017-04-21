@@ -19,10 +19,7 @@ function init () {
   var Carousel = new Flickity( '.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: {
-      x: 80,
-      y: 0
-    },
+    dragThreshold: 60,
     prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,
@@ -185,24 +182,22 @@ function init () {
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
     routes: {
-      "*actions": "defaultRoute"
-    }
-  });
-  var router = new AppRouter;
+      "*path": "defaultRoute"
+    },
 
-  router.on('route:defaultRoute', function(action) {
-    var item = items.findWhere({ key: action });
-    var itemIndex = items.indexOf(item);
+    defaultRoute: function (action) {
+      var item = items.findWhere({ key: action });
+      var itemIndex = items.indexOf(item);
 
-    if (itemIndex >= 0) {
-      if (Carousel) {
-        Carousel.select(itemIndex, false, initialization);
+      if (itemIndex >= 0) {
+        if (Carousel) {
+          Carousel.select(itemIndex, false, initialization);
+        }
       }
     }
-
-    initialization = false;
   });
-
+  
+  var router = new AppRouter();
   Backbone.history.start();
 
   Carousel.$element.on('select.flickity', function () {

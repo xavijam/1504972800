@@ -42,6 +42,10 @@ module.exports = Backbone.View.extend({
   },
 
   _createMenu: function () {
+    // Add other language
+    var locale = global.locale === 'ES' ? 'EN' : 'ES';
+    var localeParam = '?lang=' + locale;
+
     var $menu = $('<ul>').addClass('Navigation-menuDropdown js-menu');
     this.collection.each(function (item) {
       $menu.append(
@@ -55,16 +59,13 @@ module.exports = Backbone.View.extend({
       );
     });
 
-    // Add other language
-    var locale = global.locale === 'ES' ? 'EN' : 'ES';
-
     $menu.append(
       $('<li>')
         .append(
           $('<a>')
             .addClass('Navigation-menuDropdownItem')
             .html('<i class="fa fa-globe"></i> ' + locale)
-            .attr('href', '?lang=' + locale)
+            .attr('href', localeParam)
       )
     );
 
