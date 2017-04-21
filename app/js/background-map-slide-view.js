@@ -57,7 +57,7 @@ module.exports = DefaultSlideView.extend({
 
     var markerStyle = {
       radius: 4,
-      fillColor: '#DF685C',
+      fillColor: '#9CB9BF',
       color: '#FFFFFF',
       weight: 2,
       opacity: 1,
@@ -65,7 +65,7 @@ module.exports = DefaultSlideView.extend({
     };
 
     var lineStyle = {
-      color: '#314c96',
+      color: '#666',
       weight: 2,
       opacity: 0.3,
     };

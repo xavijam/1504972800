@@ -182,22 +182,23 @@ function init () {
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
     routes: {
-      "*path": "defaultRoute"
-    },
-
-    defaultRoute: function (action) {
-      var item = items.findWhere({ key: action });
-      var itemIndex = items.indexOf(item);
-
-      if (itemIndex >= 0) {
-        if (Carousel) {
-          Carousel.select(itemIndex, false, initialization);
-        }
-      }
+      "*actions": "defaultRoute"
     }
   });
-  
-  var router = new AppRouter();
+  var router = new AppRouter;
+
+  router.on('route:defaultRoute', function(action) {
+    var item = items.findWhere({ key: action });
+    var itemIndex = items.indexOf(item);
+
+    if (itemIndex >= 0) {
+      if (Carousel) {
+        Carousel.select(itemIndex, false, initialization);
+      }
+    }
+
+    initialization = false;
+  });
   Backbone.history.start();
 
   Carousel.$element.on('select.flickity', function () {

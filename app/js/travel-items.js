@@ -41,7 +41,7 @@ module.exports = [
     desc: 'honeymoon.items.hobbiton.desc',
     cost: '~120',
     wikipediaURL: 'honeymoon.items.hobbiton.wikipedia',
-    imageURL: 'http://www.placestoseeinyourlifetime.com/wp-content/uploads/2013/10/Thomas-Zlabiroth-740x488.jpg',
+    imageURL: 'https://twistedsifter.files.wordpress.com/2015/03/hobbiton-movie-set-tour-new-zealand-2.jpg?w=800&h=534',
     itemURL: 'honeymoon.items.hobbiton.url'
   },
   {
@@ -104,7 +104,7 @@ module.exports = [
     desc: 'honeymoon.items.waitomo.desc',
     cost: '~90',
     wikipediaURL: 'honeymoon.items.waitomo.wikipedia',
-    imageURL: 'http://www.placestoseeinyourlifetime.com/wp-content/uploads/2015/07/Waitomo-Caves-Photo-by-Joseph-Michael-1.jpg',
+    imageURL: 'https://media-cdn.tripadvisor.com/media/photo-s/09/31/de/0c/waitomo-glowworm-caves.jpg',
     itemURL: 'honeymoon.items.waitomo.url'
   },
   {
