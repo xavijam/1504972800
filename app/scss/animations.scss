@@ -18,11 +18,16 @@
   font-weight: 300;
   letter-spacing: 0px;
   line-height: 18px;
-  color: rgba(white, 0.7);
-  background: rgba(black, 0.5);
+  background: rgba(white, 0.8);
   border-radius: 5px;
   opacity: 0;
   transition: all 400ms ease-in-out;
+}
+.Animation-commentColorYellowish {
+  color: #E3AA45;
+}
+.Animation-commentColorGreenish {
+  color: #75A068;
 }
 .Animation-comment:after {
   content: '';
@@ -32,7 +37,7 @@
   width: 0;
   border-style: solid;
   border-width: 0 0 6px 8px;
-  border-color: transparent rgba(black, 0.5);
+  border-color: transparent rgba(white, 0.8);
   z-index: 0;
 }
 .Animation-comment--right {
@@ -103,9 +108,11 @@
 // - Plane!
 .Animation-planeWrapper {
   position: absolute;
-  top: 20px;
+  top: 60px;
   left: 50%;
   margin-left: -40px;
+  opacity: 0;
+  animation: takingOff 1s 1 linear;
 }
 .Animation-plane {
   font-size: 15px;
@@ -113,11 +120,26 @@
 }
 .Animation.is-visible {
   .Animation-planeWrapper {
+    opacity: 1;
+    top: 20px;
     margin-left: -5px;
     animation: circleRotation 3s infinite linear;
   }
   .Animation-plane {
     animation: planeRotation 3s infinite linear;
+  }
+}
+
+@keyframes takingOff {
+  from {
+    opacity: 0;
+    transform: scale(0);
+    top: 60px;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    top: 20px;
   }
 }
 

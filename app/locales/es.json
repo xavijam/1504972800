@@ -45,7 +45,7 @@
   "accomodation": {
     "key": "hoteles",
     "title": "Hoteles",
-    "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobus. ¿Dónde te interesa?:",
+    "desc": "Si quieres dormir algo después de la fiesta, nosotros te recomendamos unos cuantos en el Escorial y en las Rozas, donde hay parada en la ruta de nuestro autobús. ¿Dónde te interesa?:",
     "placeholder": "Selecciona una ciudad"
   },
   "honeymoon": {
