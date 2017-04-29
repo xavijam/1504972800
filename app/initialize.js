@@ -6,6 +6,7 @@ var DefaultSlideView = require('js/default-slide-view');
 var SelectionSlideView = require('js/selection-slide-view');
 var BackgroundMapSlideView = require('js/background-map-slide-view');
 var ContactView = require('js/contact/contact-view');
+var AccomodationSlideView = require('js/accomodation-slide-view');
 var NavigationMenuView = require('js/navigation-menu-view');
 require('js/handlebars-helpers');
 var isMobile = require('ismobilejs');
@@ -115,7 +116,7 @@ function init () {
 
   // Accomodation
   Carousel.append(
-    new SelectionSlideView({
+    new AccomodationSlideView({
       Carousel: Carousel,
       template: require('templates/accomodation.hbs'),
       selectionItemTemplate: require('./templates/accomodation-options.hbs'),

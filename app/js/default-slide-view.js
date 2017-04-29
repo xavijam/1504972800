@@ -10,6 +10,8 @@ module.exports = Backbone.View.extend({
   initialize: function (opts) {
     this.options = opts;
     this.Carousel = opts.Carousel;
+    this._animationStarted = false;
+    this._checkCurrentSlide = this._checkCurrentSlide.bind(this);
     this._initBinds();
   },
 
@@ -34,19 +36,24 @@ module.exports = Backbone.View.extend({
   },
 
   _initBinds: function () {
-    this.Carousel.$element.on('select.flickity', this._checkCurrentSlide.bind(this));
+    this.Carousel.$element.on('select.flickity', this._checkCurrentSlide);
   },
 
   _startAnimation: function () {
-    
+    this.$('.js-animation').addClass('is-visible');
   },
+
+  _stopAnimation: function () {},
 
   _checkCurrentSlide: function () {
     var currentElement = this.Carousel.selectedCell.element;
     var elementIndex = $(currentElement).data('index');
 
-    if (elementIndex === this.options.index) {
+    if (elementIndex === this.options.index && !this._animationStarted) {
       setTimeout(this._startAnimation.bind(this), 2000);
+      this._animationStarted = true;
+    } else {
+      this._stopAnimation();
     }
   },
 

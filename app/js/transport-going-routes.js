@@ -15,7 +15,7 @@ module.exports = [
   },
   {
     category: 'A',
-    data: '17:50',
+    data: '17:40',
     name: 'Iglesia Santísimo Corpus Christi',
     desc: 'Las Rozas',
     link: 'https://www.google.com/maps/place/Parroquia+Santísimo+Corpus+Christi/@40.5268311,-3.9238142,17z'
@@ -29,7 +29,7 @@ module.exports = [
   },
   {
     category: 'B',
-    data: '17:50',
+    data: '17:40',
     name: 'Iglesia Santísimo Corpus Christi',
     desc: 'Las Rozas',
     link: 'https://www.google.com/maps/place/Parroquia+Santísimo+Corpus+Christi'
