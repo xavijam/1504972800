@@ -155,6 +155,10 @@ module.exports = Backbone.View.extend({
     this.contactInfoModel.clear();
   },
 
+  _animatePlane: function () {
+    $('.js-contactIcon').addClass('flyaway popUp');
+  },
+
   _sendForm: function () {
     var contactInfo = this.contactInfoModel.toJSON();
     var attendeesInfo = {};
@@ -173,6 +177,7 @@ module.exports = Backbone.View.extend({
       ),
       dataType: 'json',
       success: function () {
+        this._animatePlane();
         this._clearContactInfo();
         this.model.set('state', 'success');
       }.bind(this),

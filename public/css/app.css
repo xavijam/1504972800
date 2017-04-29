@@ -163,12 +163,72 @@
   top: -50px;
   opacity: 1; }
 
+.Animation-busRoad {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(300px);
+  width: 10px;
+  height: 1px;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.5); }
+
+.Animation.is-visible .Animation-bus {
+  animation: bounce 100ms infinite alternate; }
+
+.Animation.is-visible .Animation-busRoad {
+  animation: road 1.5s ease-out infinite; }
+
+@keyframes road {
+  0% {
+    opacity: 0;
+    transform: translateX(300px); }
+  50% {
+    opacity: 1; }
+  100% {
+    transform: translateX(80px);
+    opacity: 0; } }
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0); }
+  100% {
+    transform: translateY(-1%); } }
+
 .Animation-z {
   position: absolute;
   color: rgba(255, 255, 255, 0.8);
   font-family: arial;
   font-size: 0;
   font-weight: bold; }
+
+.Animation-planeWrapper {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  margin-left: -40px; }
+
+.Animation-plane {
+  font-size: 15px;
+  transform: rotate(-45deg); }
+
+.Animation.is-visible .Animation-planeWrapper {
+  margin-left: -5px;
+  animation: circleRotation 3s infinite linear; }
+
+.Animation.is-visible .Animation-plane {
+  animation: planeRotation 3s infinite linear; }
+
+@keyframes circleRotation {
+  from {
+    transform: rotate(0deg) translate(-35px) rotate(0deg); }
+  to {
+    transform: rotate(360deg) translate(-35px) rotate(-360deg); } }
+
+@keyframes planeRotation {
+  from {
+    transform: rotate(-45deg); }
+  to {
+    transform: rotate(315deg); } }
 
 
 .Button {

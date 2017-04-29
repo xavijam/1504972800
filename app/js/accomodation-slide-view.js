@@ -55,6 +55,6 @@ module.exports = SelectionSlideView.extend({
   _checkCurrentSlide: function () {
     this._animationStarted = false;
     SelectionSlideView.prototype._checkCurrentSlide.apply(this);
-  },
+  }
 
 });
