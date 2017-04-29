@@ -485,7 +485,10 @@
   border: 2px solid #FFF;
 }
 .light-theme .select2-container--default .select2-selection--single .select2-selection__arrow b {
-  border-color: rgba(white, 0.6) transparent transparent transparent;
+  border-color: rgba(white, 0.6) transparent transparent;
+}
+.light-theme .select2-container--open .select2-selection--single .select2-selection__arrow b {
+  border-color: transparent transparent rgba(white, 0.6);
 }
 .light-theme .select2-container--default .select2-selection--single .select2-selection__placeholder {
     color: rgba(white, 0.6); }

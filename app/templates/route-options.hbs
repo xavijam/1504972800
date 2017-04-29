@@ -17,17 +17,17 @@
         </span>
       {{/ifCond}}
 
-      {{#ifCond slideURL '!=' '' }}
-        <a href="{{slideURL}}" target="_blank" class="RouteList-itemName Text Text-item Color Color--link">
+      {{#ifCond link '!=' '' }}
+        <a href="{{ link }}" target="_blank" class="RouteList-itemName Text Text-item Color Color--link">
       {{/ifCond}}
-      {{#ifCond slideURL '==' '' }}
+      {{#ifCond link '==' '' }}
         <p class="RouteList-itemName Text Text-item">
       {{/ifCond}}
       {{name}}
-      {{#ifCond slideURL '!=' '' }}
+      {{#ifCond link '!=' '' }}
         </a>
       {{/ifCond}}
-      {{#ifCond slideURL '==' '' }}
+      {{#ifCond link '==' '' }}
         </p>
       {{/ifCond}}
     </li>

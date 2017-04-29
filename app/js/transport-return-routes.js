@@ -5,51 +5,27 @@ module.exports = [
     name: 'Los Arcos de Fuentepizarro',
     desc: '',
     link: '',
-    slideURL: '' 
+    slideURL: 'https://www.google.es/maps/place/Los+Arcos+de+Fuentepizarro/@40.625858,-4.1086077,17z/data=!3m1!4b1!4m5!3m4!1s0xd410b74664855a5:0xd1bfc14c2a286297!8m2!3d40.625858!4d-4.106419' 
   },
   {
     category: 'A',
-    data: '+30 min',
-    name: 'Hotel las Rozas',
-    desc: 'Las Rozas',
-    link: '',
-    slideURL: '' 
-  },
-  {
-    category: 'A',
-    data: '+20 min',
-    name: 'Principe Pío',
-    desc: 'Madrid',
-    link: ''
-  },
-  {
-    category: 'A',
-    data: '+20 min',
-    name: 'Av. de los Poblados',
-    desc: 'Madrid',
-    link: ''
-  },
-  {
-    category: 'B',
-    data: '-',
-    name: 'Los Arcos de Fuentepizarro',
-    desc: '',
-    link: '',
-    slideURL: '' 
-  },
-  {
-    category: 'B',
-    data: '+15 min',
+    data: '+10 min',
     name: 'El Escorial',
     desc: '',
-    link: ''
+    link: 'http://maps.google.com/maps?q=loc:40.592172,-4.143992'
   },
   {
-    category: 'B',
+    category: 'A',
     data: '+30 min',
-    name: 'Galapagar',
-    desc: '',
-    link: '',
-    slideURL: '' 
+    name: 'Principe Pío',
+    desc: 'Madrid',
+    link: 'http://maps.google.com/maps?q=loc:40.421740,-3.721573'
+  },
+  {
+    category: 'A',
+    data: '+15 min',
+    name: 'Av. de los Poblados',
+    desc: 'Madrid',
+    link: 'https://www.google.com/maps?q=loc:40.376079,-3.748328'
   }
 ];
