@@ -51,8 +51,7 @@ module.exports = Backbone.View.extend({
             $('<a>')
               .addClass('Navigation-menuDropdownItem')
               .html(item.get('key'))
-              .attr('href', item.get('key'))
-              .attr('data', 'slide-url')
+              .attr('href', '/#/' + item.get('key'))
         )
       );
     });
@@ -66,7 +65,7 @@ module.exports = Backbone.View.extend({
           $('<a>')
             .addClass('Navigation-menuDropdownItem')
             .html('<i class="fa fa-globe"></i> ' + locale)
-            .attr('href', '/?lang=' + locale)
+            .attr('href', '?lang=' + locale)
       )
     );
 

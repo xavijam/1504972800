@@ -6,7 +6,8 @@ module.exports = {
     javascripts: {
       joinTo: {
         'js/vendor.js': /^(?!app)/,
-        'js/app.js': /^app/
+        'js/app.js': /^app/,
+        'js/ghspa.js': ['vendor/js/ghspa.js']
       }
     },
     stylesheets: {

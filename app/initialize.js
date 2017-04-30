@@ -184,9 +184,10 @@ function init () {
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
     routes: {
-      "*actions": "defaultRoute"
+      '*actions': 'defaultRoute'
     }
   });
+
   var router = new AppRouter();
 
   router.on('route:defaultRoute', function(action) {
@@ -201,17 +202,11 @@ function init () {
 
     initialization = false;
   });
-  Backbone.history.start({ pushState: true });
+  Backbone.history.start();
 
   Carousel.$element.on('select.flickity', function () {
     var currentElement = Carousel.selectedCell.element;
     var key = $(currentElement).data('key');
-    router.navigate('/' + key + '?lang=' + global.locale, { trigger: false });
-  });
-
-  $('a[data="slide-url"]').click(function (ev) {
-    ev.preventDefault();
-    var key = $(this).attr('href');
-    router.navigate('/' + key + '?lang=' + global.locale, { trigger: true });
+    router.navigate('#/' + key, { trigger: false });
   });
 }

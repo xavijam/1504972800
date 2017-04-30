@@ -20,7 +20,7 @@
     "key": "transport-going",
     "title": "Transport",
     "sub-title": "going",
-    "desc": "Everything will start at the <a class='Color Color--link' href='church' data='slide-url'>church</a>, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:",
+    "desc": "Everything will start at the <a class='Color Color--link' href='/#/church'>church</a>, but in order to arrive there, you will need a transport. We have two bus routes that will cover several places, check your closer point:",
     "placeholder": "Select a place"
   },
   "church": {
