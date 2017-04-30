@@ -166,9 +166,10 @@ function init () {
 
   // Add navigation menu
   var menuView = new NavigationMenuView({
+    $canvas: $('.js-canvas'),
     collection: items
   });
-  $('.js-carousel').append(menuView.render().el);
+  $('.js-canvas').append(menuView.render().el);
 
   Carousel.$element.on('select.flickity', function () {
     var currentElement = Carousel.selectedCell.element;
@@ -186,7 +187,7 @@ function init () {
       "*actions": "defaultRoute"
     }
   });
-  var router = new AppRouter;
+  var router = new AppRouter();
 
   router.on('route:defaultRoute', function(action) {
     var item = items.findWhere({ key: action });
@@ -200,11 +201,17 @@ function init () {
 
     initialization = false;
   });
-  Backbone.history.start();
+  Backbone.history.start({ pushState: true });
 
   Carousel.$element.on('select.flickity', function () {
     var currentElement = Carousel.selectedCell.element;
     var key = $(currentElement).data('key');
-    router.navigate('#/' + key, { trigger: false });
+    router.navigate('/' + key + '?lang=' + global.locale, { trigger: false });
+  });
+
+  $('a[data="slide-url"]').click(function (ev) {
+    ev.preventDefault();
+    var key = $(this).attr('href');
+    router.navigate('/' + key + '?lang=' + global.locale, { trigger: true });
   });
 }

@@ -20,7 +20,7 @@
     "key": "transporte-ida",
     "title": "Transporte",
     "sub-title": "ida",
-    "desc": "Todo empezará en la <a class='Color Color--link' href='#/iglesia'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Si vas en coche no hay problema, pero sino tenemos dos rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:",
+    "desc": "Todo empezará en la <a class='Color Color--link' href='iglesia' data='slide-url'>iglesia</a>, pero para llegar allí necesitarás un medio de transporte. Si vas en coche no hay problema, pero sino tenemos dos rutas de autobús que pasan por varios sitios, busca tu punto de salida más cercano:",
     "placeholder": "Selecciona un lugar"
   },
   "church": {

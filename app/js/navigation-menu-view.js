@@ -13,7 +13,8 @@ module.exports = Backbone.View.extend({
     'click .js-button': '_onButtonClicked'
   },
 
-  initialize: function () {
+  initialize: function (opts) {
+    this._$canvas = opts.$canvas;
     this.model = new Backbone.Model({
       visible: false
     });
@@ -27,7 +28,7 @@ module.exports = Backbone.View.extend({
       $('<i>').addClass('fa fa-bars')
     );
     this.$el.append($button);
-    this.$el.append(this._createMenu());
+    this._$canvas.append(this._createMenu());
     return this;
   },
 
@@ -42,10 +43,6 @@ module.exports = Backbone.View.extend({
   },
 
   _createMenu: function () {
-    // Add other language
-    var locale = global.locale === 'ES' ? 'EN' : 'ES';
-    var localeParam = '?lang=' + locale;
-
     var $menu = $('<ul>').addClass('Navigation-menuDropdown js-menu');
     this.collection.each(function (item) {
       $menu.append(
@@ -54,10 +51,14 @@ module.exports = Backbone.View.extend({
             $('<a>')
               .addClass('Navigation-menuDropdownItem')
               .html(item.get('key'))
-              .attr('href', '#/' + item.get('key'))
+              .attr('href', item.get('key'))
+              .attr('data', 'slide-url')
         )
       );
     });
+
+    // Add other language
+    var locale = global.locale === 'ES' ? 'EN' : 'ES';
 
     $menu.append(
       $('<li>')
@@ -65,30 +66,30 @@ module.exports = Backbone.View.extend({
           $('<a>')
             .addClass('Navigation-menuDropdownItem')
             .html('<i class="fa fa-globe"></i> ' + locale)
-            .attr('href', localeParam)
+            .attr('href', '/?lang=' + locale)
       )
     );
 
     return $menu;
   },
 
-  _getMenu: function () {
-    return this.$('.js-menu');
+  _getCanvas: function () {
+    return this._$canvas;
   },
 
   _showMenu: function () {
-    this._getMenu().addClass('is-visible');
+    this._getCanvas().addClass('is-menu-visible');
     $(document).on('click', this._checkDocumentClick);
   },
 
   _hideMenu: function () {
-    this._getMenu().removeClass('is-visible');
+    this._getCanvas().removeClass('is-menu-visible');
     $(document).off('click', this._checkDocumentClick);
   },
 
   _checkDocumentClick: function (ev) {
     var $target = $(ev.target);
-    if (!$target.closest('.js-menu').length && !$target.closest('.js-button').length) {
+    if (!$target.closest('.js-menu').length && !$target.closest('.js-button').length) {
       this.model.set('visible', false);
     }
   }

@@ -1,0 +1,16 @@
+.Canvas {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.Canvas-inner {
+  position: relative;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all .2s ease;
+}
+.Canvas-inner.is-menu-visible {
+  left: 240px;
+  transition: all .2s ease;
+}

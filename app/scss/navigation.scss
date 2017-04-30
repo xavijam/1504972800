@@ -3,17 +3,17 @@
 // Navigation styles, taken from flickity
 
 .Navigation-menu {
-  position: fixed;
-  right: 0;
-  bottom: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 37px;
   height: 37px;
   z-index: 11;
 }
 .Navigation-menuButton {
   display: flex;
-  width: 37px;
-  height: 37px;
+  width: 50px;
+  height: 50px;
   align-items: center;
   justify-content: center;
   background: none;
@@ -27,12 +27,14 @@
 }
 .Navigation-menuDropdown {
   position: absolute;
-  display: none;
-  bottom: 37px;
-  right: 0px;
-  width: 115px;
-  padding: 6px 15px;
-  background: #799796;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 200px;
+  padding: 20px;
+  margin-left: -240px;
+  background: #333;
   border-bottom: 1px solid rgba(black, 0.1);
   text-align: left;
 }
@@ -61,13 +63,13 @@
   display: block;
   padding: 3px 0;
   font-family: 'Lato';
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 13px;
+  font-weight: bold;
   letter-spacing: 0px;
   line-height: 18px;
   color: rgba(white, 0.7);
   text-decoration: none;
-  text-transform: capitalize;
+  text-transform: uppercase;
   &:hover {
     color: rgba(white, 0.9);
     text-decoration: underline;
@@ -75,7 +77,7 @@
 }
 
 .flickity-page-dots {
-  position: fixed;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,9 +91,9 @@
 }
 .dot {
   position: relative;
-  width: 11px;
-  height: 11px;
-  margin: 0 3px;
+  width: 9px;
+  height: 9px;
+  margin: 0 2px;
   padding: 0;
   border: none;
   border-radius: 8px;
@@ -106,8 +108,8 @@
 }
 .dot:hover,
 .dot.is-selected {
-  width: 15px;
-  height: 15px;
+  width: 11px;
+  height: 11px;
   margin-top: 0px;
   margin: 0 1px;
   background: white;
