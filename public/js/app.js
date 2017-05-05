@@ -1303,7 +1303,7 @@ module.exports = Backbone.View.extend({
   _createMenu: function _createMenu() {
     var $menu = $('<ul>').addClass('Navigation-menuDropdown js-menu');
     this.collection.each(function (item) {
-      $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html(item.get('key')).attr('href', '/#/' + item.get('key'))));
+      $menu.append($('<li>').append($('<a>').addClass('Navigation-menuDropdownItem').html(item.get('key')).attr('href', '#/' + item.get('key'))));
     });
 
     // Add other language

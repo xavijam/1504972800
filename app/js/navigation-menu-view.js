@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
             $('<a>')
               .addClass('Navigation-menuDropdownItem')
               .html(item.get('key'))
-              .attr('href', '/#/' + item.get('key'))
+              .attr('href', '#/' + item.get('key'))
         )
       );
     });
