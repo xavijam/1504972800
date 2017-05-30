@@ -77,3 +77,9 @@
     width: 100%!important;
   }
 }
+
+@include screen(0, 320px) {
+  .Contact-block {
+    max-width: 300px;
+  }
+}
