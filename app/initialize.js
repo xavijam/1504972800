@@ -17,17 +17,17 @@ document.addEventListener('DOMContentLoaded', init);
 function init () {
   var initialization = true;
 
-  var Carousel = new Flickity( '.js-carousel', {
+  var Carousel = new Flickity('.js-carousel', {
     cellAlign: 'center',
     percentPosition: false,
-    dragThreshold: 30,
+    dragThreshold: 80,
     prevNextButtons: !isMobile.any,
     pageDots: true,
     setGallerySize: false,
     contain: true,
     wrapAround: true
   });
-  
+
   // Add slides
   var items = new Backbone.Collection();
 
@@ -76,7 +76,7 @@ function init () {
     .render().el
   );
   items.add({
-    key: Handlebars.helpers.t('church.key'),
+    key: Handlebars.helpers.t('church.key')
   });
 
   // Banquet
@@ -184,24 +184,45 @@ function init () {
   // Initiate the router
   var AppRouter = Backbone.Router.extend({
     routes: {
-      '*actions': 'defaultRoute'
+      'transport-going': '_transportGoingSlide',
+      'transporte-ida': '_transportGoingSlide',
+      'church': '_churchSlide',
+      'iglesia': '_churchSlide',
+      'banquet': '_banquetSlide',
+      'banquete': '_banquetSlide',
+      'transporte-vuelta': '_transportReturnSlide',
+      'transport-return': '_transportReturnSlide',
+      'hoteles': '_accomodationSlide',
+      'accomodation': '_accomodationSlide',
+      'viaje': '_tripSlide',
+      'honeymoon': '_tripSlide',
+      'confirmation': '_contactSlide',
+      'confirmacion': '_contactSlide',
+      '*default': '_homeSlide'
+    },
+
+    _homeSlide: function () { this._goToSlide(0); },
+    _transportGoingSlide: function () { this._goToSlide(1); },
+    _churchSlide: function () { this._goToSlide(2); },
+    _banquetSlide: function () { this._goToSlide(3); },
+    _transportReturnSlide: function () { this._goToSlide(4); },
+    _accomodationSlide: function () { this._goToSlide(5); },
+    _tripSlide: function () { this._goToSlide(6); },
+    _contactSlide: function () { this._goToSlide(7); },
+
+    _goToSlide: function (slideNumber) {
+      if (slideNumber >= 0) {
+        if (Carousel) {
+          Carousel.select(slideNumber, false, initialization);
+        }
+      }
+
+      initialization = false;
     }
   });
 
   var router = new AppRouter();
 
-  router.on('route:defaultRoute', function(action) {
-    var item = items.findWhere({ key: action });
-    var itemIndex = items.indexOf(item);
-
-    if (itemIndex >= 0) {
-      if (Carousel) {
-        Carousel.select(itemIndex, false, initialization);
-      }
-    }
-
-    initialization = false;
-  });
   Backbone.history.start();
 
   Carousel.$element.on('select.flickity', function () {

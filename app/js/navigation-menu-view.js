@@ -49,12 +49,16 @@ module.exports = Backbone.View.extend({
         $('<li>')
           .append(
             $('<a>')
-              .addClass('Navigation-menuDropdownItem')
+              .addClass('Navigation-menuDropdownItem js-menuButton')
+              .click(function () {
+                this.model.set('visible', false);
+                this._hideMenu();
+              }.bind(this))
               .html(item.get('key'))
               .attr('href', '#/' + item.get('key'))
         )
       );
-    });
+    }, this);
 
     // Add other language
     var locale = global.locale === 'ES' ? 'EN' : 'ES';
@@ -92,5 +96,4 @@ module.exports = Backbone.View.extend({
       this.model.set('visible', false);
     }
   }
-
 });
