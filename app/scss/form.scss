@@ -34,6 +34,7 @@ $error-color: #e74c3c;
   outline: none;
   border-radius: $border-radius;
   border: 2px solid $input-main-color;
+  -webkit-appearance: none;
   resize: none;
 }
 .Form-input--m {
