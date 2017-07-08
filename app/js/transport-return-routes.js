@@ -5,14 +5,7 @@ module.exports = [
     name: 'Los Arcos de Fuentepizarro',
     desc: '',
     link: '',
-    slideURL: 'https://www.google.es/maps/place/Los+Arcos+de+Fuentepizarro/@40.625858,-4.1086077,17z/data=!3m1!4b1!4m5!3m4!1s0xd410b74664855a5:0xd1bfc14c2a286297!8m2!3d40.625858!4d-4.106419' 
-  },
-  {
-    category: 'A',
-    data: '+10 min',
-    name: 'El Escorial',
-    desc: '',
-    link: 'http://maps.google.com/maps?q=loc:40.592172,-4.143992'
+    slideURL: 'https://www.google.es/maps/place/Los+Arcos+de+Fuentepizarro/@40.625858,-4.1086077,17z/data=!3m1!4b1!4m5!3m4!1s0xd410b74664855a5:0xd1bfc14c2a286297!8m2!3d40.625858!4d-4.106419'
   },
   {
     category: 'A',

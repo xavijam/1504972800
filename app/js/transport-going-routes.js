@@ -19,19 +19,5 @@ module.exports = [
     name: 'Iglesia Santísimo Corpus Christi',
     desc: 'Las Rozas',
     link: 'https://www.google.com/maps/place/Parroquia+Santísimo+Corpus+Christi/@40.5268311,-3.9238142,17z'
-  },
-  {
-    category: 'B',
-    data: '17:15',
-    name: 'El Escorial',
-    desc: '',
-    link: 'http://maps.google.com/maps?q=loc:40.592172,-4.143992'
-  },
-  {
-    category: 'B',
-    data: '17:40',
-    name: 'Iglesia Santísimo Corpus Christi',
-    desc: 'Las Rozas',
-    link: 'https://www.google.com/maps/place/Parroquia+Santísimo+Corpus+Christi'
   }
 ];
