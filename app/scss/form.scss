@@ -40,6 +40,9 @@ $error-color: #e74c3c;
 .Form-input--m {
   width: 195px;
 }
+.Form-input--centered {
+  text-align: center;
+}
 .Form-input:focus {
   border-color: $input-main-focus-color;
 }

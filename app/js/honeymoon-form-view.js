@@ -56,7 +56,7 @@ module.exports = Backbone.View.extend({
 
     var state = this.model.get('state');
     var email = this._getInputValue();
-    
+
     if (state !== 'loading') {
       this.model.set('state', 'loading');
 
@@ -74,5 +74,4 @@ module.exports = Backbone.View.extend({
       });
     }
   }
-
 });

@@ -12,6 +12,10 @@ var QUERY_TEMPLATE = _.template('http://xavijam.cartodb.com/api/v2/sql?format=Ge
 
 module.exports = DefaultSlideView.extend({
 
+  events: {
+    'click .TravelList-item': '_focusInput'
+  },
+
   render: function () {
     var template = this.options.template;
 
@@ -20,7 +24,7 @@ module.exports = DefaultSlideView.extend({
         items: TravelItems
       })
     );
-    
+
     this.$el.attr({
       'id': Handlebars.helpers.t(this.options.translateKey + '.key'),
       'data-background': this.options.background,
@@ -67,11 +71,11 @@ module.exports = DefaultSlideView.extend({
     var lineStyle = {
       color: '#666',
       weight: 2,
-      opacity: 0.3,
+      opacity: 0.3
     };
 
     var loadPoints = function () {
-      $.getJSON(QUERY_TEMPLATE({ tableName: 'pois_nueva_zelanda' }), function(data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'pois_nueva_zelanda' }), function (data) {
         L.geoJson(data, {
           pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, markerStyle);
@@ -81,14 +85,14 @@ module.exports = DefaultSlideView.extend({
       });
     };
 
-    $.getJSON(QUERY_TEMPLATE({ tableName: "oceania where iso_alpha3='NZL'" }), function(data) {
+    $.getJSON(QUERY_TEMPLATE({ tableName: "oceania where iso_alpha3='NZL'" }), function (data) {
       L.geoJson(data, {
         style: polygonStyle
       }).addTo(map);
 
       var onLineLoaded = _.after(3, loadPoints);
 
-      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_taupo_a_blue_pools_walk' }), function(data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_taupo_a_blue_pools_walk' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -96,7 +100,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_sky_tower_a_taupo' }), function(data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_sky_tower_a_taupo' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -104,7 +108,7 @@ module.exports = DefaultSlideView.extend({
         onLineLoaded();
       });
 
-       $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_blue_pools_walk_a_kaikoura' }), function(data) {
+      $.getJSON(QUERY_TEMPLATE({ tableName: 'indicaciones_de_blue_pools_walk_a_kaikoura' }), function (data) {
         L.geoJson(data, {
           style: lineStyle
         }).addTo(map);
@@ -116,7 +120,20 @@ module.exports = DefaultSlideView.extend({
 
   _initViews: function () {
     var form = new HoneymoonFormView();
-    this.$('.Slide-content').append(form.render().el)
-  }
+    this.$('.js-form').append(form.render().el);
+  },
 
+  _focusInput: function (ev) {
+    if (!$(ev.target).closest('a').length) {
+      this.$el.closest('.Slide').animate(
+        {
+          scrollTop: this.$('.js-textInput').offset().top
+        },
+        1000,
+        function () {
+          this.$('.js-textInput').focus();
+        }.bind(this)
+      );
+    }
+  }
 });
