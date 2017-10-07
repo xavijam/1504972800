@@ -150,19 +150,19 @@ function init () {
   });
 
   // Contact
-  Carousel.append(
-    new ContactView({
-      Carousel: Carousel,
-      template: require('templates/contact/contact-slide.hbs'),
-      index: 7,
-      background: '#DDD',
-      translateKey: 'contact'
-    })
-    .render().el
-  );
-  items.add({
-    key: Handlebars.helpers.t('contact.key')
-  });
+  // Carousel.append(
+  //   new ContactView({
+  //     Carousel: Carousel,
+  //     template: require('templates/contact/contact-slide.hbs'),
+  //     index: 7,
+  //     background: '#DDD',
+  //     translateKey: 'contact'
+  //   })
+  //   .render().el
+  // );
+  // items.add({
+  //   key: Handlebars.helpers.t('contact.key')
+  // });
 
   // Add navigation menu
   var menuView = new NavigationMenuView({

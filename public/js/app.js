@@ -284,16 +284,19 @@ function init() {
   });
 
   // Contact
-  Carousel.append(new ContactView({
-    Carousel: Carousel,
-    template: require('templates/contact/contact-slide.hbs'),
-    index: 7,
-    background: '#DDD',
-    translateKey: 'contact'
-  }).render().el);
-  items.add({
-    key: Handlebars.helpers.t('contact.key')
-  });
+  // Carousel.append(
+  //   new ContactView({
+  //     Carousel: Carousel,
+  //     template: require('templates/contact/contact-slide.hbs'),
+  //     index: 7,
+  //     background: '#DDD',
+  //     translateKey: 'contact'
+  //   })
+  //   .render().el
+  // );
+  // items.add({
+  //   key: Handlebars.helpers.t('contact.key')
+  // });
 
   // Add navigation menu
   var menuView = new NavigationMenuView({
@@ -2254,27 +2257,6 @@ if (typeof define === 'function' && define.amd) {
 }
 });
 
-;require.register("templates/contact/contact-slide.hbs", function(exports, require, module) {
-var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
-
-  return "<div class=\"Slide-content Slide-content--centered js-content\">\n  <div class=\"Slide-contentItem\">\n    <i class=\"Slide-icon Color Color--dark fa fa-paper-plane fa-3x js-contactIcon\"></i>\n  </div>\n  <h2 class=\"Color Color--dark Text-title Slide-title\">"
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.title",{"name":"t","hash":{},"data":data}))
-    + "</h2>\n  <p class=\"Slide-contentParagraph Text Color Color--dark Text-paragraph u-tSpace--xxxl\">"
-    + alias3((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,"contact.desc",{"name":"t","hash":{},"data":data}))
-    + "</p>\n</div>";
-},"useData":true});
-if (typeof define === 'function' && define.amd) {
-  define([], function() {
-    return __templateData;
-  });
-} else if (typeof module === 'object' && module && module.exports) {
-  module.exports = __templateData;
-} else {
-  __templateData;
-}
-});
-
 ;require.register("templates/home.hbs", function(exports, require, module) {
 var __templateData = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
@@ -2353,9 +2335,9 @@ var __templateData = Handlebars.template({"1":function(container,depth0,helpers,
     + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.title : depth0),{"name":"t","hash":{},"data":data}))
     + "\" alt=\""
     + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.title : depth0),{"name":"t","hash":{},"data":data}))
-    + "\"/>\n              <span class=\"TravelList-itemCost Color\">"
+    + "\"/>\n              <!--span class=\"TravelList-itemCost Color\">"
     + alias4(((helper = (helper = helpers.cost || (depth0 != null ? depth0.cost : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cost","hash":{},"data":data}) : helper)))
-    + "€</span>\n            </div>\n            <div class=\"TravelList-itemInfo\">\n              <h4 class=\"TravelList-itemTitle Text Color--dark\">"
+    + "€</span-->\n            </div>\n            <div class=\"TravelList-itemInfo\">\n              <h4 class=\"TravelList-itemTitle Text Color--dark\">"
     + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.title : depth0),{"name":"t","hash":{},"data":data}))
     + "</h4>\n              <p class=\"Text Text--paragraph TravelList-itemDesc Color--dark u-tSpace--xl\">"
     + alias4((helpers.t || (depth0 && depth0.t) || alias2).call(alias1,(depth0 != null ? depth0.desc : depth0),{"name":"t","hash":{},"data":data}))
