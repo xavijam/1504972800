@@ -119,8 +119,9 @@ module.exports = DefaultSlideView.extend({
   },
 
   _initViews: function () {
-    var form = new HoneymoonFormView();
-    this.$('.js-form').append(form.render().el);
+    // No more form! _for the moment_
+    // var form = new HoneymoonFormView();
+    // this.$('.js-form').append(form.render().el);
   },
 
   _focusInput: function (ev) {
